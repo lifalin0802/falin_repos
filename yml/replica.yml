@@ -1,0 +1,26 @@
+apiVersion: apps/v1 #版本号
+kind: ReplicaSet
+metadata:
+  name: nginx-pod
+  # namespace:
+  # labels:
+  #   controller: rs
+spec:  
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-pod
+    #   tier: nginx-pod
+    # matchExpressions:
+    #   - {key: tier, operator: In, values: [nginx-pod]}
+  template: #模板， 当副本数量不足，会根据以下模板创建pod 副本
+    metadata:
+      labels:
+        app: nginx-pod
+        # tier: nginx-pod
+    spec:
+      containers:
+      - name: nginx-pod
+        image: nginx:1.17.1      
+        ports:
+        - containerPort: 80

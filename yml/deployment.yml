@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pc-deployment
+  namespace: dev   
+spec:  
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-pod 
+  template: #模板， 当副本数量不足，会根据以下模板创建pod 副本
+    metadata:
+      labels:
+        app: nginx-pod
+    spec:
+      containers:
+      - name: nginx-pod
+        image: nginx:1.17.1      
+        ports:
+          - containerPort: 80 #-后边的空格不能去掉，否则就变成了map 类型，有空格是array数组类型
