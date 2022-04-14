@@ -6,11 +6,12 @@
 kubectl edit cm kube-proxy -n kube-system
 ```
 
-将mode设置为“ipvs”（ 没改之前，默认是”“）
+将mode设置为"ipvs" (没改之前，默认是""）
 退出保存
 ![](image/kubenetes_config_ipvs/1649954420886.png)
 
-### 重新配置kube-proxy为ipvs模式
+### 配置kube-proxy
+重新配置kube-proxy为ipvs模式
 删除当前的kube-proxy,
 ```bash
 kubectl get pod -n kube-system|grep kube-proxy|awk '{system("kubectl delete pod "$1" -n kube-system")}'
