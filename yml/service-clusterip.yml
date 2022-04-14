@@ -7,7 +7,7 @@ spec:
   selector: 
     app: nginx-pod
   clusterIP:   #不写会自动生成一个IP
-  type: clusterIP
+  type: ClusterIP
   ports:
     - port: 80 #Service端口
       targetPort: 80 #pod端口
