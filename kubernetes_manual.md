@@ -25,7 +25,7 @@ run命令也只是启动一个**自主的pod,**
 
 ### 要点解释：
 
-1. ``kubectl create deployment XX`` 正常创建deployment ，默认会创建**一个pod+两个docker容器**, 一个docker是httpd本身，另一个是pause 这个容器。
+1. ```kubectl create deployment XX``` 正常创建deployment ，默认会创建**一个pod+两个docker容器**, 一个docker是httpd本身，另一个是pause 这个容器。
 2. pause容器干啥的？
   相当于infor 容器, 用于共享**网络**，**存储**。
 3. **pod可以不属于任何namespace**,可以没有namespace的概念。
@@ -98,8 +98,7 @@ f4033c816a79   k8s.gcr.io/pause:3.6   "/pause"                 About an hour ago
 
 默认pod namespace 是 `<none>`
 ### 查看deployment
-若改成replica副本数量是2, 则启动
-4个docker
+若改成replica副本数量是2, 则启动4个docker
 ```bash
 [root@centos ~]# docker ps | grep httpd
 93d9558ff466   5c2ee73209da           "httpd-foreground"       12 seconds ago      Up 11 seconds                                                  k8s_httpd_httpd-76f7455774-v45fb_dev_be9d0c08-6330-42b9-acd1-1cccc569beb4_0
@@ -120,6 +119,11 @@ NAME                     READY   STATUS    RESTARTS      AGE
 httpd-76f7455774-2vln2   1/1     Running   1 (17m ago)   83m
 httpd-76f7455774-v45fb   1/1     Running   0             5m56s
 
+```
+
+### 查看apiversion 可用版本
+```bash
+kubectl api-versions
 ```
 
 ```bash

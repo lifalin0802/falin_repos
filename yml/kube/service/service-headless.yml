@@ -6,7 +6,7 @@ metadata:
 spec:   
   selector: 
     app: nginx-pod
-  clusterIP:   #不写会自动生成一个IP
+  clusterIP:  None #headless 类型的
   type: ClusterIP
   ports:
     - port: 80 #Service端口

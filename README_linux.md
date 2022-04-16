@@ -11,10 +11,9 @@ pgrep test.sh #查看当前叫test.sh 的进程
 ```
 
 ### 替换，用sed
-
 ```bash
-
-
+sed -i "s/\r//" a.sh
+sed -i "s/quay.io/quay-mirror.qiniu.com/" mandatory.yaml
 ```
 
 ### 查看rpm/yum 安装记录
