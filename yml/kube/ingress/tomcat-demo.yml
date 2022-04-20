@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-svc
+  namespace: dev
+spec:
+  selector:
+    app: tomcat
+    release: canary
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: ajp
+    port: 8009
+    targetPort: 8009
+ 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: tomcat-deploy
+  namespace: dev   
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: tomcat
+      release: canary
+  template:
+    metadata:
+      labels:
+        app: tomcat
+        release: canary
+    spec:
+      containers:
+      - name: tomcat
+        image: tomcat:8.5-jre10-slim
+        ports:
+        - name: httpd
+          containerPort: 8080
+        - name: ajp
+          containerPort: 8009

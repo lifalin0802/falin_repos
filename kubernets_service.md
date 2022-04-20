@@ -288,6 +288,7 @@ $ kubectl expose deployment pc-deployment --target-port 80 --type NodePort -n de
 $ kubectl get svc -n dev
 $ cat /etc/resolv.conf  #查看本机用哪台nds
 $ dig @ndsIP url #查看本url地址
+$ kubectl delete ns dev #会删掉所有dev namespace下所有的资源
 ```
 1. expose: 暴露一个serivce，其中pc-deployment必须存在，且要指定namespace,否则就在default namespace 中找，没有就会报错
 
