@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume     									# 指定为PV类型
+metadata:
+  name:  nfspv1  												  # 指定PV的名称
+  labels:
+    pv: test1
+
+spec:
+  capacity: 
+    storage: 11Mi					  								# 指定PV的容量
+  accessModes:
+    - ReadWriteMany						              # 指定PV的访问模式，简写为RWO，只支持挂在1个Pod的读和写
+  persistentVolumeReclaimPolicy: Recycle 		# 指定PV的回收策略，Recycle表示支持回收，回收完成后支持再次利用
+  # storageClassName: nfs
+  nfs:											  							# 指定PV的存储类型，本文是以nfs为例
+    path: /nfsdata				            			# 共享的地址
+    server: 192.168.5.100										# 服务器地址

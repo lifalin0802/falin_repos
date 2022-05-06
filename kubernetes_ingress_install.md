@@ -48,8 +48,8 @@ limitrange/ingress-nginx configured
    地址：https://github.com/kubernetes/ingress-nginx/blob/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml  
    下载后加上nodePort分别指向该node 30080,30443两个地址  
    注明： 此处30080 改为30082, 因为30080要给kuboard使用  
-   Q:这个yml 做什么的？  
-   A:就是初始化这个一个nginx pod实例。做url <--> service映射  
+   &ensp;Q:这个yml 做什么的？  
+   &ensp;A:就是初始化这个一个nginx pod实例。做url <--> service映射  
 
 ### 测试，以tomcat 为例
 ```bash

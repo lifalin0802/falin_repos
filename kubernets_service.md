@@ -95,7 +95,34 @@ Executing busybox-1.34.1-r5.trigger
 OK: 49 MiB in 35 packages
 /usr/local/apache2 # curl pc-deployment
 172.17.0.3
+/usr/local/apache2 # curl service-headless.dev.svc.cluster.local
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
 /usr/local/apache2 #
+
 ```
 service 只能内网访问, 说明只在内网配置了DNS
 公网访问靠ingress
@@ -151,7 +178,7 @@ options ndots:5
 ;; Got answer:
 ;; WARNING: .local is reserved for Multicast DNS
 ;; You are currently testing what happens when an mDNS query is leaked to DNS
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 5297
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 5297  
 ;; flags: qr aa rd; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
 ;; WARNING: recursion requested but not available
 
@@ -263,25 +290,6 @@ www.a.shifen.com.       5       IN      A       39.156.66.18
 ```
 
 
-```bash
-[root@centos ~]# docker ps
-CONTAINER ID   IMAGE                  COMMAND                  CREATED        STATUS       PORTS                                       NAMES
-51a915511187   98ebf73aba75           "nginx -g 'daemon of…"   4 hours ago    Up 4 hours                                               k8s_nginx-pod_pc-deployment-557dc8d667-p2lqz_dev_56b3fecf-6014-488e-b5e8-2bcf6d8fb1b8_1
-59f8b0b8e744   98ebf73aba75           "nginx -g 'daemon of…"   4 hours ago    Up 4 hours                                               k8s_nginx-pod_pc-deployment-557dc8d667-p29kd_dev_015ef67f-e6ac-43c8-a2b1-b28546595bd8_1
-a857862b9c31   k8s.gcr.io/pause:3.6   "/pause"                 4 hours ago    Up 4 hours                                               k8s_POD_pc-deployment-557dc8d667-p29kd_dev_015ef67f-e6ac-43c8-a2b1-b28546595bd8_1
-878f2a18c3fc   k8s.gcr.io/pause:3.6   "/pause"                 4 hours ago    Up 4 hours                                               k8s_POD_pc-deployment-557dc8d667-p2lqz_dev_56b3fecf-6014-488e-b5e8-2bcf6d8fb1b8_1
-[root@centos ~]# kubectl get pods -n dev
-NAME                             READY   STATUS    RESTARTS       AGE
-httpd-76f7455774-2vln2           1/1     Running   2 (4h5m ago)   2d9h
-httpd-76f7455774-v45fb           1/1     Running   1 (4h5m ago)   2d7h
-pc-deployment-557dc8d667-p29kd   1/1     Running   1 (4h5m ago)   32h
-pc-deployment-557dc8d667-p2lqz   1/1     Running   1 (4h5m ago)   32h
-[root@centos ~]# kubectl get deployments -n dev
-NAME            READY   UP-TO-DATE   AVAILABLE   AGE
-httpd           2/2     2            2           2d9h
-pc-deployment   2/2     2            2           32h
-
-```
 ## 小结：
 ```bash
 $ kubectl expose deployment pc-deployment --target-port 80 --type NodePort -n dev # 1

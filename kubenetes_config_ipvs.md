@@ -3,7 +3,7 @@
    用 ``kubectl edit ``命令
 
 ```bash
-kubectl edit cm kube-proxy -n kube-system
+kubectl edit cm kube-proxy -n kube-system #configmap
 ```
 
 将mode设置为"ipvs" (没改之前，默认是""）
