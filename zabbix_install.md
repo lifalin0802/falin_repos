@@ -51,5 +51,8 @@ grep '^DPPa' /etc/zabbix/zabbix_server.conf
 
 ### 修改端口号
 ```bash
-
+vi /etc/opt/rh/rh-php72/php-fpm.d/www.conf #修改端口号9000为8999，不然端口有冲突
 ``` 
+
+现在可以访问了zabbix了,  
+```http://192.168.5.100/zabbix/zabbix.php?action=dashboard.view```

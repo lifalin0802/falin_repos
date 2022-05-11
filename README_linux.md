@@ -2,12 +2,11 @@
 
 my repository
 
-### linux查找某个进程
-
+### linux查找某个进程  
 ```bash
 jobs -l #查看当前所有的job
-pgrep test.sh #查看当前叫test.sh 的进程
-
+pgrep test.sh #查看当前叫test.sh 
+find / -name www.conf # find file
 ```
 
 ### 替换，用sed
@@ -75,6 +74,7 @@ rndc: neither /etc/rndc.conf nor /etc/rndc.key was found
 ### 写入文件
 
 ```bash
+echo "BB" > /index.html
 [root@centos kubeworkspace]$ cat >replica.yml <<EOF
 > apiVersion: apps/v1 #版本号
 > kind: ReplicaSet
