@@ -16,7 +16,7 @@ sed -i "s/quay.io/quay-mirror.qiniu.com/" mandatory.yaml
 sed '/this/d' # 去掉this
 grep -Ev '^$|^#' /etc/zabbix/zabbix_agent2.conf #这里排除#开始的行，和空行， 好，打印输出
 grep -Ev '^$|^#' /etc/zabbix/zabbix_server.conf
-
+[ -d "/path/to/dir" ] && echo "Directory /path/to/dir exists." || echo "Directory does not/path/to/dir exists." #查看某个路径是否存在
 ```
 
 ### 查看rpm/yum 安装记录
@@ -109,7 +109,81 @@ echo "BB" > /index.html
 ```bash
 cat replica.yml
 nl replica.yml
+head messages -n 20
+tail messages  #默认显示最后10 行
+tail -f messages #实时跟进日志
+
 ```
+
+### shell 参数传递：
+```bash
+#!/bin/bash
+
+name="Shell"
+url="http://c.biancheng.net/shell/"
+
+str1=$name$url  #中间不能有空格
+str2="$name $url"  #如果被双引号包围，那么中间可以有空格
+str3=$name": "$url  #中间可以出现别的字符串
+str4="$name: $url"  #这样写也可以
+str5="${name}Script: ${url}index.html"  #这个时候需要给变量名加上大括号
+
+echo $str1
+echo $str2
+echo $str3
+echo $str4
+echo $str5
+
+
+#/bin/bash
+ 
+# 变量拼接
+# 1. 类似字面量拼接
+# part01part02
+part01="part01"
+part02="part02"
+ 
+str03=${part01}${part02}
+echo ${str03}
+ 
+# 变量字面量混拼
+# part01end
+str04=${part01}"end"
+echo ${str04}
+ 
+# 引号
+# part01 part02
+str05="${part01} ${part02}"
+echo ${str05}
+
+#/bin/bash
+ 
+# 命令
+str01=`date`
+# 当前日期
+echo ${str01}
+ 
+# 拼接
+# 当前日期end
+# 当前日期part01
+part01="part01"
+str02=`date`"end"
+echo ${str02}
+str03=`date`${part01}
+echo ${str03}
+ 
+# 引号
+# 单引号内的 命令无法执行
+# 当前日期
+# `date`
+str04="`date`"
+echo ${str04}
+str05='`date`'
+echo ${str05}
+ 
+```
+
+
 
 ### 甘特图：
 ```mermaid
