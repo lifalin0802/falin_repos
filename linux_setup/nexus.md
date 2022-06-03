@@ -92,8 +92,9 @@ base64在线转码工具:
 https://tool.oschina.net/encrypt?type=3
 ### for go:
 ```bash
-
-
+$ go env 
+GO111MODULE="on"
+GOPROXY="http://192.168.2.99:9081/repository/group-go/"
 ```
 
 
@@ -113,6 +114,8 @@ https://tool.oschina.net/encrypt?type=3
 
 ### command mvn deploy to neuxs:
 ```bash
+$ mvn help:effective-settings  #查看
+
 $ mvn deploy:deploy-file -DgroupId=com.example -DartifactId=demo -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -Dfile=C:\code\springmvc\src\demo\target\demo-0.0.1-SNAPSHOT.jar -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-snapshots/ -DrepositoryId=snapshots
 
 $ mvn deploy:deploy-file -DgroupId=com.example -DartifactId=demo -Dversion=0.0.1-RELEASE -Dpackaging=jar -Dfile=C:\code\springmvc\src\demo\target\demo-0.0.1-RELEASE.jar -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-releases/ -DrepositoryId=releases
@@ -155,7 +158,11 @@ mvn deploy:deploy-file -DgroupId=deepjob -DartifactId=deepjob -Dversion=0.0.1.0 
 mvn deploy:deploy-file -DgroupId=kms -DartifactId=kms_node_modules -Dversion=0.0.1.0 -Dpackaging=tar.gz  -Dfile=C:\code\clouddeep\dev-kms-node_modules.tar.gz -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-releases/ -Dmaven.test.skip=true
 
 
-mvn deploy:deploy-file -DgroupId=kms -DartifactId=kms_node_modules -Dversion=0.0.1.0 -Dpackaging=tar.gz  -Dfile=C:\code\clouddeep\ysp_clouddeep_alert.tar.gz -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-releases/ -Dmaven.test.skip=true
+mvn deploy:deploy-file -DgroupId=deepalert -DartifactId=deepalert -Dversion=0.0.1.0 -Dpackaging=tar.gz  -Dfile=C:\code\clouddeep\ysp_clouddeep_alert.tar.gz -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-releases/ -Dmaven.test.skip=true
+
+
+mvn deploy:deploy-file -DgroupId=managerdns -DartifactId=managerdns -Dversion=0.0.1.0 -Dpackaging=tar  -Dfile=./managerdns.tar -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-releases/ -Dmaven.test.skip=true
+
 
 
 mvn deploy:deploy-file -DgroupId=deeppush -DartifactId=deeppush -Dversion=0.0.1.0 -Dpackaging=tar.gz  -Dfile=C:\code\clouddeep\deeppush.beta_std.1c21876.tar.gz -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-releases/ -Dmaven.test.skip=true

@@ -30,7 +30,7 @@ grep -Ev '^$|^#' /etc/zabbix/zabbix_server.conf
 rpm -ql yum-config-manager 
 rpm -e  zsh  #-e 卸载
 journalctl -u jenkins.service #查看安装日志
-
+systemctl status -l kibana 
 ```
 
 

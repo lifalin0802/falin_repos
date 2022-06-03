@@ -59,12 +59,37 @@ sh-4.4# ntpdate cn.pool.ntp.org #对准时间 refered to: https://www.jianshu.co
 
 ```
 
+### 安装docker
+```bash
+yum install -y yum-utils device-mapper-persistent-data lvm2
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install docker-ce  
+systemctl start docker
+systemctl enable docker
+
+```
+
+### nexus 机器安装docker-compose：
+```bash
+$ curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+$ curl -L "https://github.com/docker/compose/releases/download/1.29.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+$ chmod +x /usr/local/bin/docker-compose
+$ docker-compose --version 
+
+```
+
+
+
 ### 翻不了墙 ？ 
 ```bash
-vi /etc/profile
+$ vi /etc/profile
 export http_proxy=http://40.125.172.218:7878
 export https_proxy=http://40.125.172.218:7878
-source /etc/profile
+$ source /etc/profile
+# 取消代理
+$ unset http_proxy
+$ unset http_proxy
 ```
 
 
@@ -216,8 +241,8 @@ $ cd Python-3.7.2
 $ ./configure --prefix=/usr/local/python3 --enable-optimizations --with-ssl 
 #编译
 $ make && make install
-$ ln -s /usr/local/python3/bin/python3 /usr/local/bin/python3 
-$ ln -s /usr/local/python3/bin/pip3 /usr/local/bin/pip3 
+$ ln -s /usr/local/python3/bin/python3 /usr/bin/python3 
+$ ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3 
 $ yum install --reinstall python3-pip 
 $ python3 -V 
 
@@ -227,19 +252,351 @@ export PATH=$PYTHON_HOME/bin:$PATH
 $ pip3 install --upgrade pip #升级pip3
 $ pip3 install grpcio
 $ pip3 install grpcio-tools googleapis-common-protos   
+
+yum install python-pip
+
+
 ```
- 
 
-
-### nexus 机器安装docker-compose：
+### 安装go:
 ```bash
-$ curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-$ curl -L "https://github.com/docker/compose/releases/download/1.29.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+$ wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz
+$ tar -C /usr/local -xzf go1.18.1.linux-amd64.tar.gz 
+$ go version
+$ cat /etc/profile|grep GO
+export GO_HOME=/usr/local/go
+export GO_ROOT=/usr/local/go
+export GO_PATH=/opt/go
+export GO111MODULE=on
+export GOPROXY=http://192.168.2.99:9081/repository/group-go/ #http://devops:devops@192.168.2.99:9081/repository/group-go/
+PATH=$PATH:$GO_HOME:$GO_ROOT:$GO_PATH:$GO_HOME/bin
 
-$ chmod +x /usr/local/bin/docker-compose
-$ docker-compose --version 
+$ go get -u github.com/gin-gonic/gin@v1.4.0 # 测试下载
 
 ```
+
+### 磁盘扩容方法：
+```bash
+#查看磁盘分区情况
+[root@jenkins_falin deepdns]# lsblk
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda               8:0    0   45G  0 disk 
+├─sda1            8:1    0    1G  0 part /boot
+├─sda2            8:2    0   15G  0 part 
+│ ├─centos-root 253:0    0 13.4G  0 lvm  /
+│ └─centos-swap 253:1    0  1.6G  0 lvm  [SWAP]
+└─sda3            8:3    0   24G  0 part 
+sr0              11:0    1  4.4G  0 rom  
+
+[root@jenkins_falin demo]# pvcreate /dev/sda3
+  Physical volume "/dev/sda3" successfully created.
+[root@jenkins_falin demo]# pvdisplay
+  --- Physical volume ---
+  PV Name               /dev/sda2
+  VG Name               centos
+  PV Size               <15.00 GiB / not usable 3.00 MiB
+  Allocatable           yes (but full)
+  PE Size               4.00 MiB
+  Total PE              3839
+  Free PE               0
+  Allocated PE          3839
+  PV UUID               9NYTeH-PgGE-50x3-RBOT-8daX-rjKe-5g2Ady
+   
+  "/dev/sda3" is a new physical volume of "24.00 GiB"
+  --- NEW Physical volume ---
+  PV Name               /dev/sda3
+  VG Name               
+  PV Size               24.00 GiB
+  Allocatable           NO
+  PE Size               0   
+  Total PE              0
+  Free PE               0
+  Allocated PE          0
+  PV UUID               b2vMOm-gZ80-fhYl-46Kh-l5Dp-skCT-uO9mmO
+   
+[root@jenkins_falin demo]# mkfs.ext4 /dev/sda3
+mke2fs 1.42.9 (28-Dec-2013)
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+1572864 inodes, 6291456 blocks
+314572 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=2153775104
+192 block groups
+32768 blocks per group, 32768 fragments per group
+8192 inodes per group
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, 
+	4096000
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (32768 blocks): done
+Writing superblocks and filesystem accounting information: done   
+
+[root@jenkins_falin demo]# pvdisplay
+  --- Physical volume ---
+  PV Name               /dev/sda2
+  VG Name               centos
+  PV Size               <15.00 GiB / not usable 3.00 MiB
+  Allocatable           yes (but full)
+  PE Size               4.00 MiB
+  Total PE              3839
+  Free PE               0
+  Allocated PE          3839
+  PV UUID               9NYTeH-PgGE-50x3-RBOT-8daX-rjKe-5g2Ady
+   
+[root@jenkins_falin demo]# pvcreate /dev/sda3
+WARNING: ext4 signature detected on /dev/sda3 at offset 1080. Wipe it? [y/n]: y
+  Wiping ext4 signature on /dev/sda3.
+  Physical volume "/dev/sda3" successfully created.
+[root@jenkins_falin demo]# pvdisplay
+  --- Physical volume ---
+  PV Name               /dev/sda2
+  VG Name               centos
+  PV Size               <15.00 GiB / not usable 3.00 MiB
+  Allocatable           yes (but full)
+  PE Size               4.00 MiB
+  Total PE              3839
+  Free PE               0
+  Allocated PE          3839
+  PV UUID               9NYTeH-PgGE-50x3-RBOT-8daX-rjKe-5g2Ady
+   
+  "/dev/sda3" is a new physical volume of "24.00 GiB"
+  --- NEW Physical volume ---
+  PV Name               /dev/sda3
+  VG Name               
+  PV Size               24.00 GiB
+  Allocatable           NO
+  PE Size               0   
+  Total PE              0
+  Free PE               0
+  Allocated PE          0
+  PV UUID               Z5tVum-eSwz-0J9R-HXDo-EQb1-X1n5-gr3uNN
+   
+[root@jenkins_falin demo]# vgextend centos /dev/sda3
+  Volume group "centos" successfully extended
+[root@jenkins_falin demo]# lvextend -L +24G /dev/mapper/centos-root
+  Insufficient free space: 6144 extents needed, but only 6143 available
+[root@jenkins_falin demo]# cat /etc/fstab | grep centos-root
+/dev/mapper/centos-root /                       xfs     defaults        0 0
+[root@jenkins_falin demo]# xfs_growfs /dev/mapper/centos-root
+meta-data=/dev/mapper/centos-root isize=512    agcount=4, agsize=877824 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0 spinodes=0
+data     =                       bsize=4096   blocks=3511296, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal               bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@jenkins_falin demo]# lvextend -L +9G /dev/mapper/centos-root
+  Size of logical volume centos/root changed from 13.39 GiB (3429 extents) to 22.39 GiB (5733 extents).
+  Logical volume centos/root successfully resized.
+   
+[root@jenkins_falin demo]# xfs_growfs /dev/mapper/centos-root
+meta-data=/dev/mapper/centos-root isize=512    agcount=4, agsize=877824 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0 spinodes=0
+data     =                       bsize=4096   blocks=3511296, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal               bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+data blocks changed from 3511296 to 5870592
+[root@jenkins_falin demo]# df -h
+Filesystem               Size  Used Avail Use% Mounted on
+devtmpfs                 1.9G     0  1.9G   0% /dev
+tmpfs                    1.9G     0  1.9G   0% /dev/shm
+tmpfs                    1.9G  8.9M  1.9G   1% /run
+tmpfs                    1.9G     0  1.9G   0% /sys/fs/cgroup
+/dev/mapper/centos-root   23G  9.3G   14G  42% /
+/dev/sda1               1014M  150M  865M  15% /boot
+tmpfs                    379M     0  379M   0% /run/user/0
+tmpfs                    379M     0  379M   0% /run/user/998
+
+
+$ pvcreate /dev/sda3
+$ mkfs.ext4 /dev/sda3
+$ vgextend centos /dev/sda3
+$ cat /etc/fstab | grep centos-root
+$ lvextend -L +9G /dev/mapper/centos-root
+$ xfs_growfs /dev/mapper/centos-root #使用相应的命令来扩展磁盘空间
+$ lvextend -L +14G /dev/mapper/centos-root
+$ xfs_growfs /dev/mapper/centos-root
+
+# 参考
+# https://www.jb51.net/article/230685.htm
+# https://blog.csdn.net/qq_45143653/article/details/119649813
+```
+
+
+### 安装elasticsearch
+```bash
+$ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.7.0-linux-x86_64.tar.gz
+$ tar -vxzf elasticsearch-6.7.0-linux-x86_64.tar.gz
+
+$ mv ./elasticsearch-6.7.0/* /usr/local/elasticsearch/ #
+$ cat /usr/local/elasticsearch/config/elasticsearch.yml |grep -v "^#"
+
+cluster.name: my-application                  
+path.data: /usr/local/elasticsearch/data          
+path.logs: /usr/local/elasticsearch/log
+bootstrap.memory_lock: false     
+network.host: 0.0.0.0                     #允许任何机器访问
+http.port: 9200
+# xpack.security.enabled: false             #es8默认是true,要改成false,即关闭安全认证
+# xpack.security.enrollment.enabled: true
+# xpack.security.http.ssl:
+#   enabled: false
+#   keystore.path: certs/http.p12
+# xpack.security.transport.ssl:
+#   enabled: true
+#   verification_mode: certificate
+#   keystore.path: certs/transport.p12
+#   truststore.path: certs/transport.p12
+# cluster.initial_master_nodes: ["targetserver_falin"]
+# ingest.geoip.downloader.enabled: false
+
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+
+
+$ cat /usr/local/elasticsearch/config jvm.options |grep -Xms # 调整内存 默认即可
+
+$ mkdir -p /usr/local/elasticsearch
+$ useradd esSS
+$ passwdadd es
+
+$ chown -R es:es /usr/local/elasticsearch/data
+$ chown -R es:es /usr/local/elasticsearch/log
+$ chown -R es:es /usr/local/elasticsearch   #别写错了 一定要有权限启动
+$ vim /etc/systemd/system/elasticsearch.service #  std机器上的配置文件路径是 /usr/lib/systemd/system/elasticsearch.service
+
+[Unit]
+Description=elasticsearch
+
+[Service]
+User=es
+Group=es
+Type=forking
+LimitNOFILE=65535
+LimitNPROC=4096
+ExecStart=/usr/local/elasticsearch/bin/elasticsearch -d
+
+[Install]
+WantedBy=multi-user.target
+
+$ sudo su elasticsearch
+$ /etc/elasticsearch/bin/elasticsearch
+
+$ vim /etc/sysctl.conf
+vm.max_map_count = 262144 #添加参数
+$ sysctl -p #重新加载/etc/sysctl.conf配置
+
+
+$ vim /etc/security/limits.conf #改完需要重新登录才能生效，或者切换用户
+*  hard nofile 65536
+*  soft nofile 131072
+*  soft nproc 4096
+*  hard nproc 4096
+
+$ su es #切换用户
+$ su root
+
+cat /etc/ssh/sshd_config |grep UsePAM 
+UsePAM yes
+
+cat /etc/pam.d/system-auth | grep pam_limits.so 
+session required pam_limits.so
+
+cat /etc/pam.d/login | grep pam_limits.so #
+session required /lib64/security/pam_limits.so
+
+cat /etc/security/limits.d/20-nproc.conf |grep nofile
+*  hard nofile 65536
+*  soft nofile 65536
+
+
+vi /etc/pam.d/su #注释掉以下，否则服务切换用户
+#session               include         system-auth
+
+```
+
+
+### 安装es head：
+```bash
+yum install -y unzip
+
+# go to github download source code: https://github.com/mobz/elasticsearch-head
+cd elasticsearch-head
+npm install
+#出错 ： Error: phantomjs-prebuilt@2.1.16 install: `node install.js`
+#解决办法：
+npm -g install phantomjs-prebuilt@2.1.16 --ignore-script  
+#再出同样的错也不用管了， 直接npm run start就可以
+npm run start
+#接着可以访问 http://ip:9100 
+
+vim Gruntfile.js 
+# 添加hostname: "*", 
+    connect: {
+          server: {
+            options: {
+              hostname: "*",
+              port: 9100,
+              base: '.',
+              keepalive: true
+            }
+			  }
+    }
+
+```
+
+
+### 安装filebeat:
+```bash
+$ vim /etc/yum.repos.d/filebeat.repo
+[filebeat-6.x]
+name=Elasticsearch repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/6.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md 
+$ yum install filebeat -y
+
+```
+
+
+### 安装kibana:
+```bash
+wget https://artifacts.elastic.co/downloads/kibana/kibana-8.2.2-x86_64.rpm
+cd /etc/kibana
+
+cat 
+server.port: 5601
+server.host: "0.0.0.0"
+elasticsearch.hosts: ["http://127.0.0.1:9200"]      # 连接es地址
+kibana.index: ".kibana"                             # 开启索引数据库文件
+elasticsearch.username: "elastic"                   # 这里如果es还没设置密码，这里写上密码也不影响kibana启动
+elasticsearch.password: "Clouddeep@8890"
+
+
+```
+
+
+### 安装nginx:
+```bash
+yum isntall -y nginx 
+ps -ef|grep nginx 
+```
+
 
 
 ### rsyslog 配置方法：

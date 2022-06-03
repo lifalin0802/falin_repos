@@ -21,12 +21,26 @@ find /etc -name passwd &>find.all 或 find /etc -name passwd >find.all 2>&1
 #  2>&1 |less 表示将标准错误重定向至标准输出，并用less进行分页显示
 find /etc -name passwd &2>&1 |less
 
+nohup XXX &
+tail -f nohup.out
+
+
 ```
 
 ```bash
 yum install lrzsz
 rz # 上传
 sz XXX.tar.gz #下载文件 send到本地
+
+yum install -y ca-certificates
+$ wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890' http://139.217.185.199:18180/sdp/rc/redcore_manager.rc_std.a8f4424.tar.gz 
+```
+
+
+```bash
+sudo -i
+#netstat, ps, nginx -t, 都需要管理员权限
+
 ```
 
 
@@ -36,9 +50,9 @@ lsof -p 29249
 lsof /project/redcore/webRoot/config/config.js  # no
 lsof|grep /project/redcore/webRoot/config/config.js  # no
 $ lsof|grep /project/openresty/nginx/logs/manager_client_access.log # 有结果，进程写文件的时候，能通过文件找到进程
-$ /project/openresty/nginx/sbin/nginx -t #yes
-$ nginx -t #yes
-$ netstat -nltup|grep 80 #yes
+$ /project/openresty/nginx/sbin/nginx -t #yes 前提 : sudo -i 
+$ nginx -t #yes 前提 : sudo -i
+$ netstat -nltup|grep 80 #yes 前提 : sudo -i
 
 [root@beta-manager1 29249]# netstat -nltup|grep 80
 tcp        0      0 172.40.0.208:2380       0.0.0.0:*               LISTEN      28607/etcd          
