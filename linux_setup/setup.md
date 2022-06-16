@@ -61,6 +61,11 @@ sh-4.4# ntpdate cn.pool.ntp.org #对准时间 refered to: https://www.jianshu.co
 
 ### 安装docker
 ```bash
+cd /etc/yum.repos.d/
+wget http://mirrors.aliyun.com/repo/Centos-7.repo
+sed -i 's/$releasever/7/g' /etc/yum.repos.d/Centos-7.repo
+yum makecache
+
 yum install -y yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 yum install docker-ce  
@@ -77,6 +82,14 @@ $ curl -L "https://github.com/docker/compose/releases/download/1.29.0/docker-com
 $ chmod +x /usr/local/bin/docker-compose
 $ docker-compose --version 
 
+#启动服务
+docker-compose -f docker-compose.yml up -d
+
+#停止服务
+docker-compose -f docker-compose.yml stop
+
+#停止并删除服务
+docker-compose -f docker-compose.yml down 
 ```
 
 
@@ -154,6 +167,8 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - /var/apps/nexus/nexus-data:/nexus-data
+      - /home/lifalin/nexus.vmoptions:/opt/sonatype/nexus/bin/nexus.vmoptions #添加选项 -Dstorage.diskCache.diskFreeSpaceLimit=2048 否则内存不足
+
 ```
 
 
@@ -204,6 +219,22 @@ echo -n 'myuser:mypassword' | openssl base64
 
 ```
 
+### 安装 nvm:
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+mv root/.nvm /opt/nvm
+export NVM_DIR="/opt/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+#检查nvm下安装了哪些node版本
+nvm ls
+nvm install 8.9.1
+nvm use 8.9.1
+chown -R jenkins:jenkins /var/lib/jenkins/workspace/deepwebclient/UI
+```
+
+
 ### jenkins 机器安装maven 用于上传tar.gz 包：
 ```bash
 wget https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
@@ -243,6 +274,7 @@ $ ./configure --prefix=/usr/local/python3 --enable-optimizations --with-ssl
 $ make && make install
 $ ln -s /usr/local/python3/bin/python3 /usr/bin/python3 
 $ ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3 
+$ ln -s /usr/local/python3/bin/gunicorn /usr/bin/gunicorn 
 $ yum install --reinstall python3-pip 
 $ python3 -V 
 
@@ -271,9 +303,67 @@ export GO111MODULE=on
 export GOPROXY=http://192.168.2.99:9081/repository/group-go/ #http://devops:devops@192.168.2.99:9081/repository/group-go/
 PATH=$PATH:$GO_HOME:$GO_ROOT:$GO_PATH:$GO_HOME/bin
 
+$ go env -w GOSUMDB=off
+
 $ go get -u github.com/gin-gonic/gin@v1.4.0 # 测试下载
+$ go get -u github.com/smartystreets/goconvey@v1.6.4 --registory=http://192.168.2.99:9081/repository/go-proxy
+
+# go to http://www.tcpdump.org/#latest-release，
+# 参考https://blog.csdn.net/wuyou1995/article/details/104742424
+$ wget https://www.tcpdump.org/release/libpcap-1.10.1.tar.gz
+$ tar -vxzf libpcap-1.10.1.tar.gz
+$ cd libpcap-1.10.1 && ./configure
+$ cp pcap.h /usr/include/
+
+$ yum install libpcap-devel 缺少pcap组件
+ 
+$ pip3 install -r requirements.txt
+$ pip3 install --upgrade gevent==20.9.0
 
 ```
+
+
+### 安装harbor :
+```bash
+wget https://github.com/goharbor/harbor/releases/download/v1.9.3/harbor-offline-installer-v1.9.3.tgz 
+tar xf harbor-offline-installer-v1.9.3.tgz
+cp harbor.yml harbor.yml.bak  
+sed -i "s|reg.mydomain.com|192.168.1.208|g" harbor/harbor.yml  #调整配置文件
+sed -i "s|Harbor12345|whsir.com|g" harbor/harbor.yml
+
+./harbor/install.sh --with-clair #安装harbor
+
+
+#client 机器上如何登录harbor
+vim /etc/docker/daemon.json
+{
+  "insecure-registries":["harbor机器IP"]
+}
+systemctl daemon-reload
+systemctl restart docker
+./harbor/install.sh #重启docker ，因为cs 同在一个机器
+
+docker login http://192.168.2.142  #admin/Harbor12345
+
+#docker login -u admin --password-stdin http://192.168.2.142
+
+docker image save centos:deeptunBase_20210624 > centos_deeptunbase.tar
+
+wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890'  http://139.217.185.199:18180/centos_deeptunbase.tar
+
+docker load < centos_deeptunbase.tar
+docker tag centos:deeptunBase_20210624 192.168.2.142/library/centos:deeptunBase_20210624
+docker push 192.168.2.142/library/centos:deeptunBase_20210624
+
+
+
+
+mv XX /project/devops_web/
+wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890'  http://139.217.185.199:18180/redcore_manager.rc_std.740ba86.tar.gz
+
+```
+
+
 
 ### 磁盘扩容方法：
 ```bash
@@ -419,7 +509,9 @@ tmpfs                    1.9G     0  1.9G   0% /sys/fs/cgroup
 tmpfs                    379M     0  379M   0% /run/user/0
 tmpfs                    379M     0  379M   0% /run/user/998
 
-
+$ fdisk -l 
+$ fdisk /dev/sda    #后依次输入n, p, 3, w
+$ reboot            #一定要重启，否则下边操作 会报 /dev/sda3 not found
 $ pvcreate /dev/sda3
 $ mkfs.ext4 /dev/sda3
 $ vgextend centos /dev/sda3
@@ -575,6 +667,7 @@ $ yum install filebeat -y
 
 
 ### 安装kibana:
+调整cpu 核数为2 ，
 ```bash
 wget https://artifacts.elastic.co/downloads/kibana/kibana-8.2.2-x86_64.rpm
 cd /etc/kibana
@@ -589,6 +682,40 @@ elasticsearch.password: "Clouddeep@8890"
 
 
 ```
+
+### 安装mysql
+```bash
+wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.37-linux-glibc2.12-i686.tar.gz
+tar -xvf mysql-5.7.24-linux-glibc2.12-x86_64.tar.gz
+mv mysql-5.7.22-linux-glibc2.12-x86_64 /usr/local/mysql 
+groupadd mysql
+useradd -r -g mysql mysql
+chown mysql:mysql -R /data/mysql
+mkdir -p /data/mysql
+
+
+
+wget https://downloads.mysql.com/archives/get/p/23/file/mysql-5.7.37-1.el7.x86_64.rpm-bundle.tar  #下载
+tar -xvf mysql-5.7.37-1.el7.x86_64.rpm-bundle.tar -C /usr/local/mysql
+cd /usr/local/mysql/
+yum install mysql-community-libs-5.7.37-1.el7.x86_64.rpm mysql-community-libs-compat-5.7.37-1.el7.x86_64.rpm mysql-community-common-5.7.37-1.el7.x86_64.rpm
+yum install mysql-community-client-5.7.37-1.el7.x86_64.rpm 
+yum install mysql-community-server-5.7.37-1.el7.x86_64.rpm
+
+echo 'skip-grant-tables' > /etc/my.cnf  # 跳过授权表,run this command for logging in without passwd
+mysql -u root # 空密码登录
+mysql> UPDATE mysql.user SET authentication_string=password('Clouddeep@8890') WHERE User='root';  # 更新密码
+mysql> flush privileges;              # 刷新策略
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'Clouddeep@8890';                              # 再次修改密码24
+# 删除/etc/my.cnf中的skip-grant-tables，并重启mysql
+systemctl restart mysqld  # 重启mysql
+
+mysql> show databases;    # 查看
+mysql> create database rdc_manager;
+
+```
+
+
 
 
 ### 安装nginx:

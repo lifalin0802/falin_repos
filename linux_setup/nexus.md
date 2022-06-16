@@ -49,7 +49,7 @@ production = false
 ; HOME = /root
 ; "npm config ls -l" to show all defaults.
 
-
+npm install dns@^0.2.2 --registry=
 
 ```
 说明:  
@@ -213,3 +213,5 @@ wget -c --http-user=devops  --http-passwd=devops http://192.168.2.99:9081/reposi
 	
 </settings>	  
 ```
+
+
