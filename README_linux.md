@@ -17,6 +17,11 @@ sed '/this/d' # 去掉this
 grep -Ev '^$|^#' /etc/zabbix/zabbix_agent2.conf #这里排除#开始的行，和空行， 好，打印输出
 grep -Ev '^$|^#' /etc/zabbix/zabbix_server.conf
 [ -d "/path/to/dir" ] && echo "Directory /path/to/dir exists." || echo "Directory does not/path/to/dir exists." #查看某个路径是否存在
+
+# 分别删除 创建7天前、修改7天前、访问7天前的文件。前2个用的较多。
+find . -type f -ctime +7 -delete
+find . -type f -mtime +7 -delete
+find . -type f -atime +7 -delete
 ```
 
 ### 查看rpm/yum 安装记录
