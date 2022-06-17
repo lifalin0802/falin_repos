@@ -74,6 +74,9 @@ systemctl enable docker
 
 ```
 
+
+
+
 ### nexus 机器安装docker-compose：
 ```bash
 $ curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
@@ -715,6 +718,15 @@ mysql> create database rdc_manager;
 
 ```
 
+
+
+### 设置vscode:
+```bash
+#设置zoom in/out in editor by mouse scheel
+# F1, 搜索 settings.json , open settings (JSON) 添加
+ "editor.mouseWheelZoom": true,  #only save, 即刻生效 
+
+```
 
 
 
