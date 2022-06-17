@@ -19,9 +19,18 @@ grep -Ev '^$|^#' /etc/zabbix/zabbix_server.conf
 [ -d "/path/to/dir" ] && echo "Directory /path/to/dir exists." || echo "Directory does not/path/to/dir exists." #查看某个路径是否存在
 
 # 分别删除 创建7天前、修改7天前、访问7天前的文件。前2个用的较多。
-find . -type f -ctime +7 -delete
-find . -type f -mtime +7 -delete
-find . -type f -atime +7 -delete
+$ find . -type f -ctime +7 -delete
+$ find . -type f -mtime +7 -delete
+$ find . -type f -atime +7 -delete
+
+#vim 删除所有内容 快捷键
+# gg dG
+# gg 为跳转到文件首行；
+# dG 为删除光标所在行以及其下所有行的内容；d为删除，G为跳转到文件末尾行；
+
+# shell -x 调试执行
+$ sh -x test.sh
+
 ```
 
 ### 查看rpm/yum 安装记录

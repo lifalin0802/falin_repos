@@ -359,11 +359,10 @@ docker tag centos:deeptunBase_20210624 192.168.2.142/library/centos:deeptunBase_
 docker push 192.168.2.142/library/centos:deeptunBase_20210624
 
 
+mv XX /project/devops_web/ 
 
-
-mv XX /project/devops_web/
-wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890'  http://139.217.185.199:18180/redcore_manager.rc_std.740ba86.tar.gz
-
+wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890'  http://139.217.185.199:18180/redcore_manager.6.8.8.635e806.tar.gz
+wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890'  http://139.217.185.199:18180/deeppush.1.2.3.b229161.tar.gz 
 ```
 
 
