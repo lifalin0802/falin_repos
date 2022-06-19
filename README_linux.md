@@ -32,6 +32,20 @@ $ find . -type f -atime +7 -delete
 $ sh -x test.sh
 
 ```
+### 基础命令：
+```bash
+$ mkdir -p
+$ mv -f 
+$ mv aa bb cc ./software #mv 多个文件
+$ cp -arf
+$ \\cp -f
+$ ifconfig ens192   # 只显示某个网卡的信息
+
+
+
+```
+
+
 
 ### 查看rpm/yum 安装记录
 ```bash

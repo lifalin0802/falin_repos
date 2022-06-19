@@ -772,3 +772,16 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLlJNqak24tOvH5oUKmLiNEVS3YWGy1CnWisL/8u5a
 参考文献：  
 https://www.appservgrid.com/paw92/index.php/2020/06/06/how-to-setup-ssh-without-passwords-linux-hint/
 https://www.thegeekstuff.com/2008/11/3-steps-to-perform-ssh-login-without-password-using-ssh-keygen-ssh-copy-id/
+
+
+### 通过ssh expect 间接登录主机
+```bash
+
+
+# 安装expect 
+$ yum install tcl-devel
+$ yum install expect
+
+```
+
+
