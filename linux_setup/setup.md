@@ -784,4 +784,94 @@ $ yum install expect
 
 ```
 
+### windows 中跑windows docker 容器：
+```bash
+
+#安装docker for windows 4.4.4 版本别高了
+#别在C:\User\XX 下运行Dockerfile 会报错
+#将"experimental" 设置为true，应用并重启
+#写好Dockerfile
+mkdir dockerfiles
+cd dockerfiles
+vi Dockerfile
+docker build -t mytag .  #. 表示当前路径
+
+# 进入容器
+docker exec -it dockerid cmd
+
+docker build -f DockerfileSDP -t sdp:6.9.4 .
+docker build -f DockerfileWG -t wg:1 .
+
+docker run -d wg:1 cmd /S /C ping -t 114.114.114.114
+
+taskkill /f /pid 1868
+
+
+
+#退出容器
+exit 
+
+```
+
+
+
+### wireguard:
+```bash
+
+wg-quick up wg0    #启动服务端
+wg-quick down wg0  #停止服务端
+wg #查看节点列表
+
+
+#server :
+[Interface]
+Address = 10.100.0.1/16  # 这里指的是使用 10.100.0.1，网段大小是 16 位
+SaveConfig = true
+ListenPort = 51820  # 监听的 UDP 端口
+PrivateKey = KMAVNsiiW1gtiWN+N0Bf9bcXznv7r5o2z/6qTXu7JVM=
+# 下面这两行规则允许访问服务器的内网,注意替换`eth0`
+PostUp   = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o ens192 -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o ens192 -j MASQUERADE
+
+# Client，可以有很多 Peer
+[Peer]
+PublicKey = 4Zw2U+iyql0ByXxt1Oy5jGIxTp5Y3sG3C3gepyH39nk=
+AllowedIPs = 10.100.0.2/32
+
+[Peer]
+PublicKey = MmmfJH3oOXSQPKk+Urv/97AVo5bVOEQl6vTLLJclPFc=
+AllowedIPs = 10.100.0.3/32
+
+
+
+
+
+#client2 :
+[Interface]
+PrivateKey = eEq8t1nSuf52+e9Pq9qN2FVnNW7dhXTUpPhzLNVyD1M=
+Address = 10.100.0.2/32
+DNS = 8.8.8.8  # 连接后使用的 DNS, 如果要防止 DNS 泄露，建议使用内网的 DNS 服务器
+
+[Peer]
+PublicKey = 16bMBy7J70JVASjKMsG8SvfJ093IQt1PiQU9Q11H3Ak=
+Endpoint = 192.168.2.248:51820  # 服务端公网暴露地址，51280 是上面指定的
+AllowedIPs = 10.100.0.0/16,172.17.0.11/20  # 指定要访问的服务端网段,或者设置0.0.0.0/0来进行全局代理.
+PersistentKeepalive = 25
+
+
+
+#client3 :
+[Interface]
+PrivateKey = 8N+n+lwrhaGt1FhF3zzKTg5kNtAzgM8h1EUoeDXNcFM=
+Address = 10.100.0.3/32
+DNS = 8.8.8.8  # 连接后使用的 DNS, 如果要防止 DNS 泄露，建议使用内网的 DNS 服务器
+
+[Peer]
+PublicKey = 16bMBy7J70JVASjKMsG8SvfJ093IQt1PiQU9Q11H3Ak=
+Endpoint = 192.168.2.248:51820  # 服务端公网暴露地址，51280 是上面指定的
+AllowedIPs = 10.100.0.0/16,172.17.0.11/20  # 指定要访问的服务端网段,或者设置0.0.0.0/0来进行全局代理.
+PersistentKeepalive = 25
+
+```
+
 
