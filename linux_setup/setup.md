@@ -802,7 +802,19 @@ docker exec -it dockerid cmd
 docker build -f DockerfileSDP -t sdp:6.9.4 .
 docker build -f DockerfileWG -t wg:1 .
 
-docker run -d wg:1 cmd /S /C ping -t 114.114.114.114
+# 1. run 
+docker run -d wg:2 cmd /S /C ping -t 114.114.114.114
+docker run -idt sdp:2 cmd.exe
+
+
+#默认不是admin 权限进入docker ，指定user还是得做
+docker exec --user ContainerAdministrator -it <container_id> cmd
+
+echo %USERDOMAIN%\%USERNAME%
+
+
+docker build -f DockerfileWG3 -t wg:3 .
+docker rm -f $( docker ps -aq --no-trunc  --filter ancestor=wg:1)
 
 taskkill /f /pid 1868
 
