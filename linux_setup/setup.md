@@ -804,10 +804,11 @@ docker build -f DockerfileWG -t wg:1 .
 
 # 1. run 
 docker run -d wg:2 cmd /S /C ping -t 114.114.114.114
-docker run -idt sdp:2 cmd.exe
 
-
-#默认不是admin 权限进入docker ，指定user还是得做
+#启动容器
+docker run -idt wg:1 cmd.exe
+docker run --user "NT Authority\System" -dit  wg:3 cmd.exe
+#进入容器，admin 权限
 docker exec --user ContainerAdministrator -it <container_id> cmd
 
 echo %USERDOMAIN%\%USERNAME%
