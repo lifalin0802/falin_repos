@@ -50,6 +50,8 @@ echo %USERDOMAIN%\%USERNAME%
 sc create DeepTunSvc binPath="C:\Program Files (x86)\CloudDeep\EnterLite\EnterLite.exe" displayname="DeepTunSvc" start=auto
 sc create DeepTunSvc start= delayed-auto binpath= "C:\Program Files (x86)\CloudDeep\EnterLite\EnterLite.exe service"
 
+
+
 # 配置
 sc config TrustedInstaller binpath= "%SystemRoot%\servicing\TrustedInstaller.exe"
 
@@ -80,7 +82,9 @@ sc start WireGuardTunnel$client
 
 
 #powershell 方式直接启动进程
-powershell.exe -Command Start-Process -FilePath "c:\WireGuard\WireGuard\wireguard.exe" -ArgumentList "/installtunnelservice","C:\client.conf"
+powershell.exe -Command Start-Process -FilePath "${env:ProgramFiles(x86)}\CloudDeep\EnterLite\EnterLite.exe" 
+
+powershell.exe -Command Start-Process -FilePath "C:\Program Files\WireGuard\wireguard.exe" -ArgumentList "/tunnelservice","c:\client.conf" -PassThru
 
 #删除服务
 sc delete WireGuardTunnel$client
@@ -94,9 +98,6 @@ powershell.exe -Command Start-Process -Wait -FilePath 'c:\sdp.exe' -ArgumentList
 #查看日志
 powershell.exe -Command Get-EventLog -List
 powershell.exe -Command Get-EventLog -LogName System -EntryType Error
-Get-EventLog -LogName System -InstanceId 3221232496 | Select-Object -Property Message
-Get-EventLog -LogName 
-Application -Newest 10 -EntryType Warning | select -ExpandProperty message
 
 
 
@@ -113,6 +114,29 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control" /v ServicesPipeTim
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters" /v DisabledComponents /t REG_DWORD /d <value> /f
 
 ```
+
+
+### wireguard 服务注册情况：
+```bash
+C:\Users\PC>sc qc WireGuardTunnel$client
+[SC] QueryServiceConfig SUCCESS
+
+SERVICE_NAME: WireGuardTunnel$client
+        TYPE               : 10  WIN32_OWN_PROCESS
+        START_TYPE         : 2   AUTO_START
+        ERROR_CONTROL      : 1   NORMAL
+        BINARY_PATH_NAME   : C:\WireGuard\WireGuard\wireguard.exe /tunnelservice "C:\Program Files\WireGuard\Data\Configurations\client.conf.dpapi"
+        LOAD_ORDER_GROUP   :
+        TAG                : 0
+        DISPLAY_NAME       : WireGuard Tunnel: client
+        DEPENDENCIES       : Nsi
+                           : TcpIp
+        SERVICE_START_NAME : LocalSystem
+
+
+```
+
+
 
 
 ### windows下的dockerfile
