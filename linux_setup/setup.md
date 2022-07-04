@@ -807,9 +807,11 @@ docker run -d wg:2 cmd /S /C ping -t 114.114.114.114
 
 #启动容器
 docker run -idt wg:1 cmd.exe
-docker run --user "NT Authority\System" -dit  wg:3 cmd.exe
+docker run --user "NT Authority\System" -dit  wg:1 cmd.exe
 #进入容器，admin 权限
 docker exec --user ContainerAdministrator -it <container_id> cmd
+docker exec --user "NT Authority\System" -it 8717d716d431 cmd
+
 
 echo %USERDOMAIN%\%USERNAME%
 
@@ -884,6 +886,50 @@ PublicKey = 16bMBy7J70JVASjKMsG8SvfJ093IQt1PiQU9Q11H3Ak=
 Endpoint = 192.168.2.248:51820  # 服务端公网暴露地址，51280 是上面指定的
 AllowedIPs = 10.100.0.0/16,172.17.0.11/20  # 指定要访问的服务端网段,或者设置0.0.0.0/0来进行全局代理.
 PersistentKeepalive = 25
+
+```
+
+
+### clickhouse-server, clickhouse-client 安装：
+```bash
+yum install clickhouse-server
+yum install clickhouse-client
+
+systemctl start clickhouse-server
+yum remove clickhouse-server
+
+#生成password命令：
+echo -n Clouddeep@8890 | openssl dgst -sha256
+
+#登录：-m 进入交互界面 可以换行，命令以;分号结束
+clickhouse-client -m #以default user身份登录
+clickhouse-client -m -u clouddeep --password #以clouddeep user身份登录
+
+shou databases;
+shou tables;
+#离开
+quit
+
+
+```
+
+
+```xml
+<!--设置用户名i密码：-->
+<!--修改/etc/clickhouse-server/users.xml，在users中添加节点：
+password 生成命令： echo -n Clouddeep@8890 | openssl dgst -sha256
+填入 password_sha256_hex 节点中
+或者直接用password 节点明文显示密码
+-->
+<clouddeep>           
+      <networks>
+      <ip>::/0</ip>
+      </networks>
+      <profile>default</profile>
+      <quota>default</quota>
+      <!-- <password>Clouddeep@8890</password> -->
+			<password_sha256_hex>0f872baa8ac9553a224e5c2d6e5a0ec3e46cf25a780f979dd5b4dde8474ff772</password_sha256_hex>
+</clouddeep>
 
 ```
 
