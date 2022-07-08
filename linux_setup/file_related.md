@@ -27,6 +27,30 @@ tail -f nohup.out
 
 ```
 
+
+### 使用环境变量 替换文件中的变量值
+linux 系统中一般自带envsubst 命令
+```bash
+#./template.yml
+systeminfo:
+  OS: $OS
+  user: ${USER}
+  home: ${HOME}
+  type: ${TYPE}
+
+#执行脚本
+#!/usr/bin/env bash
+export OS=$(uname -a)
+cat ./template.yml|envsubst >./envsubst-1.yml
+
+#!/usr/bin/env bash
+export OS=$(uname -a)
+envsubst <./template.yml >./envsubst-2.yml
+
+```
+
+
+
 ```bash
 yum install lrzsz
 rz # 上传

@@ -715,6 +715,12 @@ systemctl restart mysqld  # 重启mysql
 mysql> show databases;    # 查看
 mysql> create database rdc_manager;
 
+#添加用户
+mysql> create user clouddeep;
+mysql> UPDATE mysql.user SET authentication_string=password('Clouddeep@8890') WHERE User='clouddeep';
+mysql> ALTER USER 'clouddeep'@'%' IDENTIFIED BY 'Clouddeep@8890'; 
+
+
 ```
 
 
@@ -920,6 +926,14 @@ quit
 password 生成命令： echo -n Clouddeep@8890 | openssl dgst -sha256
 填入 password_sha256_hex 节点中
 或者直接用password 节点明文显示密码
+echo -n 123 | openssl dgst -sha256
+a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3
+<password_sha256_hex>a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3</password_sha256_hex>
+
+echo -n Clouddeep@8890 | sha256sum | tr -d '-'
+echo -n Clouddeep@8890 | openssl dgst -sha256
+0f872baa8ac9553a224e5c2d6e5a0ec3e46cf25a780f979dd5b4dde8474ff772
+<password_sha256_hex>0f872baa8ac9553a224e5c2d6e5a0ec3e46cf25a780f979dd5b4dde8474ff772</password_sha256_hex>
 -->
 <clouddeep>           
       <networks>
@@ -931,6 +945,20 @@ password 生成命令： echo -n Clouddeep@8890 | openssl dgst -sha256
 			<password_sha256_hex>0f872baa8ac9553a224e5c2d6e5a0ec3e46cf25a780f979dd5b4dde8474ff772</password_sha256_hex>
 </clouddeep>
 
+```
+
+
+### scp via jumpserver:
+https://superuser.com/questions/276533/scp-files-via-intermediate-host
+https://mperdikeas.github.io/networking.html.files/scp-a-file-through-jump-host.html
+https://blog.csdn.net/sj349781478/article/details/114308331
+```bash
+
+#work
+scp -oProxyCommand="ssh -W %h:%p B" thefile C:destination
+scp -oProxyCommand="ssh -W %h:%p 192.168.2.99" anaconda-ks.cfg 192.168.2.248:/env
+
+sshpass -p 'Clouddeep@8890' scp -o 'ProxyCommand ssh root@192.168.2.99 -W %h:%p' anaconda-ks.cfg root@192.168.2.248:/env
 ```
 
 

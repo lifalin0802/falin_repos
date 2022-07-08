@@ -50,7 +50,7 @@ echo %USERDOMAIN%\%USERNAME%
 sc create DeepTunSvc binPath="C:\Program Files (x86)\CloudDeep\EnterLite\EnterLite.exe" displayname="DeepTunSvc" start=auto
 sc create DeepTunSvc start= delayed-auto binpath= "C:\Program Files (x86)\CloudDeep\EnterLite\EnterLite.exe service"
 
-
+sc create DeepTunSvc start= delayed-auto binpath= "C:\EnterLite\EnterLite.exe service"
 
 # 配置
 sc config TrustedInstaller binpath= "%SystemRoot%\servicing\TrustedInstaller.exe"
@@ -62,7 +62,7 @@ net start DeepTunSvc
 #查找服务 
 sc query | findstr DeepTunSvc # 只能找到开启的服务
 
-
+powershell.exe -Command Start-Process -Wait -FilePath sdp.exe -ArgumentList '/S /v/qn' -PassThru
 
 
 # 注册服务
@@ -95,13 +95,17 @@ sc qc WireGuardTunnel$client
 #静默安装
 powershell.exe -Command Start-Process -Wait -FilePath 'c:\sdp.exe' -ArgumentList '/s /v/qn' -PassThru
 
+
+powershell.exe -Command Start-Process -Wait -FilePath 'c:\wireguard-installer.exe' -ArgumentList '/s /v/qn' -PassThru
+
 #查看日志
 powershell.exe -Command Get-EventLog -List
 powershell.exe -Command Get-EventLog -LogName System -EntryType Error
+powershell.exe -Command Get-EventLog -LogName Security -EntryType Error
 
 
 
-powershell.exe -Command "Get-EventLog -LogName System -InstanceId 3221232472 | select -ExpandProperty message"
+powershell.exe -Command "Get-EventLog -LogName System -InstanceId 701 | select -ExpandProperty message"
 
 
 powershell.exe -Command "Get-EventLog -LogName System -InstanceId 3221232496 | Select-Object -Property Message"
