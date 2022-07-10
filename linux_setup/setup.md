@@ -234,8 +234,21 @@ export NVM_DIR="/opt/nvm"
 nvm ls
 nvm install 8.9.1
 nvm use 8.9.1
+
+nvm ls-remote
+nvm install v16.16.0
 chown -R jenkins:jenkins /var/lib/jenkins/workspace/deepwebclient/UI
+
 ```
+### 安装vue cli:
+编译报错时候, 删除node_modules 文件夹重新安装npm 依赖包 npm install
+没有哪个模块(vue-cli-service) 看node_modules/.bin 下是否有该执行文件
+```bash
+npm install -g @vue/cli
+npm install -g @vue/cli-service
+
+```
+
 
 
 ### jenkins 机器安装maven 用于上传tar.gz 包：
@@ -951,13 +964,14 @@ echo -n Clouddeep@8890 | openssl dgst -sha256
 ### scp via jumpserver:
 https://superuser.com/questions/276533/scp-files-via-intermediate-host
 https://mperdikeas.github.io/networking.html.files/scp-a-file-through-jump-host.html
-https://blog.csdn.net/sj349781478/article/details/114308331
+https://blog.csdn.net/sj349781478/article/details/114308331 密码带有特殊符号
 ```bash
 
 #work
 scp -oProxyCommand="ssh -W %h:%p B" thefile C:destination
 scp -oProxyCommand="ssh -W %h:%p 192.168.2.99" anaconda-ks.cfg 192.168.2.248:/env
 
+yum install sshpass
 sshpass -p 'Clouddeep@8890' scp -o 'ProxyCommand ssh root@192.168.2.99 -W %h:%p' anaconda-ks.cfg root@192.168.2.248:/env
 ```
 
