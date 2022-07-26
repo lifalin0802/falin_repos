@@ -37,6 +37,10 @@ systemctl restart network #后重启网卡
 yum -y install ntpdate ntp
 ntpdate cn.pool.ntp.org
 
+#linux ll命令时间,Linux ll命令显示年月日 时分秒
+alias ll='ls -lh  --time-style=+"%Y-%m-%d %H:%M:%S"'
+
+
 docker exec -it 827 -u root /bin/sh #容器内部也需要安装ntpdate, 
 cat /proc/version 
 
@@ -163,10 +167,10 @@ services:
     container_name: nexus3
     ports:
       - 9081:8081
-	  - 9082:8082
-	  - 9083:8083
-	privileged: true
-	environment:
+	    - 9082:8082
+	    - 9083:8083
+	  privileged: true
+	  environment:
       - TZ=Asia/Shanghai
     volumes:
       - /var/apps/nexus/nexus-data:/nexus-data
@@ -240,7 +244,7 @@ nvm install v16.16.0
 chown -R jenkins:jenkins /var/lib/jenkins/workspace/deepwebclient/UI
 
 ```
-### 安装vue cli:
+### 安装 cli:
 编译报错时候, 删除node_modules 文件夹重新安装npm 依赖包 npm install
 没有哪个模块(vue-cli-service) 看node_modules/.bin 下是否有该执行文件
 ```bash
@@ -752,6 +756,8 @@ mysql> ALTER USER 'clouddeep'@'%' IDENTIFIED BY 'Clouddeep@8890';
 ```bash
 yum isntall -y nginx 
 ps -ef|grep nginx 
+
+nginx -t #查看nginx 配置文件
 ```
 
 
@@ -962,6 +968,7 @@ echo -n Clouddeep@8890 | openssl dgst -sha256
 
 
 ### scp via jumpserver:
+```bash
 https://superuser.com/questions/276533/scp-files-via-intermediate-host
 https://mperdikeas.github.io/networking.html.files/scp-a-file-through-jump-host.html
 https://blog.csdn.net/sj349781478/article/details/114308331 密码带有特殊符号
@@ -973,6 +980,106 @@ scp -oProxyCommand="ssh -W %h:%p 192.168.2.99" anaconda-ks.cfg 192.168.2.248:/en
 
 yum install sshpass
 sshpass -p 'Clouddeep@8890' scp -o 'ProxyCommand ssh root@192.168.2.99 -W %h:%p' anaconda-ks.cfg root@192.168.2.248:/env
+
+#不太work, 因为有堡垒机
+[root@jenkins ~]# sshpass scp -o "ProxyCommand sshpass -p ''JenkinsClouddeep@8890!'' ssh jenkins@139.217.97.252  -W %h:%p" anaconda-ks.cfg jmsadmin@120.92.91.72:/env
+-bash: !'': event not found
+
+[root@jenkins ~]# sshpass scp -o 'ProxyCommand sshpass -p ''JenkinsClouddeep@8890!'' ssh jenkins@139.217.97.252  -W %h:%p' anaconda-ks.cfg jmsadmin@120.92.91.72:/env
+channel 0: open failed: unknown channel type: unsupported channel type
+stdio forwarding failed
+ssh_exchange_identification: Connection closed by remote host
+lost connection
+
+[jmsadmin@jenkins ~]$ sudo -i
+[root@jenkins ~]# sshpass -p 'JenkinsClouddeep@8890!' scp anaconda-ks.cfg jenkins@139.217.97.252:/Default/rc/spa/rc-spa
+No PTY requested.
+
+sshpass -p "user_password" sftp user@sftp.server.com:remote_dir <<< $'put *.csv'
+
+
+```
+
+
+### sftp 传文件：
+```bash
+$ sftp remote-system
+Password: password
+sftp> put filename
+sftp> bye
+```
+
+### nginx 安装：
+```bash
+yum install gcc-c++
+yum install -y openssl openssl-devel
+yum install -y pcre pcre-devel
+yum install -y zlib zlib-devel
+mkdir /usr/local/nginx
+cd /home/lifalin
+wget https://nginx.org/download/nginx-1.23.0.tar.gz
+tar -zxvf -1.23.0.tar.gz
+
+#手动创建用户和用户组
+groupadd nginx
+useradd nginx -g nginx -s /sbin/nologin -M
+
+cd nginx-1.23.0
+./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --user=nginx --group=nginx
+
+make			# 编译
+make install  		# 安装
+
+
+#修改nginx.conf, 修改端口 
+user  nginx nginx;
+http {  
+    server {
+        listen       18180;      
+    }
+}
+
+/usr/local/nginx/sbin/nginx            # 启动服务
+/usr/local/nginx/sbin/nginx -s reload  # 重新加载服务
+/usr/local/nginx/sbin/nginx -s stop  # 停止服务
+
+vim /lib/systemd/system/nginx.service  
+# /etc/systemd/system     #存放系统启动的默认级别及启动的unit的软连接，优先级最高。
+# /run/systemd/system     #系统执行过程中产生的服务脚本，优先级次之。
+# /usr/lib/systemd/system #存放系统上所有的启动文件。优先级最低
+
+[Unit]
+Description=The NGINX HTTP and reverse proxy server
+
+[Service]
+Type=forking
+PIDFile=/usr/local/nginx/logs/nginx.pid
+ExecStart=/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+ExecReload=/usr/local/nginx/sbin/nginx -s reload
+ExecStop=/usr/local/nginx/sbin/nginx -s quit
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl deamon-reload
+```
+
+### linux 创建cronjob:
+```bash
+
+vim /project/cronjob/clear_image.sh
+#!/bin/bash
+time=`docker images |grep 'months' |grep 'deeptun'|awk '{print $4}'`
+for i in $time
+do
+  if [ $i -ge 6 ]; then
+    docker images | awk '{print $3}' |xargs docker rmi 
+  fi
+done
+
+crontab -e    # 编辑crontab 指令
+crontab -l    # 查看 定时任务 列表
+0 0 1,15 * * /bin/bash   /project/cronjob/clear_image.sh  # 每个月1号15号运行该脚本 
 ```
 
 

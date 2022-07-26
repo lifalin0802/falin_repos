@@ -143,6 +143,13 @@ mvn deploy:deploy-file  -Dre.user=xx -Dr.pass=xx  -DgroupId=redcore.manager -Dar
 
 mvn deploy:deploy-file -DgroupId=redcore.manager -DartifactId=jenkinsfile -Dversion=0.0.1.0 -Dpackaging=tar.gz  -Dfile=C:\code\clouddeep\Jenkinsfile.tar.gz -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-releases/ -Dmaven.test.skip=true  #yes!!!!!!!
 
+mvn deploy:deploy-file -DgroupId=deepctl -DartifactId=deepctl -Dversion=0.0.1.0 -Dpackaging=tar.gz  -Dfile=C:\code\deepctl\readme.txt -Durl=http://devops:devops@139.217.185.199:9081/repository/maven-releases/ -Dmaven.test.skip=true
+
+mvn deploy:deploy-file -DgroupId=deepctl -DartifactId=deepctl -Dversion=0.0.1.1 -Dpackaging=tar.gz  -Dfile=C:\code\clouddeep\deepctl.tar.gz
+ -Durl=http://devops:devops@139.217.185.199:9081/repository/maven-releases/ -Dmaven.test.skip=true
+
+
+
 
 mvn deploy:deploy-file -DgroupId=deeppush -DartifactId=deeppush_node_modules -Dversion=0.0.1.0 -Dpackaging=tar.gz  -Dfile=C:\code\clouddeep\deeppush_node_modules.tar.gz -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-releases/ -Dmaven.test.skip=true
 
@@ -166,6 +173,8 @@ mvn deploy:deploy-file -DgroupId=managerdns -DartifactId=managerdns -Dversion=0.
 
 
 mvn deploy:deploy-file -DgroupId=deeppush -DartifactId=deeppush -Dversion=0.0.1.0 -Dpackaging=tar.gz  -Dfile=C:\code\clouddeep\deeppush.beta_std.1c21876.tar.gz -Durl=http://devops:devops@192.168.2.99:9081/repository/maven-releases/ -Dmaven.test.skip=true
+
+
 
 
 mvn deploy:deploy-file -DgroupId=redcore.manager -DartifactId=jenkinsfile -Dversion=0.0.1.0 -Dpackaging=tar.gz  -Dfile=C:\code\clouddeep\Jenkinsfile.tar.gz -Durl=http:/192.168.2.99:9081/repository/maven-releases/ #no
