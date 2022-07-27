@@ -248,8 +248,8 @@ chown -R jenkins:jenkins /var/lib/jenkins/workspace/deepwebclient/UI
 编译报错时候, 删除node_modules 文件夹重新安装npm 依赖包 npm install
 没有哪个模块(vue-cli-service) 看node_modules/.bin 下是否有该执行文件
 ```bash
-npm install -g @vue/cli
-npm install -g @vue/cli-service
+npm install -g @vue/cli 
+npm install -g @vue/cli-service   --registry=https://registry.npm.taobao.org
 
 ```
 
@@ -787,6 +787,9 @@ ssh remote_IP # 稍等一会就可以连接上
 #root@jenkins_falin 都是A主机的用户名@主机名
 cat /remote_user/.ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLlJNqak24tOvH5oUKmLiNEVS3YWGy1CnWisL/8u5aI4dclXiHXjp32cYTBgS0kDID3MiUEqJDZSl92VbXJKp/vyfQ4WmzuBz+eeh+oG8iUn1Htt/y/zfQpc8vRQpY1YhodKbK5HQGJipzrUe6Qt81c1gHG/We/B86G7dq+cCj5WeGcLrRsBnTqGBmV7JOHD32h2K4/2tD2iFOYB2A279jTBeUCqv7wzJ0L/pi3S2jzztArqcxrXuG8Q+WSb+bAyUgwL7Y01wu84bs8w7Z4lYNVTB5IjwixpJRqrBG9ERVTNlUkiACjWGuUa7w6fK6yF7FWEbDpS+1kc6u18AfTnZh root@jenkins_falin
+
+ssh root@47.100.178.71 -p 5101
+ssh root@47.100.178.71  #默认端口号22
 
 ```
 **说明**
