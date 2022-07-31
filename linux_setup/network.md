@@ -6,6 +6,7 @@
 curl cip.cc # 查看公网Ip
 curl ifconfig.me # 查看公网Ip
 ifconfig -a #查看Linux的内网IP地址
+
 ```
 
 ### 几个重要的配置文件：
@@ -35,7 +36,22 @@ DEVICE="ens33"
 IPADDR="192.168.5.100" #必须设置
 GATEWAY="192.168.5.2" #必须设置
 ONBOOT="yes" #必须设置
+
+#编辑之后别忘了重启
+systemctl restart network
+
 ```
+
+###防火墙设置
+```bash
+
+systemctl disable firewalld 
+systemctl restart network 
+sestatus  #查看
+setencforce 0  #关闭防火墙
+
+```
+
 
 
 Q: 不能操作 /etc/sysconfig/network-scripts/ifcfg-ens33?   
