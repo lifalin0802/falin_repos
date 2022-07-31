@@ -61,6 +61,8 @@ ARC=false
 sh-4.4# ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime #linux的时区设置为上海
 sh-4.4# ntpdate cn.pool.ntp.org #对准时间 refered to: https://www.jianshu.com/p/83b9b333f629
 
+#也可以手动校准时间
+date "17:50" 
 ```
 
 ### 安装docker
@@ -837,6 +839,7 @@ docker run -d wg:2 cmd /S /C ping -t 114.114.114.114
 docker run -idt wg:1 cmd.exe
 docker run --user "NT Authority\System" -dit  wg:1 cmd.exe
 #进入容器，admin 权限
+#默认不是admin 权限进入docker ，指定user还是得做
 docker exec --user ContainerAdministrator -it <container_id> cmd
 docker exec --user "NT Authority\System" -it 8717d716d431 cmd
 
@@ -859,8 +862,9 @@ exit
 
 
 ### wireguard:
+wiregaurds官方文档
+https://www.wireguard.com/quickstart/
 ```bash
-
 wg-quick up wg0    #启动服务端
 wg-quick down wg0  #停止服务端
 wg #查看节点列表

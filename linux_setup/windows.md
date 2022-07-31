@@ -51,6 +51,11 @@ sc create DeepTunSvc binPath="C:\Program Files (x86)\CloudDeep\EnterLite\EnterLi
 sc create DeepTunSvc start= delayed-auto binpath= "C:\Program Files (x86)\CloudDeep\EnterLite\EnterLite.exe service"
 
 sc create DeepTunSvc start= delayed-auto binpath= "C:\EnterLite\EnterLite.exe service"
+sc create WireGuardManager start= delayed-auto binpath= "C:\code\performance-test\WireGuard\WireGuard\wireguard.exe /managerservice"
+
+sc create WireGuardManager start= delayed-auto binpath= "C:\\WireGuard\\WireGuard\\wireguard.exe /tunnelservice C:\client4.conf"
+
+sc delete DeepTunSvc 
 
 # 配置
 sc config TrustedInstaller binpath= "%SystemRoot%\servicing\TrustedInstaller.exe"
@@ -111,12 +116,15 @@ powershell.exe -Command "Get-EventLog -LogName System -InstanceId 701 | select -
 powershell.exe -Command "Get-EventLog -LogName System -InstanceId 3221232496 | Select-Object -Property Message"
 #调整powershell配置
 powershell.exe -Command Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
-
+powershell.exe -Command Get-EventLog -LogName System -InstanceId 3221232496 -Source DCOM
+powershell.exe -Command Get-EventLog -LogName Application -Newest 10 -EntryType Warning | select -ExpandProperty message
+#https://www.toutiao.com/article/6783117467783791115/?wid=1656229438179
 #
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control" /v ServicesPipeTimeout /t REG_DWORD /d 60
 
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters" /v DisabledComponents /t REG_DWORD /d <value> /f
-
+cscript C:\Windows\System32\eventquery.vbs /FI "source eq DeepTunSvc"
+cscript eventquery.vbs /FI "source eq DeepTunSvc"
 ```
 
 
