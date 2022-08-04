@@ -371,11 +371,11 @@ docker login http://192.168.2.142  #admin/Harbor12345
 
 docker image save centos:deeptunBase_20210624 > centos_deeptunbase.tar
 
-wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890'  http://139.217.185.199:18180/centos_deeptunbase.tar
-
 docker load < centos_deeptunbase.tar
 docker tag centos:deeptunBase_20210624 192.168.2.142/library/centos:deeptunBase_20210624
 docker push 192.168.2.142/library/centos:deeptunBase_20210624
+
+wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890'  http://139.217.185.199:18180/centos_deeptunbase.tar
 
 
 mv XX /project/devops_web/ 
@@ -756,11 +756,155 @@ mysql> ALTER USER 'clouddeep'@'%' IDENTIFIED BY 'Clouddeep@8890';
 
 ### 安装nginx:
 ```bash
+
+yum install -y pcre pcre-devel gcc zlib zlib-devel openssl openssl-devel
+yum -y install gcc pcre pcre-devel zlib zlib-devel openssl openssl-devel
+
+
+
+wget http://nginx.org/download/nginx-1.21.6.tar.gz
+./configure --prefix=/usr/local/nginx --conf-path=/usr/local/nginx/nginx.conf
+./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-http_realip_module
+make
+make install
+
+#、启动nginx命令：
+/usr/local/nginx/sbin/nginx
+
+nginx -t #查看nginx 配置文件
+nginx -v #查看版本
 yum isntall -y nginx 
 ps -ef|grep nginx 
 
-nginx -t #查看nginx 配置文件
+
+#配置文件：
+worker_processes  1;  
+events {
+    worker_connections  1024;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+        listen       80;
+        server_name  localhost;
+        auth_basic "Auth access test!";
+        auth_basic_user_file /usr/local/nginx/auth_conf;  #身份认证
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+    }
+erver {
+        listen       443 ssl;
+	      listen       [::]:443;
+        server_name  beta1.deepcloudsdp.com localhost;
+#       ssl on;
+      
+        ssl_certificate      /opt/cert/deepcloudsdp.com/fullchain.cer;
+        ssl_certificate_key  /opt/cert/deepcloudsdp.com/deepcloudsdp.com.key;
+        #ssl_session_cache    shared:SSL:1m;
+        #ssl_session_timeout  5m;
+
+        proxy_set_header X-Real-IP $remote_addr;
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+          location ~* /client/v[345]/push/sse {
+           rewrite /client/v[345]/push(.*) $1 break;
+           proxy_pass http://127.0.0.1:8181;  #转到某个内部应用
+           proxy_set_header Connection '';
+           proxy_http_version 1.1;
+           chunked_transfer_encoding off;
+           proxy_buffering off;
+           proxy_cache off;
+           proxy_read_timeout 600s;
+           proxy_connect_timeout 600;
+        }
+
+  }
+}
+  
+#https://www.jb51.net/article/243665.htm
+###静态资源访问
+server {
+  listen       80;
+  server_name  static.jb51.com;
+  location /static/imgs {
+       root /Users/Hao/Desktop/Test;
+       index  index.html index.htm;
+   }
+}
+###动态资源访问
+ server {
+  listen       80;
+  server_name  www.jb51.com;
+     
+  location / {
+    proxy_pass http://127.0.0.1:8080;
+     index  index.html index.htm;
+   }
+}
+
+#https://blog.csdn.net/carefree2005/article/details/121242227
+#负载均衡实例 权重：
+upstream backend {
+    server backend1.example.com       weight=5;  #执行realserver，可以赋权重
+    server backend2.example.com:8080; 
+    server unix:/tmp/backend3;
+
+    server backup1.example.com:8080   backup;  #backup表示该节点为热备节点，激活节点失效时启用
+    server backup2.example.com:8080   down;  #下线服务器，可以在real服务器需要维护时配置
+}
+
+server {
+   listen	80;  #listen、server_name这些正常配置
+   server_name	www.test.com;
+    location / {
+        proxy_pass http://backend;  ##反向代理执行定义的upstream名字
+    }
+}
+
+
+#负载均衡实例 url hash：
+upstream backend{
+	hash &request_uri;  #被记录下来的url 三台机器里的其中一个
+	server 192.168.200.146:9001;
+	server 192.168.200.146:9002;
+	server 192.168.200.146:9003;
+}
+server {
+	listen 8083;
+	server_name localhost;
+	location /{
+		proxy_pass http://backend;
+	}
+}
+#https://blog.csdn.net/Leon_Jinhai_Sun/article/details/121153058
+
+#配置http请求转成https, 用rewrite
+server {
+listen 80;
+server_name www.hword.top;
+rewrite ^(.*) https://$server_name$1 permanent;
+}
+
+
 ```
+在linux下有Nginx、LVS、 Haproxy 等等服务可以提供负载均衡服务，而且Nginx提供了几种分配方式(策略):
+负载均衡策略
+轮询	默认方式
+weight	权重方式
+ip_hash	依据ip分配方式  解决session 问题 提高缓存命中率
+least_conn	最少连接方式  分配给连接最少的机器
+fair（第三方）	响应时间方式  响应时间短的优先分配
+url_hash（第三方）	依据URL分配方
+https://www.jianshu.com/p/2d70a367f9d2
 
 
 
@@ -858,6 +1002,39 @@ taskkill /f /pid 1868
 exit 
 
 ```
+
+
+### dockerfile docker 编译：
+分阶段编译 最小镜像
+```bash
+
+# 1. 从编译阶段中拷贝 --from=0
+FROM golang:1.10.3 
+COPY server.go /build/ 
+WORKDIR /build 
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GOARM=6 go build -ldflags '-w -s' -o server 
+# 运行阶段
+FROM scratch
+COPY --from=0 /build/server / # 从编译阶段的中拷贝编译结果到当前镜像中
+ENTRYPOINT ["/server"]
+
+
+
+#2. 从编译阶段中拷贝 --from=builder 
+FROM golang:1.10.3 as builder 
+# ... 省略 
+FROM scratch 
+COPY --from=builder /build/server / # 从编译阶段的中拷贝编译结果到当前镜像中
+
+
+
+# 3.从已存在镜像中拷贝 --from=quay.io/coreos/etcd:v3.3.9
+FROM ubuntu:16.04
+COPY --from=quay.io/coreos/etcd:v3.3.9 /usr/local/bin/etcd /usr/local/bin/  #直接从一个已经存在的镜像中拷贝
+
+
+```
+
 
 
 

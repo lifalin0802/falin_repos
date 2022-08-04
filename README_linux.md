@@ -9,6 +9,16 @@ pgrep test.sh #查看当前叫test.sh
 find / -name www.conf # find file
 ```
 
+
+### 进程通信：
+```bash
+
+mkfifo mypipe
+echo "hello" > mypipe
+cat < mypipe
+
+```
+
 ### 替换，用sed
 ```bash
 sed -i "s/\r//" a.sh
@@ -140,6 +150,10 @@ nl replica.yml
 head messages -n 20
 tail messages  #默认显示最后10 行
 tail -f messages #实时跟进日志
+
+head -n 10 XX.log
+tail -n 10 XX.log
+last -n 5 
 
 ```
 
