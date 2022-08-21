@@ -16,26 +16,103 @@ systemctl stop firewalld
 
 ```
 
+
+### iptables, icmp:
+```bash
+yum install iptables-services #安装iptables 防火墙
+
+cat /etc/sysconfig/iptables #只有安装了iptables 才有此文件
+
+#禁止ping 防止ping攻击
+echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+```
+
 ### 文件操作：
 ```bash
+mv config.toml{,.bak} 
+
+[root@centos ~]# type ls
+ls is aliased to `ls --color=auto`
+
+[root@centos ~]# alias ls
+alias ls='ls --color=auto'
+
+\ls  #直接使用ls命令
+
+
 grep -Ev '^$|#' xxx.conf #去掉空行和注释
 cat -n xx.conf  #显示行号
+cat a.txt B.txt >> demo.txt
+cat > xx.txt << EOF  #覆盖写入
+cat >> file.txt <<EOF   #追加写入
+>SDFSDFSD
+>EOF
+
 
 ping 114.114.114.114
 ```
 
 
-### 抓包命令：
+### 抓包命令：  	
 ```bash
 tcpdump  -i deeptun0 host 192.168.2.142 -nvvvt
 
 
 ```
 
+
+### 监控：
+```bash
+dmesg |grep sda #是机器启动一闪而过的一堆命令和输出 缓存在ring buffer里边  也可以看到硬件连接和断开的信息
+top #比较综合的命令
+uptime #只显示top的第一尚
+uptime -s #显示机器启动时间
+free -s 1 #持续监视内存 1秒刷新一次
+
+
+#http://t.zoukankan.com/yfacesclub-p-12015466.html 
+#网卡使用情况
+sar -n DEV
+sar -n DEV -f /var/log/sa/saDD
+sar -f /var/log/sa/saDD #DD表示数字，25表示25号，29表示29号
+cat /proc/net/dev #监控网卡使用情况
+
+
+```
+注意：  
+    若服务器丢包非常严重，需要查看网卡流量是否异常。接收数据部分 rxpck大于4000，或者rxKB大于5000，则有可能被攻击了，正常服务器网卡流量没有这么大。除非自己在拷贝数据。
+
+### iostat io设备监控：
+
+```bash
+# 其实使用最多的是 网络nfs监控 + 本地磁盘的监控
+# idle <20  要关注cpu le
+# 如果io》30 算是比较大，但cpU挺闲 那么性能卡在io设备上
+# https://www.bilibili.com/video/BV1rZ4y137Mo
+iostat
+iostat -N\
+[root@centos-node personal]# iostat
+Linux 3.10.0-1062.el7.x86_64 (centos-node) 	08/06/2022 	_x86_64_	(1 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           0.25    0.00    0.34    0.00    0.00   99.40
+
+Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
+sda               0.40        11.66         1.17     365391      36813
+
+cd /dev/mapper  #会有映射
+```
+此处只是视频中的操作：  
+![](2022-08-06-21-47-59.png)
+![](2022-08-06-21-50-08.png)  
+我自己本机不是这样的，即便是开启了swap分区：  
+![](2022-08-06-21-53-37.png)
+
+
 ### 标准输入、
 ```bash
 echo "hello" | xargs echo #xargs将
-![](2022-08-01-08-30-51.png)
 ```
 
 
@@ -48,6 +125,12 @@ $#  #当前脚本执行命令的输入参数个数，例如执行 ./test.sh aa b
 $!  # 上一个执行指令的PID（后台运行的最后一个进程的进程ID号）
 $?  # 上一个命令返回的执行结果
 $$  # 当前shell的PID（即脚本运行的当前进程号）
+
+OS=CentOS_7 #设置变量
+echo $OS #设置变量
+
+unset xxx yyy zzz #连续unset 
+
 ```
 
 
@@ -57,6 +140,7 @@ $$  # 当前shell的PID（即脚本运行的当前进程号）
 free -m
 free -mh
 swapoff -a  #关闭缓冲区
+sed -ri 's/.*swap.*/#&/' /etc/fstab #永久关闭
 
 ![](2022-08-02-19-38-51.png)
 ```
@@ -103,7 +187,25 @@ sysctl -p #查看是否生效：
 
 
 ```
+### mem一键清理？
+```bash
+free -m 查看
+echo 1 > /proc/sys/vm/drop_caches #清理 
+free -m  #查看  <https://blog.csdn.net/m0_67401055/article/details/123975789>
 
+```
+
+
+### 网络相关：
+```bash
+nslookup -qt=ptr 74.125.128.106 #反向接卸
+nslookup baidu.com 114.114.114.114 #也是指定ip访问
+
+dig @114.114.114.114 baidu.com #用dig 指定域名解析  
+
+```
+### dns解析顺序
+![](2022-08-05-20-55-02.png)
 
 
 ### yum
@@ -116,5 +218,148 @@ rpm -qa nginx
 #卸载
 rpm -e --nodeps XXX
 rpm -qa|grep nginx|xargs rpm -e --nodeps
+
+```
+
+### cgroup:
+```bash
+df -hT
+ll /sys/fs/cgroup
+lssubsys
+lssubsys -m 
+
+#限制memory 的例子 https://www.bilibili.com/video/BV1XG4y1Y7wc
+man cgcreate 
+#创建一个memory 类型的cgroup 
+cgcreate -a root -g memory:oomtest #-a <agid>:<auid>  -g <controllers>:<path>
+lscgroup |grep oom #查看cgroup 找出
+cgget -g memory:oomtest #查看创建的该组 或者是 cgget -g memory:/oomtest
+ll /sys/fs/cgroup/memory/oomtest
+
+echo 1000000 > /sys/fs/cgroup/memory/oomtest/memory.limit_in_bytes #
+
+cgexec -g memory:oomtest mongod -f /etc/mongodb.conf #以刚创建的oomtest 启动mongodb, 此时fork了子进程 但立刻停止了, 因为才10M 根本跑不起来mongodb
+ps -ef|grep mongo
+dmesg -T|grep oom #可以查看到溢出的日志
+
+lscgroup |grep oom #查看cgroup 找出
+cgdelete memory:/oomtest #删除该创建的cgroup 
+
+
+#限制cpu的例子 https://www.bilibili.com/video/BV1ei4y1S7dE
+cgcreate -g cpu:friday
+lscgroup |grep friday
+
+cgset -r  cpu.cfs_quota_us=10000 friday  #set一下这个group 的时间
+cgget -r cpu.cfs_quota_us friday  #get 查看
+cgclassify -g cpu:friday 2750 #将进程加入该cgoup中 2750是进程号 此处是api-server 
+cgclassify -g cpu:/ 2750  #取消限制
+
+
+----------------------------------------------
+
+[root@centos memory]# cgcreate -a root -g memory:oomtest
+[root@centos memory]# ll |grep oom
+-rw-r--r--   1 root root 0 Aug 13 02:08 memory.oom_control
+drwxr-xr-x   2 root root 0 Aug 14 00:20 oomtest		
+
+[root@centos ~]# lscgroup |grep oom 
+memory:/oomtest
+
+[root@master01 lifalin]# cd /sys/fs/cgroup
+[root@master01 cgroup]# ll
+total 0
+drwxr-xr-x. 6 root root  0 Aug 13 02:14 blkio  
+lrwxrwxrwx. 1 root root 11 Aug 13 02:14 cpu -> cpu,cpuacct
+lrwxrwxrwx. 1 root root 11 Aug 13 02:14 cpuacct -> cpu,cpuacct
+drwxr-xr-x. 6 root root  0 Aug 13 02:14 cpu,cpuacct
+drwxr-xr-x. 3 root root  0 Aug 13 21:08 cpuset
+drwxr-xr-x. 6 root root  0 Aug 13 02:14 devices
+drwxr-xr-x. 3 root root  0 Aug 13 21:08 freezer
+drwxr-xr-x. 3 root root  0 Aug 13 21:08 hugetlb
+drwxr-xr-x. 6 root root  0 Aug 13 02:14 memory
+lrwxrwxrwx. 1 root root 16 Aug 13 02:14 net_cls -> net_cls,net_prio
+drwxr-xr-x. 3 root root  0 Aug 13 21:08 net_cls,net_prio
+lrwxrwxrwx. 1 root root 16 Aug 13 02:14 net_prio -> net_cls,net_prio
+drwxr-xr-x. 3 root root  0 Aug 13 21:08 perf_event
+drwxr-xr-x. 6 root root  0 Aug 13 02:14 pids
+drwxr-xr-x. 6 root root  0 Aug 13 02:14 systemd
+
+
+[root@centos memory]# cgget -g cpu,cpuacct:/friday
+/friday:
+cpu.rt_period_us: 1000000
+cpu.rt_runtime_us: 0
+cpu.stat: nr_periods 0
+	nr_throttled 0
+	throttled_time 0
+cpu.cfs_period_us: 100000 #10w ms
+cpu.cfs_quota_us: -1  #指每10w ms 中该进程可以占用多少时间 -1 表示不限制，我们可以设置成10000
+cpu.shares: 1024
+cpuacct.stat: user 0
+	system 0
+cpuacct.usage_percpu: 0 0 
+cpuacct.usage: 0
+
+```
+
+
+### linux 清理内存：
+```bash
+free -m  #查看
+echo 1 > /proc/sys/vm/drop_caches #清理 
+free -m 
+
+```
+### shell:
+```bash
+#linux shell(bash)测试表达式中“==“和“-eq“的区别 https://blog.csdn.net/wx_assa/article/details/103658351
+# "=="是判断字符串是否相等。
+# "-eq"是判断字符串对应的数字值是否相等。
+
+
+#!/bin/bash
+num1=123	#num1是长度为3的字符串
+num2=0123	#num2是长度为4的字符串
+echo "======================================"
+
+echo -n "用==比较时："
+if [ $num1 == $num2 ]   #no
+then
+	echo "$num1和$num2相等"
+else
+	echo "$num1和$num2不相等"
+fi
+
+echo "======================================"
+
+echo -n "用-eq比较时："
+if [ $num1 -eq $num2 ] #yes
+then
+	echo "$num1和$num2相等"
+else
+	echo "$num1和$num2不相等"
+fi 
+
+```
+### linux中如何转换大小写
+https://www.csdn.net/tags/Mtjagg5sNzY4MjQtYmxvZwO0O0OO0O0O.html
+```bash
+# 如果是单个文件，用
+cat file | tr a-z A-Z > newfile
+# 可以将文件内容转换为大写。
+cat file | tr A-Z a-z > #newfile可以转换为小写。
+# 也可以用
+awk '{print toupper($1)}' file > newfile
+```
+
+### 监控 上下文切换
+https://www.jianshu.com/p/3b499937055f
+```bash
+# 系统上下文切换
+vmstat 5  # 每5s输出一组数据
+pidstat -w 5 # 进程上下文切换
+# 线程上下文切换
+# 中断上下文切换
 
 ```

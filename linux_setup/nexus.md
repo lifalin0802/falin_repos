@@ -100,17 +100,6 @@ GOPROXY="http://192.168.2.99:9081/repository/group-go/"
 
 ## 其他选项其他选项：
 允许代理匿名使用：
-![](http://showdoc.clouddeep.cn/server/index.php?s=/api/attachment/visitFile&sign=7e9d71798ae2669bd9dc1d8e12447312)
-
-允许npm token认证：
-![](http://showdoc.clouddeep.cn/server/index.php?s=/api/attachment/visitFile&sign=c6f68c64d8b020d6ce16a1c1a87b994f)
-
-禁用outreach:management功能
-![](http://showdoc.clouddeep.cn/server/index.php?s=/api/attachment/visitFile&sign=c9a0ff75e9f30bb2fe0a635e46572335)
-
-
-
-
 
 ### command mvn deploy to neuxs:
 ```bash

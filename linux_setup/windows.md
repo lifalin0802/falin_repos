@@ -160,3 +160,16 @@ RUN  powershell.exe -Command Start-Process -Wait -FilePath 'c:\sdp.exe' -Argumen
 
 CMD [ "cmd" ]
 ```
+
+```bash
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
+
+ADD [test]DeepCloud_SDP_Std_Update_6.9.4_20220623162027.exe c:/  
+
+RUN powershell.exe -Command  \
+  $ErrorActionPreference = 'Stop'; \
+  Start-Process -Wait -FilePath 'C:\[test]DeepCloud_SDP_Std_Update_6.9.4_20220623162027.exe' -ArgumentList '/s /v/qn' -PassThru -Wait ;   
+# RUN powershell.exe -Command  Start-Process -Wait -FilePath 'C:\DeepCloud_SDP_Std_Setup_6.9.4.exe' -ArgumentList '/s /v/qn' -PassThru
+
+CMD [ "cmd" ]
+```

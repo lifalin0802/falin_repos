@@ -7,6 +7,9 @@ my repository
 jobs -l #查看当前所有的job
 pgrep test.sh #查看当前叫test.sh 
 find / -name www.conf # find file
+
+find / -name "*.mp4" -exec rm -rf {} \;  #找到某些文件 删除
+
 ```
 
 
@@ -26,6 +29,18 @@ sed -i "s/quay.io/quay-mirror.qiniu.com/" mandatory.yaml
 sed '/this/d' # 去掉this
 grep -Ev '^$|^#' /etc/zabbix/zabbix_agent2.conf #这里排除#开始的行，和空行， 好，打印输出
 grep -Ev '^$|^#' /etc/zabbix/zabbix_server.conf
+
+grep -E 'pattern1.*pattern2' filename  #grep 本身没有and这个
+egrep 'pattern1.*pattern2' filename
+pgrep nginx
+
+$ egrep  'Tech|Sales' employee.txt  # or
+100 Thomas Manager Sales $5,000
+200 Jason Developer Technology $5,500
+300 Raj Sysadmin Technology $7,000
+500 Randy Manager Sales $6,000
+=
+
 [ -d "/path/to/dir" ] && echo "Directory /path/to/dir exists." || echo "Directory does not/path/to/dir exists." #查看某个路径是否存在
 
 # 分别删除 创建7天前、修改7天前、访问7天前的文件。前2个用的较多。
@@ -153,6 +168,8 @@ tail -f messages #实时跟进日志
 
 head -n 10 XX.log
 tail -n 10 XX.log
+tail -10 XX.log
+head -20 XX.log
 last -n 5 
 
 ```

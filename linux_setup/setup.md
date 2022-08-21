@@ -16,6 +16,9 @@ hostnamectl set-hostname Nexus  #设置主机名
 cat /etc/hostname  #检查主机名
 reboot # 重启机器
 
+
+vim /etc/hosts #编辑本地hosts文件
+
 #安装epel 要先设置http_proxy 代理
 yum install -y epel-release
 yum install net-tools
@@ -70,6 +73,11 @@ date "17:50"
 cd /etc/yum.repos.d/
 wget http://mirrors.aliyun.com/repo/Centos-7.repo
 sed -i 's/$releasever/7/g' /etc/yum.repos.d/Centos-7.repo
+
+#安装epel
+yum -y install epel-release
+
+
 yum makecache
 
 yum install -y yum-utils device-mapper-persistent-data lvm2
@@ -740,6 +748,9 @@ mysql> UPDATE mysql.user SET authentication_string=password('Clouddeep@8890') WH
 mysql> ALTER USER 'clouddeep'@'%' IDENTIFIED BY 'Clouddeep@8890'; 
 
 
+select * from user limit 10 \G  #格式化输出
+
+
 ```
 
 
@@ -754,7 +765,8 @@ mysql> ALTER USER 'clouddeep'@'%' IDENTIFIED BY 'Clouddeep@8890';
 
 
 
-### 安装nginx:
+### 安装nginx: 二进制安装
+官方文档： https://nginx.org/en/docs/http/ngx_http_upstream_module.html
 ```bash
 
 yum install -y pcre pcre-devel gcc zlib zlib-devel openssl openssl-devel
@@ -772,9 +784,24 @@ make install
 /usr/local/nginx/sbin/nginx
 
 nginx -t #查看nginx 配置文件
-nginx -v #查看版本
+nginx -s reload 
+nginx -V #查看加载的模块
+
+rpm -q --scripts nginx-filesystem #查看
+rpm -qp xxx.rpm --scripts
+rpm -ql nginx #是否通过rpm install 安装nginx
+id nginx
+
+
+
+
+
 yum isntall -y nginx 
 ps -ef|grep nginx 
+/project/openresty/nginx/sbin/nginx -t #yes 前提 : sudo -i 
+netstat -nltup|grep 80 #yes 前提 : sudo -i
+
+
 
 
 #配置文件：
@@ -846,7 +873,7 @@ server {
   server_name  www.jb51.com;
      
   location / {
-    proxy_pass http://127.0.0.1:8080;
+     proxy_pass http://127.0.0.1:8080;
      index  index.html index.htm;
    }
 }
@@ -889,13 +916,163 @@ server {
 
 #配置http请求转成https, 用rewrite
 server {
-listen 80;
-server_name www.hword.top;
-rewrite ^(.*) https://$server_name$1 permanent;
+  listen 80;
+  server_name www.hword.top;
+  rewrite ^(.*) https://$server_name$1 permanent;
 }
 
 
+#配置可以跨域访问 https://blog.csdn.net/My_SweetXue/article/details/124745745
+location / {  
+    add_header Access-Control-Allow-Origin *;
+    add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS';
+    add_header Access-Control-Allow-Headers 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization';
+ 
+    if ($request_method = 'OPTIONS') {
+        return 204;
+}
+proxy_pass http://192.168.12.1:8081;
+}
+
+#设置udp转发
+stream {
+    #将12345端口转发到192.168.1.23的3306端口
+    server {
+        listen 12345;
+        proxy_connect_timeout 5s;
+        proxy_timeout 20s;
+        proxy_pass 192.168.1.23:3306;
+    }
+    #将udp 53端口转发到192.168.1.23 53端口
+    server {
+        listen 53 udp reuseport;
+        proxy_timeout 20s;
+        proxy_pass 192.168.1.23:53;
+    }
+    #ipv4转发到ipv6
+    server {
+        listen 9135;
+        proxy_connect_timeout 10s;
+        proxy_timeout 30s;
+        proxy_pass [2607:fcd0:107:3cc::1]:9135;
+    }
+}
+
 ```
+
+
+### nginx 安装：
+```bash
+#二进制安装
+yum install gcc-c++
+yum install -y openssl openssl-devel
+yum install -y pcre pcre-devel
+yum install -y zlib zlib-devel
+mkdir /usr/local/nginx
+cd /home/lifalin
+wget https://nginx.org/download/nginx-1.23.0.tar.gz
+tar -zxvf -1.23.0.tar.gz
+
+# 脚本安装 https://www.cnblogs.com/oxspirt/p/15905112.html
+wget https://raw.githubusercontent.com/helloxz/nginx-cdn/master/nginx.sh && bash nginx.sh
+source /etc/profile  #安装完成后执行下面的命令让环境变量生效
+nginx -V
+
+#添加监控信息
+git clone git://github.com/vozlt/nginx-module-vts.git
+mv -f /home/lifalin/git/nginx-module-vts/ /usr/local/src/nginx-module-vts
+./configure  --prefix=/usr/local/nginx --conf-path=/usr/local/nginx/nginx.conf --with-http_stub_status_module --with-http_ssl_module --add-module=/usr/local/src/nginx-module-vts
+
+./configure --prefix=/usr/local/nginx --conf-path=/usr/local/nginx/nginx.conf  --with-http_stub_status_module 
+make && make install # 安装!!!重要！！！！
+cd /usr/local/nginx
+nginx  #启动
+nginx -s stop   #停止
+nginx -s reload　#重新加载nginx.conf 配置文件
+
+
+
+#手动创建用户和用户组
+groupadd nginx
+useradd nginx -g nginx -s /sbin/nologin -M
+
+cd nginx-1.23.0
+./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --user=nginx --group=nginx
+
+make			# 编译
+make install  		# 安装
+
+cd /usr/local/nginx/html
+echo  "hello nginx" > test.html
+echo "hello" >> test.html   #追加  
+ 
+[root@centos-node html]# ll
+total 16
+-rw-r--r--. 1 root root 3650 Oct 19  2021 404.html
+-rw-r--r--. 1 root root 3693 Oct 19  2021 50x.html
+-rw-r--r--. 1 root root   12 Aug  6 16:12 test.html  #默认权限是644，自己可读写，别人只读
+
+
+chmod 600 test.html #此时访问   http://192.168.5.100/test.html 会403 forbidden, 因为监听80端口是 master root权限
+chown nginx:nginx test.html    # 但worker是提供assets的人，所以要给worker nginx 这个人访问test.html权限
+
+[root@centos-node html]# ps -ef |grep nginx
+root       4304      1  0 15:55 ?        00:00:00 nginx: master process /usr/sbin/nginx
+nginx      4307   4304  0 15:55 ?        00:00:00 nginx: worker process
+root       4626   2040  0 16:24 pts/0    00:00:00 grep --color=auto nginx
+
+
+ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/nginx
+nginx -g "daemon off;" #前台启动
+
+cat /usr/local/nginx/nginx.conf|grep -Ev '^$|^.*?#' #查看配置文件
+grep -Ev '^$|^.*?#' /usr/local/nginx/nginx.conf #查看配置文件
+
+#修改nginx.conf, 修改端口 
+user  nginx nginx;
+http {  
+    server {
+        listen       18180;      
+    }
+}
+
+/usr/local/nginx/sbin/nginx            # 启动服务
+/usr/local/nginx/sbin/nginx -s reload  # 重新加载服务
+/usr/local/nginx/sbin/nginx -s stop  # 停止服务
+
+vim /lib/systemd/system/nginx.service  
+# /etc/systemd/system     #存放系统启动的默认级别及启动的unit的软连接，优先级最高。
+# /run/systemd/system     #系统执行过程中产生的服务脚本，优先级次之。
+# /usr/lib/systemd/system #存放系统上所有的启动文件。优先级最低
+
+
+
+root       3672   3594  0 16:03 ?        00:00:00 nginx: master process nginx -g daemon off;
+101        3726   3672  0 16:03 ?        00:00:00 nginx: worker process
+root       4022   3979  0 16:03 ?        00:00:00 nginx: master process nginx -g daemon off;
+root       4024   3985  0 16:03 ?        00:00:00 nginx: master process nginx -g daemon off;
+101        4049   4024  0 16:03 ?        00:00:00 nginx: worker process
+101        4050   4022  0 16:03 ?        00:00:00 nginx: worker process
+
+
+[Unit]
+Description=The NGINX HTTP and reverse proxy server
+
+[Service]
+Type=forking
+PIDFile=/usr/local/nginx/logs/nginx.pid
+ExecStart=/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+ExecReload=/usr/local/nginx/sbin/nginx -s reload
+ExecStop=/usr/local/nginx/sbin/nginx -s quit
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl deamon-reload
+```
+
+
+
 在linux下有Nginx、LVS、 Haproxy 等等服务可以提供负载均衡服务，而且Nginx提供了几种分配方式(策略):
 负载均衡策略
 轮询	默认方式
@@ -906,7 +1083,70 @@ fair（第三方）	响应时间方式  响应时间短的优先分配
 url_hash（第三方）	依据URL分配方
 https://www.jianshu.com/p/2d70a367f9d2
 
+### 模拟洪水攻击：
+```bash
+cat //proc/sys/net/core/somaxconn # 默认全连接数是128
+echo 1 > /proc/sys/net/core/somaxconn  # 改成1
+systemctl restart sshd #重启sshd ??
+ss -tnl #查看连接数 可以看到ssh 连接数改成了1 
 
+vim test.sh #此处的 & 和wait 表示并发
+[root@centos-node personal]# cat test.sh 
+#!/bin/bash
+for ((i =0; i <100 ; i++)); do {
+	ssh root@centos-node "date";
+}&
+done
+wait
+
+
+#查看半连接 全连接队列都满了
+[root@centos-node personal]# netstat -s|grep -i listen
+    212 times the listen queue of a socket overflowed  #全连接满了
+    212 SYNs to LISTEN sockets dropped   #半连接满了
+
+```
+![](2022-08-06-19-57-22.png)
+
+### top 命令：
+https://www.bilibili.com/video/BV1xz411e7st  
+![](2022-08-06-20-19-14.png)
+```bash
+
+启动了7h 42min，1个用户登录 平均负载的三个值 5 10 15min的负荷值 负荷是指任务队列里的平均长度
+当前系统中有 166个任务，2个正在运行
+cpu 状态：user用户空间  sys内核空间 ni调整优先级的用户进程 id闲置的时间  wa是用于等待io完成的时间 hi硬件中断 si软件中断 st和虚拟化有关
+内存的使用情况： 整体 空闲的 已经使用的 给缓存的
+
+任务列表：
+pr 进程的优先级 ni 是next virt virtual memory虚拟内存的使用情况 res常驻内存的大小 shr共享内存 S进程状态I idol,R running, S sleep
+cpu 占用情况 内存占用情况 启动到现在用的所有的cpu时间
+
+交互命令：
+h 帮助文档
+b 加粗
+t 显示/隐藏cpu信息
+f 添加字段 上下选择 空格选中 q退出 就可以看到最后一列加了一个
+z 变颜色
+u 选择特定user运行的进程
+M 按照memory 使用情况排序
+P 恢复默认cpu使用排序
+```
+![](2022-08-06-20-45-48.png)
+
+### 查看cpu使用情况：
+https://www.bilibili.com/video/BV1gE411e7i3  
+![](2022-08-19-01-00-51.png)
+```bash
+cat /proc/cpuinfo
+lscpu 
+cat /proc/loadavg 
+[root@centos ~]# cat /proc/loadavg 
+0.26 0.62 0.49 1/678 8750  #1 5 15min cpu的使用情况，0.26表示还好 
+#若是1，表示一个core就已经满载了 0.7-0.8是敏感数字，表示快超负荷了 ，1并不表示有问题, 若是1 core, 1.7就表示很有问题了
+#若是2核 2表示满载
+
+```
 
 ### rsyslog 配置方法：
 
@@ -973,13 +1213,13 @@ docker build -t mytag .  #. 表示当前路径
 # 进入容器
 docker exec -it dockerid cmd
 
-docker build -f DockerfileSDP -t sdp:6.9.4 .
+ -f DockerfileSDP -t sdp:6.9.4 .
 docker build -f DockerfileWG -t wg:1 .
 
 # 1. run 
 docker run -d wg:2 cmd /S /C ping -t 114.114.114.114
 
-#启动容器
+#启动容器 
 docker run -idt wg:1 cmd.exe
 docker run --user "NT Authority\System" -dit  wg:1 cmd.exe
 #进入容器，admin 权限
@@ -1193,60 +1433,6 @@ sftp> put filename
 sftp> bye
 ```
 
-### nginx 安装：
-```bash
-yum install gcc-c++
-yum install -y openssl openssl-devel
-yum install -y pcre pcre-devel
-yum install -y zlib zlib-devel
-mkdir /usr/local/nginx
-cd /home/lifalin
-wget https://nginx.org/download/nginx-1.23.0.tar.gz
-tar -zxvf -1.23.0.tar.gz
-
-#手动创建用户和用户组
-groupadd nginx
-useradd nginx -g nginx -s /sbin/nologin -M
-
-cd nginx-1.23.0
-./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --user=nginx --group=nginx
-
-make			# 编译
-make install  		# 安装
-
-
-#修改nginx.conf, 修改端口 
-user  nginx nginx;
-http {  
-    server {
-        listen       18180;      
-    }
-}
-
-/usr/local/nginx/sbin/nginx            # 启动服务
-/usr/local/nginx/sbin/nginx -s reload  # 重新加载服务
-/usr/local/nginx/sbin/nginx -s stop  # 停止服务
-
-vim /lib/systemd/system/nginx.service  
-# /etc/systemd/system     #存放系统启动的默认级别及启动的unit的软连接，优先级最高。
-# /run/systemd/system     #系统执行过程中产生的服务脚本，优先级次之。
-# /usr/lib/systemd/system #存放系统上所有的启动文件。优先级最低
-
-[Unit]
-Description=The NGINX HTTP and reverse proxy server
-
-[Service]
-Type=forking
-PIDFile=/usr/local/nginx/logs/nginx.pid
-ExecStart=/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
-ExecReload=/usr/local/nginx/sbin/nginx -s reload
-ExecStop=/usr/local/nginx/sbin/nginx -s quit
-
-[Install]
-WantedBy=multi-user.target
-
-systemctl deamon-reload
-```
 
 ### linux 创建cronjob:
 ```bash

@@ -85,17 +85,6 @@ Rules:
                  /   tomcat-svc:8080 (172.17.0.13:8080)
 Annotations:     <none>
 Events:          <none>
-[root@centos kubeworkspace]# [root@centos kubeworkspace]# curl tomcat.my.com
-Namespace:        dev
-Address:
-Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
-Rules:
-  Host           Path  Backends
-  ----           ----  --------
-  tomcat.my.com
-                 /   tomcat-svc:8080 (172.17.0.13:8080)
-Annotations:     <none>
-Events:          <none>
 [root@centos kubeworkspace]#
 ```
 此处没有调试好，但是可以看到ingress已经配置成功了，

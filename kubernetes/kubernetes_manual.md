@@ -1,24 +1,49 @@
 # kubernetes manual
 
 ### 创建自主pod
+声明式 apply 
+命令式 create/delete 
+查询 kubectl get(describe)
 ```bash
 kubectl run d1 --image httpd:alpine --port 80 
 pod/d1 created
 
 kubectl get deployments #没有东西
+kubectl get deployments -n dev #有了
 kubectl get pods #有了
 kubectl get pods -o wide #有了
 
+
 kubectl describe pod d1 #查看描述
-kubectl delete pod d1 #删除pod
+
+kubectl delete pod d1 #删除pod  临时删除， 
+kubectl delete -f xxx.yaml #彻底删除
 ```
+### kubernetes 显示当初的yaml 文件？
+https://www.csdn.net/tags/MtjaAgzsMzc3MTYtYmxvZwO0O0OO0O0O.html
+```bash
+kubectl get service serviceName -o yaml > backup.yaml
+kubectl get service -o yaml > backup.yaml  #导出所有service
+kubectl get ing web-ingress -o yaml > backup.yaml
+
+```
+
+
+
 ### 创建deployment
 ```bash
 kubectl create environment dev #创建名字为dev 的namespace
 kubectl create deployment httpd --image httpd:alpine --port 80 -n dev #c创建deployment
 kubectl get deployments -n dev
 kubectl get deployment -n dev #单复数都可以
+
+kubectl delete deployment XXX -n dev  
+kubectl delete svc XXX -n dev
 ```
+
+![](2022-08-13-00-59-55.png)
+
+
 
 这里删除 ``kubectl delete pod d1``**只对自主pod work**
 run命令也只是启动一个**自主的pod,**

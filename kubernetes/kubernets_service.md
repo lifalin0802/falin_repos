@@ -189,7 +189,7 @@ options ndots:5
 
 ;; ANSWER SECTION:
 service-headless.dev.svc.cluster.local. 30 IN A 172.17.0.4 
-service-headless.dev.svc.cluster.local. 30 IN A 172.17.0.3
+service-headless.dev.svc.cluster.local. 30 IN A 172.17.0.3  
 
 ;; Query time: 0 msec
 ;; SERVER: 10.96.0.10#53(10.96.0.10)

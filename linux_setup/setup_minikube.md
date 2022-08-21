@@ -56,6 +56,9 @@ minikube delete
 swapoff -a     #暂时关闭
 free -m
 vi /etc/fstab  #注释掉swap所在行 永久关闭
+sed -ri 's/.*swap.*/#&/' /etc/fstab # 永久关闭swap 其实就是将swap这一行注释掉
+mount -a #使之生效
+
 reboot         #永久关闭需要重启 
 
 #错误 [ERROR FileContent--proc-sys-net-bridge-bridge-nf-call-iptables]: /proc/sys/net/bridge/bridge-nf-call-iptables contents are not set to 1

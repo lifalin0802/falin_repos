@@ -74,9 +74,8 @@ lsof -p 29249
 lsof /project/redcore/webRoot/config/config.js  # no
 lsof|grep /project/redcore/webRoot/config/config.js  # no
 $ lsof|grep /project/openresty/nginx/logs/manager_client_access.log # 有结果，进程写文件的时候，能通过文件找到进程
-$ /project/openresty/nginx/sbin/nginx -t #yes 前提 : sudo -i 
-$ nginx -t #yes 前提 : sudo -i
-$ netstat -nltup|grep 80 #yes 前提 : sudo -i
+
+
 
 [root@beta-manager1 29249]# netstat -nltup|grep 80
 tcp        0      0 172.40.0.208:2380       0.0.0.0:*               LISTEN      28607/etcd          

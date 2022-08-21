@@ -42,6 +42,45 @@ systemctl restart network
 
 ```
 
+### 
+https://mp.weixin.qq.com/s/saivLvkF0watg2nHxrO5-Q
+```bash
+
+ip link set x up # Bring up interface x. ip link set lo up
+ip link set x down  # Bring down interface x.
+
+
+ip link add type veth #添加一对veth pair
+
+ip netns add ns0
+ip netns add ns1
+
+ip link set veth0 netns ns0   #将 veth0 加入到 ns0，将 veth1 加入到 XX namespace 中
+ip link set veth1 netns ns1
+
+ip netns exec ns0 ip link set veth0 up  #启用
+ip netns exec ns1 ip link set veth1 up
+
+ip netns exec ns0 ip addr #查看  ip -n ns0 addr
+ip netns exec ns1 ip addr
+
+ip netns exec ns0 ip addr add 192.0.0.1/24 dev veth0 
+ip netns exec ns1 ip addr add 192.0.0.2/24 dev veth1
+
+
+docker network create -d bridge --subnet "192.168.2.0/24" --gateway "192.168.2.1" br0   
+docker network ls
+docker run -it --name b1 --network br0 busybox
+
+
+[root@localhost ~]# docker run -it --name t1 --network bridge --rm busybox
+/ # cat /etc/hosts
+127.0.0.1 localhost
+
+```
+
+
+
 ###防火墙设置
 ```bash
 
@@ -52,6 +91,54 @@ setencforce 0  #关闭防火墙
 
 ```
 
+### iptables, dos攻击：
+```bash
+#https://blog.csdn.net/song123sh/article/details/124229841
+# 防止dos攻击 白名单 + iptables + 安全漏洞 + 隐藏源ip
+iptables -I INPUT -p tcp -dport 80 -m state -state NEW -m recent -set
+iptables -I INPUT -p tcp -dport 80 -m state-state NEW -m recent -update -seconds 30 -hitcount 10 j DROP  #封杀每30秒与80端口建立连接超过10个的IP地址
+```
+
+
+
+### mtu, mss, 滑动窗口 拥塞窗口
+```bash
+$ ping -s 1460 -M do baidu.com 
+[root@centos ~]# ping -s 1500 -M do baidu.com
+PING baidu.com (110.242.68.66) 1500(1528) bytes of data.
+ping: local error: Message too long, mtu=1500
+ping: local error: Message too long, mtu=1500
+
+# 是网络的最大传输单元,最大传输单元(MaximumTransmissionUnit，MTU)
+# https://tsov.net/uupee/17420/
+ifconfig ens33 mtu 1488 up #设置mtu大小
+netstat -i # 查看各个网卡的mtu大小
+
+# https://www.jianshu.com/p/399049fa1648
+# MSS = MTU - IP header头大小 - TCP 头大小
+[root@master01 ~]# netstat -i
+Kernel Interface table
+Iface             MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+docker0          1500        0      0      0 0             0      0      0      0 BMU
+ens33            1500     1621      0      0 0          1094      0      0      0 BMRU
+lo              65536   391996      0      0 0        391996      0      0      0 LRU
+virbr0           1500        0      0      0 0             0      0      0      0 BMU
+
+
+```
+
+
+###  tcp 网络缓冲区大小：
+```bash
+cat /proc/sys/net/core/rmem_default
+cat /proc/sys/net/core/wmem_default
+cat /proc/sys/net/core/rmem_max  # tcp 或udp收发缓冲区最大值
+cat /proc/sys/net/ipv4/tcp_wmem  # tcp 发送缓冲区的默认值
+4096	16384	4194304   #//第一个表示最小值，第二个表示默认值，第三个表示最大值。
+cat /proc/sys/net/ipv4/tcp_rmem
+
+/proc/sys/net/
+```
 
 
 Q: 不能操作 /etc/sysconfig/network-scripts/ifcfg-ens33?   
