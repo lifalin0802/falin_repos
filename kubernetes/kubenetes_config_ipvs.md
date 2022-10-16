@@ -31,6 +31,20 @@ yum install ipvsadm -y
 测试ipvs模式是否work:
    用 ``ipvsadm -Ln``命令
 ```bash
+
+route add host 192.168.1.150 dev lo:1 #直接添加 机器重启之后 会丢失 
+route -n #查看一下岗添加的
+echo "route add host 192.168.1.150 dev lo:1" >> /etc/rc.local #永久保存
+
+ipvsadm -A -t 192.168.1.150:80 -s rr
+ipvsadm -a -t 192.168.1.150:80 -r 192.168.1.171:80 -g
+ipvsadm -a -t 192.168.1.150:80 -r 192.168.1.172:80 -g
+
+ipvsadm -Ln
+
+ipvsadm -Ln --stats  #查看收发请求的状态
+
+
 [root@centos kubeworkspace]# ipvsadm -Ln
 IP Virtual Server version 1.2.1 (size=4096)
 Prot LocalAddress:Port Scheduler Flags

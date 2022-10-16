@@ -36,6 +36,9 @@ sysctl -p #使之生效
 modprobe overlay  #系统加载两个模块
 modprobe br_netfilter
 
+echo"1"> /proc/sys/net/ipv4/ip_forward 
+lsmod #列出内核模块
+
 yum list containerd #找不到！！！！
 yum list containerd.io # 找到了 ！！无语，
 yum list containerd* # 可以找到
@@ -70,7 +73,27 @@ grep -i xx   # 不区分大小写  -i, --ignore-case ignore case distinctions
 ```bash
 kubectl explain pods.spec  
 kubectl get nodes --show-labels
-kubectl label nodes node1  nodehaha
+kubectl  label node  node02 node-role.kubernetes.io/worker=
+kubectl  label node  node02 node-role.kubernetes.io/node- #消除标签node
+
+[root@master01 lifalin]# kubectl get nodes
+NAME       STATUS     ROLES           AGE   VERSION
+master01   NotReady   control-plane   67m   v1.24.3
+node02     Ready      <none>          23m   v1.24.3
+[root@master01 lifalin]# kubectl  label node  node02 node-role.kubernetes.io/worker=
+node/node02 labeled
+[root@master01 lifalin]# kubectl  label node  node02 node-role.kubernetes.io/node=
+node/node02 labeled
+[root@master01 lifalin]# kubectl get nodes
+NAME       STATUS     ROLES           AGE   VERSION
+master01   NotReady   control-plane   72m   v1.24.3
+node02     Ready      node,worker     27m   v1.24.3
+[root@master01 lifalin]# kubectl  label node  node02 node-role.kubernetes.io/node-
+node/node02 unlabeled
+[root@master01 lifalin]# kubectl get nodes
+NAME       STATUS     ROLES           AGE   VERSION
+master01   NotReady   control-plane   72m   v1.24.3
+node02     Ready      worker          28m   v1.24.3
 
 ```
 
@@ -89,9 +112,10 @@ cp cfssljson_1.6.1_linux_amd64 /usr/local/bin/cfssljson
 cp cfssl-certinfo_1.6.1_linux_amd64 /usr/local/bin/cfssl-certinfo
 
 #签发证书：
-cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
-cfssl gencert -ca=ca.pem -ca-key=key.pem -config=ca-config.json -profile=client client-csr.json| cfssljson -bare client -
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca - 
 
+cfssl gencert -ca=ca.pem -ca-key=key.pem -config=ca-config.json -profile=client client-csr.json| cfssljson -bare client -
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=../ca-config.json -profile=client server-csr.json | cfssljson -bare server
 sed -i 's/centos-master/localhost.localdomain/g' /etc/kubernetes/kubelet.conf
 
 
@@ -139,6 +163,8 @@ cat > /opt/certs/ca-config.json  << eof
   }
 }
 eof
+
+
 
 ```
 
@@ -252,6 +278,7 @@ docker tag  registry.aliyuncs.com/google_containers/coredns:v1.8.6 k8s.gcr.io/co
 
 
 kubeadm init --config=kubeadm-config.yaml --upload-certs  # 这里前提：需要cpu 2， mem 1700m, master,node docker-ce 都启来 containerd配置文件需要改
+
 kubeadm reset #如果init 失败，需要reset 一下再 执行上述init
 
 #启动文件
@@ -330,7 +357,7 @@ To start using your cluster, you need to run the following as a regular user:
 
   mkdir -p $HOME/.kube
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config   #每次reset init 成功之后都要运行的
 
 Alternatively, if you are the root user, you can run:
 
@@ -355,17 +382,34 @@ kubeadm join 192.168.5.140:6443 --token da2els.6m9ufp9c37vaagy7 \
 kubeadm init phase upload-certs --upload-certs  --v=999 #得到certificate key
 [upload-certs] Using certificate key:
 12c2a84814f1b1fae616ef86e8e570b20f06035591ccd54dae405c820ac60209
-#如果想join master 节点：
+#如果想join 一个 master 节点：
 kubeadm join 192.168.5.140:6443 --token da2els.6m9ufp9c37vaagy7 \
 	--discovery-token-ca-cert-hash sha256:ff314aa37fa425d9339cff30d3ce72835d4afae65952148a9a04c5bd28c6b878 
   --control-plane --certificate-key 12c2a84814f1b1fae616ef86e8e570b20f06035591ccd54dae405c820ac60209 --v=999
 
 #超过24小时 没有加入节点 应该重新生成token
 #第一个master节点上运行 
-[root@master01 ~]# kubeadm token create --print-join-command
+[root@master01 ~]# kubeadm token create z`--print-join-command
 kubeadm join 192.168.5.140:6443 --token vebwg0.haex8tp6r3n60fu3 --discovery-token-ca-cert-hash sha256:ff314aa37fa425d9339cff30d3ce72835d4afae65952148a9a04c5bd28c6b878 
 
 kubectl label node node01 node-role.kubernetes.io/worker=worker #kubectl get nodes 时候有个role为none? 的解决办法
+kubectl taint node node01  node-role.kubernetes.io/master-
+kubectl taint node node01 key1-
+kubectl taint nodes master1 node-role.kubernetes.io/master=:NoSchedule
+
+
+kubectl get po coredns-74586cf9b6-4lqmw -n kube-system -o yaml #work
+kubectl get configmap -n kube-system coredns -o yaml 
+
+kubectl get cs #component status
+[root@master01 yaml]# kubectl get cs
+Warning: v1 ComponentStatus is deprecated in v1.19+
+NAME                 STATUS    MESSAGE                         ERROR
+scheduler            Healthy   ok                              
+etcd-0               Healthy   {"health":"true","reason":""}   
+controller-manager   Healthy   ok  
+
+
 
 #kubeadm join 完之后可以查看各个基础pod运行情况
 #coredns 没起来 因为还没有装cni网络插件
@@ -399,9 +443,13 @@ systemctl status kubelet --full
 #安装calico
 curl https://projectcalico.docs.tigera.io/manifests/calico-etcd.yaml -o calico.yaml
 
+
+cat /etc/kubernetes/pki/etcd/ca.crt | base64 -w 0
+
 #替换calico.yaml 中的etcd的证书信息，etcd 地址  refered to :https://www.jianshu.com/p/5d760511b640
+#r如果etcd是http访问的，那就不用配置证书了，直接指定etcd地址就可以了
 #!/bin/bash 
-ETCD_ENDPOINTS="http://192.168.5.140:2379"
+ETCD_ENDPOINTS="https://192.168.5.140:2379"
 sed -i "s#.*etcd_endpoints:.*#  etcd_endpoints: \"${ETCD_ENDPOINTS}\"#g" calico.yaml
 sed -i "s#__ETCD_ENDPOINTS__#${ETCD_ENDPOINTS}#g" calico.yaml
 
@@ -424,6 +472,16 @@ sed -i "s#__ETCD_CERT_FILE__#/etc/kubernetes/pki/etcd/server.crt#g" calico.yaml
 sed -i "s#__ETCD_KEY_FILE__#/etc/kubernetes/pki/etcd/server.key#g" calico.yaml
 
 sed -i "s#__KUBECONFIG_FILEPATH__#/etc/cni/net.d/calico-kubeconfig#g" calico.yaml
+
+
+
+#设置  CALICO_IPV4POOL_CIDR  要和kube-controller-manager 一致 --cluster-cidr=10.244.0.0/16
+ - name: CALICO_IPV4POOL_CIDR
+   value: "10.244.0.0/16"
+#修改or添加 网卡参数 IP_AUTODETECTION_METHOD
+  - name: IP_AUTODETECTION_METHOD
+    value: "interface=ens33"
+
 
 #最后apply,
 kubectl apply -f calico.yaml
@@ -449,6 +507,10 @@ kube-system   kube-scheduler-master01                    1/1     Running        
 
 
 #安装ingress ? 
+
+
+
+
 
 #安装istio ?
 #安装kubesphere
@@ -497,7 +559,52 @@ root      26047  17362  0 02:13 pts/0    00:00:00 grep --color=auto 19495
 crictl --runtime-endpoint unix:///run/containerd/containerd.sock  pods
 crictl --runtime-endpoint unix:///run/containerd/containerd.sock  images
 crictl --runtime-endpoint unix:///run/containerd/containerd.sock  ps 
+
+
+vi /etc/crictl.yaml #编辑完即刻生效 啥都不用重启 
+
 ```
+
+### calico 安装：
+```bash
+
+
+```
+
+
+### calicoctl 安装:
+```bash 
+wget -c https://github.com/projectcalico/calicoctl/releases/download/v3.5.4/calicoctl -O /usr/bin/calicoct
+cp calicoctl /usr/bin
+chmod +x /usr/bin/calicoctl
+
+DATASTORE_TYPE=kubernetes KUBECONFIG=~/.kube/config calicoctl node status #命令测试S
+
+#设置环境变量
+export CALICO_DATASTORE_TYPE=kubernetes
+export CALICO_KUBECONFIG=~/.kube/config
+calicoctl get workloadendpoints
+
+calicoctl node status #查看bgp情况
+calicoctl get nodes
+calicoctl get ippool -o wide #
+
+
+#coredns起不来？ 用以下方法
+rm -rf /etc/cni/net.d/*
+rm -rf /var/lib/cni/calico
+systemctl  restart kubelet
+
+
+
+
+netstat -anp|grep :179 #查找19端口号 tcp长连接
+[root@master01 ~]# netstat -anp|grep :179
+tcp        0      0 0.0.0.0:179             0.0.0.0:*               LISTEN      3703/bird           
+tcp        0      0 192.168.5.140:179       192.168.5.142:59204     ESTABLISHED 3703/bird   
+
+```
+
 
 
 解决办法：  
@@ -517,5 +624,24 @@ Error from server (NotFound): the server could not find the requested resource (
 git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git
 kubectl create -f kubernetes-metrics-server/
 
+
+#怎盐查找apiserver的配置？比如etcd配置在哪里
+ps -ef|grep apiserver
+[root@master01 calico]# ps -ef|grep 84635|grep apiserver.
+root      84635  84445 10 18:30 ?        00:15:52 kube-apiserver --advertise-address=192.168.5.140 --allow-privileged=true --authorization-mode=Node,RBAC --client-ca-file=/etc/kubernetes/pki/ca.crt --enable-admission-plugins=NodeRestriction --enable-bootstrap-token-auth=true --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt --proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key --requestheader-allowed-names=front-proxy-client --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6443 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/etc/kubernetes/pki/sa.pub --service-account-signing-key-file=/etc/kubernetes/pki/sa.key --service-cluster-ip-range=10.96.0.0/16 --tls-cert-file=/etc/kubernetes/pkiapiserver.crt --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
+[root@master01 calico]# ps -ef|grep controll
+root      84647  84447  3 18:30 ?        00:06:07 kube-controller-manager --allocate-node-cidrs=true --authentication-kubeconfig=/etc/kubernetes/controller-manager.conf --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf --bind-address=127.0.0.1 --client-ca-file=/etc/kubernetes/pki/ca.crt --cluster-cidr=10.244.0.0/16 --cluster-name=kubernetes --cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt --cluster-signing-key-file=/etc/kubernetes/pki/ca.key --controllers=*,bootstrapsigner,tokencleaner --kubeconfig=/etc/kubernetes/controller-manager.conf --leader-elect=true --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt --root-ca-file=/etc/kubernetes/pki/ca.crt --service-account-private-key-file=/etc/kubernetes/pki/sa.key --service-cluster-ip-range=10.96.0.0/16 --use-service-account-credentials=true
+root      89474  37478  0 21:29 pts/1    00:00:00 grep --color=auto controll
+
+
+#或者在文件中 
+cat /opt/kubernetes/cfg/kube-apiserver.conf
+
+cat /opt/kubernetes/cfg/kube-controller-manager.conf
 ```
 
+### kubectl 操作：
+```bash
+#强制删除pod
+kubectl delete pod PODNAME --force --grace-period=0 
+```

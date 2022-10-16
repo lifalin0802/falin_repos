@@ -8,6 +8,17 @@ docker exec -it 45bc58dd2814 ip addr #不进入容器 打印ip地址
 for i in $(docker ps -q); do docker exec -it $i ip addr ;done  # 打印出每个镜像的ip
 for i in $(docker ps -a|grep demo|awk '{print $1}');do docker rm $i;done  #移除指定的镜像
 
+
+docker stop containerid
+docker kill containerid
+docker image save hello-world –o hello.img
+docker image load -i hello.img
+
+
+groupadd docker
+usermod -aG docker $USER
+newgrp docker #刷新权限
+
 ```
 
 ### 查看宿主机中容器的1号进程对应哪个进程号
@@ -65,7 +76,7 @@ docker run -dit demo:2
 docker run --entrypoint /bin/bash ...  #，给出容器入口的后续命令参数
 docker run --entrypoint="/bin/bash ..." ... #，给出容器的新Shell
 docker run -it --entrypoint="" mysql bash  #，重置容器入口
-docker run ... <New_Command>      #，可以给出其他命令以覆盖Dockerfile文件中的默认指令
+ ... <New_Command>      #，可以给出其他命令以覆盖Dockerfile文件中的默认指令
 
 ```
 
@@ -74,8 +85,8 @@ docker run ... <New_Command>      #，可以给出其他命令以覆盖Dockerfil
 FROM centos:latest
 CMD ["ls","-a"] 
 
-docker run -dit demo ls -al #可以  瞬时exit
-docker run -dit /bin/bash # 能up
+ -dit demo ls -al #可以  瞬时exit
+docker run -dit centos /bin/bash # 能up
 docker run -dit demo -al #报错 只能覆盖entrypiont
 
 FROM centos:latest
@@ -110,10 +121,7 @@ $ docker exec -it 511a20 ip a
 4026532707 ipc        1 16140 root   sh
 4026532708 pid        1 16140 root   sh
 
-
-
-
-
+docker run -dit busybox /bin/sh #可以保持住up状态
 
 [lifalin@centos ~]$ ifconfig
 br-1e23d51908ea: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
@@ -127,14 +135,29 @@ br-1e23d51908ea: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 
 #　解决办法：ifconfig xx  down 删除某个网卡
 ifconfig br-1e23d51908ea down 
-　
-
-
 
 ```
 
 
-### namespace :
+### docker 1号进程：
+```bash
+[root@centos ~]# docker exec -it 3fb990dbcb1a /bin/bash
+[root@3fb990dbcb1a /]# ps
+    PID TTY          TIME CMD
+     39 pts/1    00:00:00 bash
+     53 pts/1    00:00:00 ps
+[root@3fb990dbcb1a /]# ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 16:11 pts/0    00:00:00 /bin/bash
+root          39       0  0 20:49 pts/1    00:00:00 /bin/bash
+root          55      39  0 20:49 pts/1    00:00:00 ps -ef
+
+```
+docker 中一般没有systemd, 1号进程是 docker run时候的 dockerfile cmd的
+
+
+
+### namespace 新的进程是怎么使用:
 ```bash
 
 unshare --fork --pid --mount-proc /bin/bash  #隔离PID  exit之后 进程就会死掉
@@ -187,5 +210,87 @@ lrwxrwxrwx 1 root root 0 Aug 18 01:26 user -> user:[4026531837]
 lrwxrwxrwx 1 root root 0 Aug 18 01:26 uts -> uts:[4026531838]
 [root@centos ~]# lsns |grep 13572
 4026532705 mnt        2 13572 root   unshare --fork --pid --mount-proc /bin/bash
+
+```
+
+
+### 常用命令：
+```bash
+
+docker stats containername
+docker stats --no-stream 144d212470fa |awk '{print $3}' #no stream 非交互式
+docker stats --no-stream 144d212470fa |awk 'NR!=1{print $3}'
+
+#https://blog.csdn.net/u011628753/article/details/123801438 
+  docker run \
+--volume=/:/rootfs:ro \
+--volume=/var/run:/var/run:rw \
+--volume=/sys:/sys:ro \
+--volume=/var/lib/docker/:/var/lib/docker:ro \
+--volume=/dev/disk/:/dev/disk:ro \
+--publish=18888:8080 \
+--detach=true \
+--name=cadvisor \
+--restart on-failure:10 \
+google/cadvisor:latest
+
+#--net=host \   #别用这个!!!   
+
+docker port cadvisor #查看容器端口
+
+docker run -d \
+--name=grafana \
+-p 3000:3000 \
+grafana/grafana
+
+#grafana中添加模板 ui界面中选择import, ，
+# https://grafana.com/api/dashboards/193 docker的
+#  https://grafana.com/api/dashboards/9276 主机的
+ 
+
+
+[root@centos ~]# cat /etc/prometheus/prometheus.yml|grep -Ev '*#|^$'
+global:
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+rule_files:
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['localhost:9090']
+  - job_name: 'docker'
+    static_configs:
+    - targets: ['192.168.5.100:18888']  #cadvisor
+  - job_name: 'node_exporter'
+    static_configs:
+    - targets: ['192.168.5.100:9100']  #node_exporter
+
+wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+tar zxf node_exporter-1.0.1.linux-amd64.tar.gz
+
+
+id prometheus >/dev/null 2>&1 ||\
+useradd --no-create-home -s /bin/false prometheus
+chown -R prometheus:prometheus ${install_path}node_exporter/
+
+vim /usr/lib/systemd/system/node_exporter.service
+[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+ExecStart=/usr/local/node_exporter/node_exporter
+
+[Install]
+WantedBy=default.target
+
+#安装好node_exporter后  查看prometheus 界面 http://192.168.5.100:9090/graph?g0.range_input=1h&g0.expr=node_&g0.tab=1
+# query中输入node_开头的，应该有了，是node_exporter采集的
+# 另外在 http://192.168.5.100:9090/targets 也可以检测看到node_exporter 监控情况 
+
 
 ```

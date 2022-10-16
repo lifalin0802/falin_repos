@@ -37,8 +37,17 @@ jenkins_falin ip: 192.168.2.142 @ 192.168.2.223
 vi /etc/sysconfig/network-scripts/ifcfg-ens192
 ONBOOT="yes"   # 设置为yes
 systemctl restart network #后重启网卡
+
+#同步时间
+
 yum -y install ntpdate ntp
 ntpdate cn.pool.ntp.org
+yum imstall -y chrony #直接是使用默认服务器 同步外网ceph各个主机节点必须同步时间否则各种奇奇怪怪的错误
+systemctl enable --now chronyd  #默认是centos.pool.ntp.org 这个时间服务器  cat /etc/chrony.conf
+timedatectl set-ntp true
+chronyc -a makestep
+
+for i in 11 12 13 14; no ssh cong$1 hostname; done;
 
 #linux ll命令时间,Linux ll命令显示年月日 时分秒
 alias ll='ls -lh  --time-style=+"%Y-%m-%d %H:%M:%S"'
@@ -302,6 +311,7 @@ $ cd Python-3.7.2
 $ ./configure --prefix=/usr/local/python3 --enable-optimizations --with-ssl 
 #编译
 $ make && make install
+
 $ ln -s /usr/local/python3/bin/python3 /usr/bin/python3 
 $ ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3 
 $ ln -s /usr/local/python3/bin/gunicorn /usr/bin/gunicorn 
@@ -350,6 +360,8 @@ $ yum install libpcap-devel 缺少pcap组件
 $ pip3 install -r requirements.txt
 $ pip3 install --upgrade gevent==20.9.0
 
+
+sudo wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
 ```
 
 
@@ -374,6 +386,22 @@ systemctl restart docker
 ./harbor/install.sh #重启docker ，因为cs 同在一个机器
 
 docker login http://192.168.2.142  #admin/Harbor12345
+
+#harbor 安装：
+#harbor 重要的路径
+/home/harbor/harbor  #harbor 安装路径
+/home/harbor/harbor/harbor.yml #注释掉https 443 部分
+	hostname: 192.168.5.100 
+	http:
+	  port: 8089
+	harbor_admin_password: Harbor12345
+
+./prepare  检查是否可以安装
+./install.sh 真正安装
+
+
+
+
 
 #docker login -u admin --password-stdin http://192.168.2.142
 
@@ -538,17 +566,20 @@ tmpfs                    1.9G     0  1.9G   0% /sys/fs/cgroup
 tmpfs                    379M     0  379M   0% /run/user/0
 tmpfs                    379M     0  379M   0% /run/user/998
 
-$ fdisk -l 
-$ fdisk /dev/sda    #后依次输入n, p, 3, w
-$ reboot            #一定要重启，否则下边操作 会报 /dev/sda3 not found
-$ pvcreate /dev/sda3
-$ mkfs.ext4 /dev/sda3
-$ vgextend centos /dev/sda3
-$ cat /etc/fstab | grep centos-root
-$ lvextend -L +9G /dev/mapper/centos-root
-$ xfs_growfs /dev/mapper/centos-root #使用相应的命令来扩展磁盘空间
-$ lvextend -L +14G /dev/mapper/centos-root
-$ xfs_growfs /dev/mapper/centos-root
+
+
+fdisk /dev/sda    #用fdisk 对/dev/sdb 进行分区, 后依次输入n, p, 3, w  
+reboot            #一定要重启，否则下边操作 会报 /dev/sda3 not found
+partprobe /dev/sd* #磁盘初始化
+cat /proc/partitions 
+pvcreate /dev/sda3 #创建卷组
+mkfs.ext4 /dev/sda3  #或者 mkfs -t ext3 /dev/sdb1
+vgextend centos /dev/sda3
+cat /etc/fstab | grep centos-root
+lvextend -L +9G /dev/mapper/centos-root
+xfs_growfs /dev/mapper/centos-root #使用相应的命令来扩展磁盘空间
+lvextend -L +14G /dev/mapper/centos-root
+xfs_growfs /dev/mapper/centos-root
 
 # 参考
 # https://www.jb51.net/article/230685.htm
@@ -769,41 +800,6 @@ select * from user limit 10 \G  #格式化输出
 官方文档： https://nginx.org/en/docs/http/ngx_http_upstream_module.html
 ```bash
 
-yum install -y pcre pcre-devel gcc zlib zlib-devel openssl openssl-devel
-yum -y install gcc pcre pcre-devel zlib zlib-devel openssl openssl-devel
-
-
-
-wget http://nginx.org/download/nginx-1.21.6.tar.gz
-./configure --prefix=/usr/local/nginx --conf-path=/usr/local/nginx/nginx.conf
-./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-http_realip_module
-make
-make install
-
-#、启动nginx命令：
-/usr/local/nginx/sbin/nginx
-
-nginx -t #查看nginx 配置文件
-nginx -s reload 
-nginx -V #查看加载的模块
-
-rpm -q --scripts nginx-filesystem #查看
-rpm -qp xxx.rpm --scripts
-rpm -ql nginx #是否通过rpm install 安装nginx
-id nginx
-
-
-
-
-
-yum isntall -y nginx 
-ps -ef|grep nginx 
-/project/openresty/nginx/sbin/nginx -t #yes 前提 : sudo -i 
-netstat -nltup|grep 80 #yes 前提 : sudo -i
-
-
-
-
 #配置文件：
 worker_processes  1;  
 events {
@@ -963,11 +959,34 @@ stream {
 
 ### nginx 安装：
 ```bash
+
+
+yum install -y pcre pcre-devel gcc zlib gcc-c++ zlib-devel openssl openssl-devel
+
+wget http://nginx.org/download/nginx-1.21.6.tar.gz
+./configure --prefix=/usr/local/nginx --conf-path=/usr/local/nginx/nginx.conf
+./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-http_realip_module
+make
+make install
+
+#、启动nginx命令：
+/usr/local/nginx/sbin/nginx # or 直接nginx
+ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/nginx
+
+
+nginx -t #查看nginx 配置文件
+nginx -V #查看加载的模块
+nginx  #启动
+nginx -s stop   #停止
+nginx -s reload　#重新加载nginx.conf 配置文件
+
+rpm -q --scripts nginx-filesystem #查看
+rpm -qp xxx.rpm --scripts
+rpm -ql nginx #是否通过rpm install 安装nginx
+id nginx
+
+
 #二进制安装
-yum install gcc-c++
-yum install -y openssl openssl-devel
-yum install -y pcre pcre-devel
-yum install -y zlib zlib-devel
 mkdir /usr/local/nginx
 cd /home/lifalin
 wget https://nginx.org/download/nginx-1.23.0.tar.gz
@@ -983,14 +1002,27 @@ git clone git://github.com/vozlt/nginx-module-vts.git
 mv -f /home/lifalin/git/nginx-module-vts/ /usr/local/src/nginx-module-vts
 ./configure  --prefix=/usr/local/nginx --conf-path=/usr/local/nginx/nginx.conf --with-http_stub_status_module --with-http_ssl_module --add-module=/usr/local/src/nginx-module-vts
 
-./configure --prefix=/usr/local/nginx --conf-path=/usr/local/nginx/nginx.conf  --with-http_stub_status_module 
-make && make install # 安装!!!重要！！！！
 cd /usr/local/nginx
-nginx  #启动
-nginx -s stop   #停止
-nginx -s reload　#重新加载nginx.conf 配置文件
+./configure --prefix=/usr/local/nginx --conf-path=/usr/local/nginx/nginx.conf  --with-http_stub_status_module  #work
+make && make install # 安装!!!重要！！！！
+# 添加节点： location /nginx-status ，今后可以访问 http://192.168.5.100/nginx-status
+# refered to: https://blog.csdn.net/hanjinjuan/article/details/119733953
+server {
+        listen 80;
+        server_name localhost;
+        location /nginx-status {
+            stub_status     on;
+            access_log      on;
+        }
+}
 
+Active connections: 2 
+server accepts handled requests
+ 2 2 4 
+Reading: 0 Writing: 1 Waiting: 1 
 
+#pid文件路径
+cat /usr/local/nginx/logs/nginx.pid
 
 #手动创建用户和用户组
 groupadd nginx
@@ -1220,7 +1252,7 @@ docker build -f DockerfileWG -t wg:1 .
 docker run -d wg:2 cmd /S /C ping -t 114.114.114.114
 
 #启动容器 
-docker run -idt wg:1 cmd.exe
+ -idt wg:1 cmd.exe
 docker run --user "NT Authority\System" -dit  wg:1 cmd.exe
 #进入容器，admin 权限
 #默认不是admin 权限进入docker ，指定user还是得做
@@ -1449,7 +1481,36 @@ done
 
 crontab -e    # 编辑crontab 指令
 crontab -l    # 查看 定时任务 列表
-0 0 1,15 * * /bin/bash   /project/cronjob/clear_image.sh  # 每个月1号15号运行该脚本 
+0 0 1,15 * * /bin/bash   /project/cronjob/clear_image.sh  # 每个月1号15号运行该脚本  s h d m w
+0 6-12/2 * 11 * /usr/bin/httpd.sh #Crontab在11月份内，每天的早上6点到12点中，每隔2小时执行一次/use/bin/httpd.sh
 ```
 
+
+
+### setup nacos:
+```bash
+#nacos 下载地址 https://github.com/alibaba/nacos/releases
+
+# 配置jdk
+tar -xvf jdk-8u341-linux-x64.tar.gz -C /usr/local/java
+
+JAVA_HOME=/usr/local/java/jdk
+PATH=$JAVA_HOME/bin:$PATH
+CLASSPATH=$JAVA_HOME/jre/lib/ext:$JAVA_HOME/lib/tools.jar
+export PATH JAVA_HOME CLASSPATH
+
+cd ./bin
+./startup.sh #启动nacos脚本 
+#检查是否启动成功
+ps -ef |grep nacos
+netstat -nltup|grep 8848
+
+#访问页面
+#/home/lifalin/nacos
+http://192.168.5.100:8848/nacos/index.html#/login
+#账密： nacos/nacos
+```
+
+视频：https://www.bilibili.com/video/BV1xN4y157JK/?p=6&spm_id_from=pageDriver&vd_source=0cc4b9db6f2f6ccaae5a998b1e9d12d4
+blog: https://blog.csdn.net/m0_67698950/article/details/124911153
 

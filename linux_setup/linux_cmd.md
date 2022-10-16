@@ -39,6 +39,11 @@ ls is aliased to `ls --color=auto`
 alias ls='ls --color=auto'
 
 \ls  #直接使用ls命令
+find / -name "*.log" -mtime 3 -exec rm -rf {} \; #最后创建时间是3天前，后缀是*log的文件并删
+find / -name "*.log" -mtime 3 -ok rm -rf {} \;
+find / -name "*.log" -mtime 3 | xargs rm -rf
+grep -n "^$" file1  #查询file1里面空行所在行号
+mkdir -p xunlei{1..20}/dir{1..255}/xunlei{1..10000}.html
 
 
 grep -Ev '^$|#' xxx.conf #去掉空行和注释
@@ -78,6 +83,8 @@ sar -n DEV -f /var/log/sa/saDD
 sar -f /var/log/sa/saDD #DD表示数字，25表示25号，29表示29号
 cat /proc/net/dev #监控网卡使用情况
 
+
+#限制带宽 tc iptables cgroup 
 
 ```
 注意：  
@@ -125,7 +132,7 @@ $#  #当前脚本执行命令的输入参数个数，例如执行 ./test.sh aa b
 $!  # 上一个执行指令的PID（后台运行的最后一个进程的进程ID号）
 $?  # 上一个命令返回的执行结果
 $$  # 当前shell的PID（即脚本运行的当前进程号）
-
+ll !$  # 将上一条命令的参数传递给下一条命令的参数，平时用于更方便，更多应用在bash脚本
 OS=CentOS_7 #设置变量
 echo $OS #设置变量
 
@@ -196,6 +203,26 @@ free -m  #查看  <https://blog.csdn.net/m0_67401055/article/details/123975789>
 ```
 
 
+### 磁盘相关：
+```bash
+
+fdisk -l
+[root@master01 yum.repos.d]# fdisk -l
+
+Disk /dev/sda: 21.5 GB, 21474836480 bytes, 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x000e5745
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048      616447      307200   83  Linux
+/dev/sda2          616448     4810751     2097152   82  Linux swap / Solaris
+/dev/sda3         4810752    41943039    18566144   83  Linux
+
+```
+
 ### 网络相关：
 ```bash
 nslookup -qt=ptr 74.125.128.106 #反向接卸
@@ -203,7 +230,13 @@ nslookup baidu.com 114.114.114.114 #也是指定ip访问
 
 dig @114.114.114.114 baidu.com #用dig 指定域名解析  
 
+host  baidu.com 
+
 ```
+
+
+
+
 ### dns解析顺序
 ![](2022-08-05-20-55-02.png)
 
@@ -223,6 +256,11 @@ rpm -qa|grep nginx|xargs rpm -e --nodeps
 
 ### cgroup:
 ```bash
+
+ulimit -n #Linux能打开的最大文件描述符数量
+cat /proc/sys/fs/file-max
+
+
 df -hT
 ll /sys/fs/cgroup
 lssubsys

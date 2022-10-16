@@ -8,13 +8,27 @@
 kubectl run d1 --image httpd:alpine --port 80 
 pod/d1 created
 
+
+kubectl create deploy netshoot --image=nicolaka/netshoot -- /bin/sh -c 'sleep 36000'
+
+
 kubectl get deployments #没有东西
 kubectl get deployments -n dev #有了
 kubectl get pods #有了
 kubectl get pods -o wide #有了
+kubectl get po -w #监控看
 
 
 kubectl describe pod d1 #查看描述
+kubectl get cm -n kube-system  #查到所有的configmap
+kubectl get node master01 -o yaml |grep -i cidr
+
+
+[root@master01 calico]# kubectl get node master01 -o yaml |grep -i cidr
+  podCIDR: 10.244.0.0/24
+  podC
+
+
 
 kubectl delete pod d1 #删除pod  临时删除， 
 kubectl delete -f xxx.yaml #彻底删除

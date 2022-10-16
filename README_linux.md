@@ -34,6 +34,9 @@ grep -E 'pattern1.*pattern2' filename  #grep 本身没有and这个
 egrep 'pattern1.*pattern2' filename
 pgrep nginx
 
+grep -n "^$" file1 #查询file1里面空行所在行号
+
+
 $ egrep  'Tech|Sales' employee.txt  # or
 100 Thomas Manager Sales $5,000
 200 Jason Developer Technology $5,500

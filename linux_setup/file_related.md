@@ -7,7 +7,7 @@ stdin, stdout, stderr:
 2>&1 ---标准错误重新定向到标准输出
 
 ```bash
-cat >>filetest 2>&1 <<END      # 建立filetest文件，当输入遇到END时，退出
+# cat >>filetest 2>&1 <<END      # 建立filetest文件，当输入遇到END时，退出
 
 find /etc -name passwd 1>find.out 2>find.err
 find /etc -name passwd 2>find.err >find.out
@@ -25,7 +25,32 @@ nohup XXX &
 tail -f nohup.out
 
 
+./bg.sh  & #设置成backgroud 后台程序
+jobs -l  #显示所有后台进程
+fg 1 #将1号进程提成前台程序 ctrl+c可以结束该进程
+
+
+
+[root@master01 ~]# nohup ping 8.8.8.8 &
+[1] 85807
+[root@master01 ~]# ps -ef |grep 85807
+root      85807  85552  0 01:53 pts/0    00:00:00 ping 8.8.8.8
+root      86027  85552  0 01:54 pts/0    00:00:00 grep --color=auto 85807
+[root@master01 ~]# fg
+nohup ping 8.8.8.8
+
+
+find /var/log -mtime +30 -print #找出大于30天的文件 输出 https://blog.csdn.net/weixin_34731836/article/details/116740143
+find ./ -size -5k -exec rm -f {} \;# 找出大于5k 的文件 删除 https://blog.csdn.net/qingfengxd1/article/details/102861396
+
+ls -l |grep "^-"|wc -l  #统计当前文件个数
+#文件内容排序 找出访问量最多的ip
+awk -F '|' '{print $1}' log.txt | sort | uniq -c | sort -nrk 1 -t ' '
+
 ```
+
+
+
 
 
 ### 使用环境变量 替换文件中的变量值

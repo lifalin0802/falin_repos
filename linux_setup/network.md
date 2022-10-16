@@ -93,6 +93,9 @@ setencforce 0  #关闭防火墙
 
 ### iptables, dos攻击：
 ```bash
+
+iptables -L -n #查看
+
 #https://blog.csdn.net/song123sh/article/details/124229841
 # 防止dos攻击 白名单 + iptables + 安全漏洞 + 隐藏源ip
 iptables -I INPUT -p tcp -dport 80 -m state -state NEW -m recent -set
@@ -138,6 +141,26 @@ cat /proc/sys/net/ipv4/tcp_wmem  # tcp 发送缓冲区的默认值
 cat /proc/sys/net/ipv4/tcp_rmem
 
 /proc/sys/net/
+
+
+yum install speedtest-cli -y #测速包
+ifconfig 
+ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.5.100  netmask 255.255.255.0  broadcast 192.168.5.255
+        inet6 fe80::b750:3003:9565:df7d  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:09:ff:98  txqueuelen 1000  (Ethernet)
+        RX packets 808725  bytes 95545448 (91.1 MiB)   #收包和收包字节数
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 3475013  bytes 8339504836 (7.7 GiB)  #发包和收发字节数
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+#实时监控 
+ watch -n 1 -d ifconfig ens33 @
+ yum install iftop -y 
+ iftop
+ iftop -i ens33
+ 
+
 ```
 
 
