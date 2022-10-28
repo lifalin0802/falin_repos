@@ -39,15 +39,14 @@ yum -y install epel-release
 yum install python-pip
 pip install tccli
 
+
 # set 子命令可以设置某一配置，也可同时配置多个
-tccli configure set secretId AKIDAD5rUu43Lm37uSkkV1JMBl58vRZSr0sX
-tccli configure set secretKey WnpeEYcR1kCNJ0SecMsAGC5lBOL6d8Nr
+tccli configure set secretId xx
+tccli configure set secretKey xx
 tccli configure set region ap-beijing  output json
 # get 子命令用于获取配置信息
 tccli configure get secretKey
 tccli configure list
-
-
 
 
 velero backup create test-k8s-20221017
