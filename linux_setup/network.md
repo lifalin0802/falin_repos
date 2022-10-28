@@ -37,6 +37,8 @@ IPADDR="192.168.5.100" #必须设置
 GATEWAY="192.168.5.2" #必须设置
 ONBOOT="yes" #必须设置
 
+
+
 #编辑之后别忘了重启
 systemctl restart network
 

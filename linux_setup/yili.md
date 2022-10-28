@@ -17,6 +17,9 @@ kubecm merge -f /root/.kube/config
 
 kubectl config view 
 
+k get ds -A|grep velero  #查看所有的daemonset
+
+
 #不work
 powershell设置环境变量：
 $Env:KUBECONFIG=("$HOME\.kube\config;$HOME\.kube\cls-dyz4wcd3-config") 
@@ -36,7 +39,60 @@ yum -y install epel-release
 yum install python-pip
 pip install tccli
 
+# set 子命令可以设置某一配置，也可同时配置多个
+tccli configure set secretId AKIDAD5rUu43Lm37uSkkV1JMBl58vRZSr0sX
+tccli configure set secretKey WnpeEYcR1kCNJ0SecMsAGC5lBOL6d8Nr
+tccli configure set region ap-beijing  output json
+# get 子命令用于获取配置信息
+tccli configure get secretKey
+tccli configure list
 
+
+
+
+velero backup create test-k8s-20221017
+velero backup create test-k8s-20221017.4 --include-resources logconfigs,namespaces
+velero backup create test-k8s-20221018.0 --include-resources logconfigs,namespaces
+
+
+velero restore create --from-backup test-k8s-20221017
+
+velero backup delete test-k8s-20221017
+
+```
+
+### velero 安装：
+参考：
+```bash
+## 下载velero包
+wget https://github.com/vmware-tanzu/velero/releases/download/v1.5.2/velero-v1.5.2-linux-amd64.tar.gz
+## 解压
+tar -xvf velero-v1.5.2-linux-amd64.tar.gz
+## 移动velero可执行文件
+mv velero-v1.5.2-linux-amd64/velero /usr/bin/
+
+#安装成功后可以
+# 配置velero 后端存储为腾讯云cos 参考 https://www.cnblogs.com/cloudstorageangel/p/14184088.html
+velero backup-location get  #查看存储位置状态，显示“Avaliable”，则说明访问 COS 正常
+[root@centos lifalin]# velero backup-location get 
+NAME      PROVIDER   BUCKET/PREFIX           PHASE       LAST VALIDATED                  ACCESS MODE
+default   aws        tke-velero-1302259445   Available   2022-10-17 13:34:13 +0800 CST   ReadWrite
+
+
+## 备份cxp-prod以下资源，ingress、cm、secret、serviceaccount、rolebinding等资源
+velero backup create cxp-prod-ingress-20211217 --include-resources ingresses,configmaps,secrets,serviceaccounts,rolebindings --include-namespaces cxp-prod
+
+## 备份cxp-prod以下资源，根据appGroup=cxp标签选择匹配，包含deploy、svc资源进行备份
+velero backup create cxp-prod-web-java-20211217 --selector appGroup=cxp --include-resources deployments,services --include-namespaces cxp-prod
+
+## 备份ewx-prod整个命名空间下的资源
+velero backup create ewx-prod-20211217 --include-namespaces ewx-prod
+velero backup create test-k8s-20221017
+
+## 依据备份的名称进行恢复
+velero restore create --from-backup cxp-prod-ingress-20211217
+velero restore create --from-backup cxp-prod-web-java-20211217
+velero restore create --from-backup ewx-prod-20211217
 ```
 
 
@@ -56,46 +112,57 @@ kubectl api-versions -A
 
 
 helm delete log-empower-uat-java-2 -n empower-uat
-helm list --namespace empower-uat
 helm uninstall log-empower-uat-java-2 -n empower-uat #helm uninstall --namespace empower-uat log-empower-uat-java-2
 
 helm install --namespace empower-uat log-empower-uat-java-2 --set nameSpace=empower-uat,program=java,logConfig.topicId=9cb52d30-3101-41e8-8af5-6c097e9ecf20 -f values.yaml .
 helm upgrade --namespace empower-uat log-empower-uat-java-2 --set nameSpace=empower-uat,program=java,logConfig.topicId=9cb52d30-3101-41e8-8af5-6c097e9ecf20 -f values.yaml .
 
+#查看installed的列表
+helm list --namespace empower-uat
+helm ls -n empower-uat
+
+
+
+java -Dspring.output.ansi.enabled=ALWAYS -jar springboot-01-helloworld-1.0-SNAPSHOT.jar 
+
+docker run  --entrypoint  -p 8089:8080 hellojava:7
+docker run --entrypoint="/bin/bash java -Dspring.output.ansi.enabled=ALWAYS -jar springboot-01-helloworld-1.0-SNAPSHOT.jar"  -p 8089:8080 hellojava:7
+```
+
+```powershell
+C:\code\springmvc\src\springboot-01-helloworld\target>java -jar springboot-01-helloworld-1.0-SNAPSHOT.jar --spring.output.ansi.enabled=ALWAYS
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+[32m :: Spring Boot :: [39m      [2m (v1.5.9.RELEASE)[0;39m
+
+[2m2022-10-25 19:13:01.221[0;39m [32m INFO[0;39m [35m16992[0;39m [2m---[0;39m [2m[           main][0;39m [36mcom.atguigu.HelloWorldMainApplication   [0;39m [2m:[0;39m Starting HelloWorldMainApplication v1.0-SNAPSHOT on DESKTOP-052GI91 with PID 16992 (C:\code\springmvc\src\springboot-01-helloworld\target\springboot-01-helloworld-1.0-SNAPSHOT.jar started by lifal in C:\code\springmvc\src\springboot-01-helloworld\target)
+[2m2022-10-25 19:13:01.225[0;39m [32m INFO[0;39m [35m16992[0;39m [2m---[0;39m [2m[           main][0;39m [36mcom.atguigu.HelloWorldMainApplication   [0;39m [2m:[0;39m No active profile set, falling back to default profiles: default
 
 ```
-\[(\w+)\]\s
-\[([^\]]+)\]\s
 
 
+```yaml
+    containers:
+      - env:
+        - name: APPNAME
+          value: wx-xjhcrm-xxljob
+        - name: APPGROUP
+          value: wx-xjhcrm
+        - name: workEnv
+          value: prod
+        - name: JAVA_OPTS
+          value: -Xms1024m -Xmx3072m --spring.output.ansi.enabled=NEVER
+        image: yldc-docker.pkg.coding.yili.com/wx-xujinhuan/docker/wx-xjhcrm-xxljob:eprod-bbranch-tag-commit-4-2109101607
+        imagePullPolicy: IfNotPresent
+```
 
 
-\[\w+\]\s+\[\w+\]\s+.*   #首行
-\[(\w+)\]\s\[(\w+)\]\s\[(\w+)\]\s\[([^\]]+)\]\s(.*)
-\[(\w+)\]\s\[(\w+)\]\s\[(\w+)\]\s\[([^\]]+)\]\s\[([^\]]+)\]\s\[([^\]]+)\]\s\[([^\]]+)\]\s-\s(.*)
-[empower] [uat] [INFO] [dcenter-service] [2022-10-12 14:41:05.098] [xxl-job, JobThread-32-1665556800013] [c.i.c.dcenter.beam.jdbc.JdbcWriter] - INSERT INTO empower_emp_activity_exec (
-											activity_guid,	
-											emp_guid,
-											num,
-											tenant_id,
-											create_time 
-										)
-										VALUES
-											(
-												@activity_guid,
-												@emp_guid,
-												@num,
-												2,
-												now()
-											)"
-
-
-
+ #首行
 
 单行完全正则
-[empower] [uat] [INFO] [dcenter-service] [2022-10-12 17:22:34.728] [xxl-job, JobThread-32-1665566400020] [com.xxl.job.core.thread.JobThread] - >>>>>>>>>>> xxl-job JobThread stoped, hashCode:Thread[xxl-job, JobThread-32-1665566400020,10,main]
-\[(\w+)\]\s\[(\w+)\]\s\[(\w+)\]\s\[([^\]]+)\]\s\[([^\]]+)\]\s\[([^\]]+)\]\s\[([^\]]+)[^>]+\s\-\s.*
 
-
-
-[empower] [uat] [INFO] [api-gateway] [2022-10-14 13:21:38.469] [com.alibaba.nacos.naming.push.receiver] [com.alibaba.nacos.client.naming] - received push data: {"type":"dom","data":"{\"name\":\"empower-uat@@report-service\",\"clusters\":\"\",\"cacheMillis\":10000,\"hosts\":[{\"instanceId\":\"172.22.19.152#8080#DEFAULT#empower-uat@@report-service\",\"ip\":\"172.22.19.152\",\"port\":8080,\"weight\":1.0,\"healthy\":true,\"enabled\":true,\"ephemeral\":true,\"clusterName\":\"DEFAULT\",\"serviceName\":\"empower-uat@@report-service\",\"metadata\":{\"preserved.register.source\":\"SPRING_CLOUD\",\"management.port\":\"5885\"},\"instanceHeartBeatInterval\":5000,\"instanceHeartBeatTimeOut\":15000,\"ipDeleteTimeout\":30000}],\"lastRefTime\":1665724898468,\"checksum\":\"\",\"allIPs\":false,\"reachProtectionThreshold\":false,\"valid\":true}","lastRefTime":11757094658706013} from /172.22.12.53
