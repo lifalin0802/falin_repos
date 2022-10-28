@@ -102,8 +102,11 @@ systemctl enable docker
 
 ### nexus 机器安装docker-compose：
 ```bash
-$ curl -L https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-$ curl -L "https://github.com/docker/compose/releases/download/1.29.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+$ curl -sSL  https://github.com/docker/compose/releases/download/1.29.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+$ curl -sSL  "https://github.com/docker/compose/releases/download/1.29.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+
+#https://github.com/docker/compose/releases/tag/v2.12.2 从这里边手动下吧。。。
 
 $ chmod +x /usr/local/bin/docker-compose
 $ docker-compose --version 
@@ -312,23 +315,77 @@ $ ./configure --prefix=/usr/local/python3 --enable-optimizations --with-ssl
 #编译
 $ make && make install
 
-$ ln -s /usr/local/python3/bin/python3 /usr/bin/python3 
-$ ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3 
-$ ln -s /usr/local/python3/bin/gunicorn /usr/bin/gunicorn 
-$ yum install --reinstall python3-pip 
-$ python3 -V 
+ln -s /usr/local/python3/bin/python3.7 /usr/bin/python3 
+ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3 
+ln -s /usr/local/python3/bin/gunicorn /usr/bin/gunicorn 
+
+# yum install --reinstall python3-pip 
+python3 -V 
 
 export PYTHON_HOME= /usr/local/python3
 export PATH=$PYTHON_HOME/bin:$PATH
 
-$ pip3 install --upgrade pip #升级pip3
-$ pip3 install grpcio
-$ pip3 install grpcio-tools googleapis-common-protos   
+pip3 install --upgrade pip #用pip3升级pip
+pip install --upgrade pip # work!!!
+# pip3 install grpcio
+# pip3 install grpcio-tools googleapis-common-protos   
 
-yum install python-pip
+# yum install python-pip
 
 
 ```
+
+
+#### 安装出现的问题：
+参考 https://www.itdaan.com/tw/4872fc1c8b614c873a8698e0a537ade8 
+```bash
+# 例如：
+# 1
+sample.o: file not recognized: File truncated
+collect2: error: ld returned 1 exit status
+make[5]: *** [libsample.so] Error 1
+make[4]: *** [toolkit/library/target] Error 2
+
+#办法：
+yum install -y ccache 
+ccache -C  #清理缓存 work!!!
+make clean 
+make && make install #clean后重新 编译安装
+
+# 2 参考 https://blog.csdn.net/weixin_51080564/article/details/123584119
+[root@centos ~]# pip3 install tccli
+...
+Requirement already satisfied: charset-normalizer<3,>=2 in /usr/local/python3/lib/python3.7/site-packages (from requests>=2.27.0->tencentcloud-sdk-python>=3.0.738->tccli) (2.1.1)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+#办法：
+python3 -m venv tutorial-env
+source tutorial-env/bin/activate
+[root@centos ~]# source tutorial-env/bin/activate
+(tutorial-env) 
+
+
+# 3
+[root@centos ~]# pip3 install tccli
+...
+tencentcloud-sdk-python, six, tccli
+Successfully installed certifi-2022.9.24 charset-normalizer-2.1.1 idna-3.4 jmespath-0.10.0 requests-2.28.1 six-1.16.0 tccli-3.0.738.1 tencentcloud-sdk-python-3.0.750 urllib3-1.26.12
+You are using pip version 18.1, however version 22.3 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+#办法：
+ [root@centos ~]# pip install --upgrade pip
+Collecting pip
+  Using cached https://files.pythonhosted.org/packages/47/ef/8b5470b5b94b36231ed9c0bde90caa71c0d4322d4a15f009b2b7f4287fe0/pip-22.3-py3-none-any.whl
+Installing collected packages: pip
+  Found existing installation: pip 18.1
+    Uninstalling pip-18.1:
+      Successfully uninstalled pip-18.1
+Successfully installed pip-22.3
+(tutorial-env) 
+
+```
+
 
 ### 安装go:
 ```bash
@@ -370,13 +427,13 @@ sudo wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
 wget https://github.com/goharbor/harbor/releases/download/v1.9.3/harbor-offline-installer-v1.9.3.tgz 
 tar xf harbor-offline-installer-v1.9.3.tgz
 cp harbor.yml harbor.yml.bak  
-sed -i "s|reg.mydomain.com|192.168.1.208|g" harbor/harbor.yml  #调整配置文件
+sed -i "s|reg.mydomain.com|192.168.5.100|g" harbor/harbor.yml  #调整配置文件
 sed -i "s|Harbor12345|whsir.com|g" harbor/harbor.yml
 
 ./harbor/install.sh --with-clair #安装harbor
 
 
-#client 机器上如何登录harbor
+#client 机器上如何登录harbor 不然会报443错误 ：Error response from daemon: Get "https://192.168.5.100/v2/": dial tcp 192.168.5.100:443: connect: connection refused
 vim /etc/docker/daemon.json
 {
   "insecure-registries":["harbor机器IP"]
@@ -385,7 +442,9 @@ systemctl daemon-reload
 systemctl restart docker
 ./harbor/install.sh #重启docker ，因为cs 同在一个机器
 
-docker login http://192.168.2.142  #admin/Harbor12345
+docker login http://192.168.5.100  #admin/Harbor12345
+docker login -u admin -p Harbor12345 http://192.168.5.100
+docker login -u lifl@anchnet.com -p <PASSWORD> yldc-docker.pkg.coding.yili.com
 
 #harbor 安装：
 #harbor 重要的路径
@@ -406,8 +465,9 @@ docker login http://192.168.2.142  #admin/Harbor12345
 #docker login -u admin --password-stdin http://192.168.2.142
 
 docker image save centos:deeptunBase_20210624 > centos_deeptunbase.tar
-
 docker load < centos_deeptunbase.tar
+
+#多个镜像库时候， 先打tag,用前缀区别开来
 docker tag centos:deeptunBase_20210624 192.168.2.142/library/centos:deeptunBase_20210624
 docker push 192.168.2.142/library/centos:deeptunBase_20210624
 
@@ -1269,6 +1329,9 @@ docker rm -f $( docker ps -aq --no-trunc  --filter ancestor=wg:1)
 taskkill /f /pid 1868
 
 
+
+
+docker images java #查询docker 镜像版本
 
 #退出容器
 exit 
