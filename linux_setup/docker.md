@@ -221,32 +221,7 @@ docker stats containername
 docker stats --no-stream 144d212470fa |awk '{print $3}' #no stream 非交互式
 docker stats --no-stream 144d212470fa |awk 'NR!=1{print $3}'
 
-#https://blog.csdn.net/u011628753/article/details/123801438 
-  docker run \
---volume=/:/rootfs:ro \
---volume=/var/run:/var/run:rw \
---volume=/sys:/sys:ro \
---volume=/var/lib/docker/:/var/lib/docker:ro \
---volume=/dev/disk/:/dev/disk:ro \
---publish=18888:8080 \
---detach=true \
---name=cadvisor \
---restart on-failure:10 \
-google/cadvisor:latest
 
-#--net=host \   #别用这个!!!   
-
-docker port cadvisor #查看容器端口
-
-docker run -d \
---name=grafana \
--p 3000:3000 \
-grafana/grafana
-
-#grafana中添加模板 ui界面中选择import, ，
-# https://grafana.com/api/dashboards/193 docker的
-#  https://grafana.com/api/dashboards/9276 主机的
- 
 
 
 [root@centos ~]# cat /etc/prometheus/prometheus.yml|grep -Ev '*#|^$'
@@ -267,9 +242,49 @@ scrape_configs:
     static_configs:
     - targets: ['192.168.5.100:9100']  #node_exporter
 
+
+
+```
+
+### 安装  cadvisor:
+```bash
+#https://blog.csdn.net/u011628753/article/details/123801438 
+#cadvisor只负责采集，没存储能力，只能实时查看
+  docker run -d \
+--volume=/:/rootfs:ro \
+--volume=/var/run:/var/run:rw \
+--volume=/sys:/sys:ro \
+--volume=/var/lib/docker/:/var/lib/docker:ro \
+--volume=/dev/disk/:/dev/disk:ro \
+--publish=18888:8080 \
+--detach=true \
+--name=cadvisor \
+--restart on-failure:10 \
+google/cadvisor:latest
+
+#--net=host \   #别用这个!!!   
+# 装好后可以浏览 http://192.168.5.100:18888/metrics, http://192.168.5.100:18888/containers/
+
+docker port cadvisor #查看容器端口
+
+```
+# 安装grafana
+默认登录账密： admin/admin
+```bash
+docker run -d \
+--name=grafana \
+-p 3000:3000 \
+grafana/grafana
+
+#grafana中添加模板 ui界面中选择import, ，
+# https://grafana.com/api/dashboards/193 docker的
+#  https://grafana.com/api/dashboards/9276 主机的
+```
+
+###  安装 node_exporter 
+```bash
 wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
 tar zxf node_exporter-1.0.1.linux-amd64.tar.gz
-
 
 id prometheus >/dev/null 2>&1 ||\
 useradd --no-create-home -s /bin/false prometheus
@@ -287,6 +302,9 @@ ExecStart=/usr/local/node_exporter/node_exporter
 
 [Install]
 WantedBy=default.target
+
+#可以浏览http://192.168.5.100:9100/metrics 查看主机监控情况
+
 
 #安装好node_exporter后  查看prometheus 界面 http://192.168.5.100:9090/graph?g0.range_input=1h&g0.expr=node_&g0.tab=1
 # query中输入node_开头的，应该有了，是node_exporter采集的

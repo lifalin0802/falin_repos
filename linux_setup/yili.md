@@ -17,7 +17,13 @@ kubecm merge -f /root/.kube/config
 
 kubectl config view 
 
+
+kubectl patch logconfig $logconfigName --patch-file patch-java2.yaml --type="merge" 
+kubectl patch logconfig log-wx-camp-double11-prod-nginx  --patch-file patch.yaml --type="merge"
+
 k get ds -A|grep velero  #查看所有的daemonset
+k api-resources|grep velero #查看是否安装了velero
+k get ns 2>&1 | head -n 10 # get first line of a linux command's output
 
 
 #不work
@@ -37,7 +43,34 @@ chsh -s /usr/local/bin/zsh  #切换成zsh模式
 
 yum -y install epel-release 
 yum install python-pip
-pip install tccli
+# pip install tccli
+
+pip3 install --upgrade pip
+pip3 install tccli #不管用
+
+#step1: 建立虚拟环境
+cd /home/lifalin/code/tccli
+python3 -m venv tutorial-env
+source tutorial-env/bin/activate  
+
+#step2 安装
+pip3 install tccli
+
+#step3 查看安装位置
+which tccli
+(tutorial-env) [root@centos tccli]# which tccli
+/home/lifalin/code/tccli/tutorial-env/bin/tccli
+whereis tccli
+(tutorial-env) [root@centos tccli]# whereis tccli
+tccli: /usr/bin/tccli /usr/local/bin/tccli /home/lifalin/code/tccli/tutorial-env/bin/tccli
+
+#step4 建立软连接 whereis 中报错的，删了重新建立 比如 /usr/bin/tccli --version 报错 就将rm -rf /usr/bin/tccli 然后
+ln -s /home/lifalin/code/tccli/tutorial-env/bin/tccli /usr/bin/tccli
+
+
+cd /home/lifalin/git/tencentcloud-cli
+python3 setup.py install  #参考 https://cloud.tencent.com/document/product/440/34011
+
 
 # set 子命令可以设置某一配置，也可同时配置多个
 tccli configure set secretId xx
@@ -59,6 +92,11 @@ velero restore create --from-backup test-k8s-20221017
 
 velero backup delete test-k8s-20221017
 
+
+git add --all .  #提交所有的修改之前做
+git checkout .  #撤销所有未提交的修改
+
+
 ```
 
 ### velero 安装：
@@ -78,6 +116,7 @@ velero backup-location get  #查看存储位置状态，显示“Avaliable”，
 NAME      PROVIDER   BUCKET/PREFIX           PHASE       LAST VALIDATED                  ACCESS MODE
 default   aws        tke-velero-1302259445   Available   2022-10-17 13:34:13 +0800 CST   ReadWrite
 
+velero backup get
 
 ## 备份cxp-prod以下资源，ingress、cm、secret、serviceaccount、rolebinding等资源
 velero backup create cxp-prod-ingress-20211217 --include-resources ingresses,configmaps,secrets,serviceaccounts,rolebindings --include-namespaces cxp-prod
@@ -113,6 +152,8 @@ kubectl api-versions -A
 
 helm delete log-empower-uat-java-2 -n empower-uat
 helm uninstall log-empower-uat-java-2 -n empower-uat #helm uninstall --namespace empower-uat log-empower-uat-java-2
+helm install log-wx-camp-double11-prod-nginx -f values.yaml .
+
 
 helm install --namespace empower-uat log-empower-uat-java-2 --set nameSpace=empower-uat,program=java,logConfig.topicId=9cb52d30-3101-41e8-8af5-6c097e9ecf20 -f values.yaml .
 helm upgrade --namespace empower-uat log-empower-uat-java-2 --set nameSpace=empower-uat,program=java,logConfig.topicId=9cb52d30-3101-41e8-8af5-6c097e9ecf20 -f values.yaml .
@@ -121,6 +162,33 @@ helm upgrade --namespace empower-uat log-empower-uat-java-2 --set nameSpace=empo
 helm list --namespace empower-uat
 helm ls -n empower-uat
 
+#kubectl查看label
+k get deploy --show-labels -n wx-fulishe-uat -o wide|grep java
+k get pod --show-labels -n wx-fulishe-uat -o wide|grep java
+
+#kubectl打label
+kubectl label deployment $deployname program=java -n cms-cdm-uat
+
+kubectl patch deploy -n cms-cdm-uat pt-shot-task-api -p '{"spec":{"template":{"metadata":{"labels":{"program":"java"}}}}}'
+
+#https://cloud.tencent.com/developer/article/1788343
+kubectl -n monitoring patch  deployments prometheus-grafana --patch '{
+    "spec": {
+        "template": {
+            "spec": {
+                "hostAliases": [
+                    {
+                        "hostnames":
+                        [
+                            "prometheus-prometheus-oper-prometheus"
+                        ],
+                            "ip": "10.233.10.10"
+                    }
+                ]
+            }
+        }
+    }
+}'
 
 
 java -Dspring.output.ansi.enabled=ALWAYS -jar springboot-01-helloworld-1.0-SNAPSHOT.jar 

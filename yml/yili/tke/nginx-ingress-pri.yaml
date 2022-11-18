@@ -1,0 +1,80 @@
+apiVersion: cloud.tencent.com/v1alpha1
+kind: NginxIngress
+metadata:
+  creationTimestamp: "2022-10-24T06:22:09Z"
+  generation: 1
+  managedFields:
+  - apiVersion: cloud.tencent.com/v1alpha1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        .: {}
+        f:ingressClass: {}
+        f:service:
+          .: {}
+          f:annotation:
+            .: {}
+            f:service.kubernetes.io/qcloud-loadbalancer-clusterid: {}
+            f:service.kubernetes.io/qcloud-loadbalancer-internal-subnetid: {}
+          f:type: {}
+        f:workLoad:
+          .: {}
+          f:hpa:
+            .: {}
+            f:enable: {}
+            f:maxReplicas: {}
+            f:metrics: {}
+            f:minReplicas: {}
+          f:template:
+            .: {}
+            f:affinity: {}
+            f:container:
+              .: {}
+              f:image: {}
+              f:resources:
+                .: {}
+                f:limits:
+                  .: {}
+                  f:cpu: {}
+                  f:memory: {}
+                f:requests:
+                  .: {}
+                  f:cpu: {}
+                  f:memory: {}
+          f:type: {}
+    manager: TC_Http
+    operation: Update
+    time: "2022-10-24T06:22:09Z"
+  name: prod-pri-ingress
+  resourceVersion: "11599098672"
+  selfLink: /apis/cloud.tencent.com/v1alpha1/nginxingresses/prod-pri-ingress
+  uid: 740cb698-3ded-4406-a35a-1b9361dcde64
+spec:
+  ingressClass: prod-pri-ingress
+  service:
+    annotation:
+      service.kubernetes.io/qcloud-loadbalancer-clusterid: cls-1op5b3r1
+      service.kubernetes.io/qcloud-loadbalancer-internal-subnetid: subnet-68pzzsl1
+    type: LoadBalancer
+  workLoad:
+    hpa:
+      enable: true
+      maxReplicas: 2
+      metrics:
+      - pods:
+          metricName: k8s_pod_rate_cpu_core_used_limit
+          targetAverageValue: "80"
+        type: Pods
+      minReplicas: 1
+    template:
+      affinity: {}
+      container:
+        image: ccr.ccs.tencentyun.com/paas/nginx-ingress-controller:v1.1.3
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: 1024Mi
+          requests:
+            cpu: "0.25"
+            memory: 256Mi
+    type: deployment

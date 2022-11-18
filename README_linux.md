@@ -22,8 +22,22 @@ cat < mypipe
 
 ```
 
+### 字符串截取：
+```bash
+#从左边去掉
+tmp="http://aaa/bbb/ccc.git"
+echo ${tmp#*/}  
+
+#从右边去掉
+tmp="cmc-event-service-8fb97f764-z67jx"
+tmp=${tmp%-*}   
+echo ${tmp%-*}
+```
+
+
 ### 替换，用sed
 ```bash
+
 sed -i "s/\r//" a.sh
 sed -i "s/quay.io/quay-mirror.qiniu.com/" mandatory.yaml
 sed '/this/d' # 去掉this
