@@ -72,6 +72,7 @@ cd /home/lifalin/git/tencentcloud-cli
 python3 setup.py install  #参考 https://cloud.tencent.com/document/product/440/34011
 
 
+
 # set 子命令可以设置某一配置，也可同时配置多个
 tccli configure set secretId xx
 tccli configure set secretKey xx
@@ -79,8 +80,6 @@ tccli configure set region ap-beijing  output json
 # get 子命令用于获取配置信息
 tccli configure get secretKey
 tccli configure list
-
-
 
 
 velero backup create test-k8s-20221017

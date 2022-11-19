@@ -42,7 +42,7 @@ systemctl restart network #后重启网卡
 
 yum -y install ntpdate ntp
 ntpdate cn.pool.ntp.org
-yum imstall -y chrony #直接是使用默认服务器 同步外网ceph各个主机节点必须同步时间否则各种奇奇怪怪的错误
+yum install -y chrony #直接是使用默认服务器 同步外网ceph各个主机节点必须同步时间否则各种奇奇怪怪的错误
 systemctl enable --now chronyd  #默认是centos.pool.ntp.org 这个时间服务器  cat /etc/chrony.conf
 timedatectl set-ntp true
 chronyc -a makestep
