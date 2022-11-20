@@ -39,8 +39,39 @@ kubeadm alpha certs renew -h
 kubeadm alpha certs renew all  # 这里用all,可以用-h中查到的设备 给具体的设备renew
 
 
+ln -s cfssl_1.6.1_linux_amd64            /usr/local/bin/cfssl
+ln -s cfssl-certinfo_1.6.1_linux_amd64   /usr/local/bin/cfssl-certinfo
+ln -s cfssljson_1.6.1_linux_amd64        /usr/local/bin/cfssljson
 
 
+cp cfssl_1.6.1_linux_amd64 /usr/local/bin/cfssl
+cp cfssljson_1.6.1_linux_amd64 /usr/local/bin/cfssljson
+cp cfssl-certinfo_1.6.1_linux_amd64 /usr/local/bin/cfssl-certinfo
+
+
+
+
+
+cat > ca-config.json  << eof
+> {
+>   "signing": {
+>     "default": {
+>       "expiry": "876000h"
+>     },
+>     "profiles": {
+>       "kubernetes": {
+>         "usages": [
+>             "signing",
+>             "key encipherment",
+>             "server auth",
+>             "client auth"
+>         ],
+>         "expiry": "876000h"
+>       }
+>     }
+>   }
+> }
+> eof
 
 [root@centos ca]# ll
 total 32

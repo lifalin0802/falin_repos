@@ -25,7 +25,33 @@ Filesystem               Size  Used Avail Use% Mounted on
 ```bash
 find /var/lib/docker -name *-json.log|xargs rm -rf
 systemctl start docker
+
+
+
+
+```
+### 查看磁盘大小：
+```bash
+#查看当前磁盘空间大小
+du -sh
+#查看文件大小
+du -sh test.txt 
+
+docker run -d -p 9000:9000 \
+--restart=always \
+-v /var/run/docker.sock:/var/run/docker.sock \
+--name portainer-test \
+docker.io/portainer/portainer
+#账密 admin Llfl_123
+#连接local之后，可以清 volume
+
+docker system prone #清理出来3G
+
+
 ```
 
 将所有的container 按照占用大小排序：其实没什么用
+```bash
 [root@centos ~]# du -d1 -h /var/lib/docker/containers |sort -h
+
+```

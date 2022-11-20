@@ -237,6 +237,22 @@ host  baidu.com
 
 
 
+### 查看磁盘大小：
+```bash
+#查看当前磁盘空间大小
+du -sh
+#查看文件大小
+du -sh test.txt 
+
+docker run -d -p 9000:9000 \
+--restart=always \
+-v /var/run/docker.sock:/var/run/docker.sock \
+--name portainer-test \
+docker.io/portainer/portainer
+#账密 admin Llfl_123
+#连接local之后，可以清理
+```
+
 ### dns解析顺序
 ![](2022-08-05-20-55-02.png)
 
