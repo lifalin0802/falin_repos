@@ -1198,11 +1198,11 @@ wait
     212 SYNs to LISTEN sockets dropped   #半连接满了
 
 ```
-![](2022-08-06-19-57-22.png)
+![](img/2022-08-06-19-57-22.png)
 
 ### top 命令：
 https://www.bilibili.com/video/BV1xz411e7st  
-![](2022-08-06-20-19-14.png)
+![](img/2022-08-06-20-19-14.png)
 ```bash
 
 启动了7h 42min，1个用户登录 平均负载的三个值 5 10 15min的负荷值 负荷是指任务队列里的平均长度
@@ -1224,11 +1224,11 @@ u 选择特定user运行的进程
 M 按照memory 使用情况排序
 P 恢复默认cpu使用排序
 ```
-![](2022-08-06-20-45-48.png)
+![](img/2022-08-06-20-45-48.png)
 
 ### 查看cpu使用情况：
 https://www.bilibili.com/video/BV1gE411e7i3  
-![](2022-08-19-01-00-51.png)
+![](img/2022-08-19-01-00-51.png)
 ```bash
 cat /proc/cpuinfo
 lscpu 

@@ -111,10 +111,10 @@ sda               0.40        11.66         1.17     365391      36813
 cd /dev/mapper  #会有映射
 ```
 此处只是视频中的操作：  
-![](2022-08-06-21-47-59.png)
-![](2022-08-06-21-50-08.png)  
+![](img/2022-08-06-21-47-59.png)
+![](img/2022-08-06-21-50-08.png)  
 我自己本机不是这样的，即便是开启了swap分区：  
-![](2022-08-06-21-53-37.png)
+![](img/2022-08-06-21-53-37.png)
 
 
 ### 标准输入、
@@ -149,7 +149,7 @@ free -mh
 swapoff -a  #关闭缓冲区
 sed -ri 's/.*swap.*/#&/' /etc/fstab #永久关闭
 
-![](2022-08-02-19-38-51.png)
+![](img/2022-08-02-19-38-51.png)
 ```
 
 
@@ -235,26 +235,8 @@ host  baidu.com
 ```
 
 
-
-
-### 查看磁盘大小：
-```bash
-#查看当前磁盘空间大小
-du -sh
-#查看文件大小
-du -sh test.txt 
-
-docker run -d -p 9000:9000 \
---restart=always \
--v /var/run/docker.sock:/var/run/docker.sock \
---name portainer-test \
-docker.io/portainer/portainer
-#账密 admin Llfl_123
-#连接local之后，可以清理
-```
-
 ### dns解析顺序
-![](2022-08-05-20-55-02.png)
+![](img/2022-08-05-20-55-02.png)
 
 
 ### yum

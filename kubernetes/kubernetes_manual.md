@@ -55,7 +55,7 @@ kubectl delete deployment XXX -n dev
 kubectl delete svc XXX -n dev
 ```
 
-![](2022-08-13-00-59-55.png)
+![](img/2022-08-13-00-59-55.png)
 
 
 
