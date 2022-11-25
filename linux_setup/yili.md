@@ -45,13 +45,17 @@ yum -y install epel-release
 yum install python-pip
 # pip install tccli
 
-pip3 install --upgrade pip
-pip3 install tccli #不管用
+pip3 install --upgrade pip  
+pip3 install tccli #即使安装成功了，也是不能用，因为提示升级到python3 最高版本
+python3 -m pip install tccli #又不管用了 
+pip3 install --force-reinstall tccli  #http://www.cppblog.com/jack-wang/archive/2022/07/28/229378.html
+find / -name tccli
 
 #step1: 建立虚拟环境
 cd /home/lifalin/code/tccli
-python3 -m venv tutorial-env
-source tutorial-env/bin/activate  
+
+# python3 -m venv tutorial-env
+# source tutorial-env/bin/activate  
 
 #step2 安装
 pip3 install tccli

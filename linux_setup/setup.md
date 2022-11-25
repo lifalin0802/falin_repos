@@ -317,20 +317,13 @@ $ make && make install
 
 ln -s /usr/local/python3/bin/python3.7 /usr/bin/python3 
 ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3 
-ln -s /usr/local/python3/bin/gunicorn /usr/bin/gunicorn 
 
 # yum install --reinstall python3-pip 
 python3 -V 
-
-export PYTHON_HOME= /usr/local/python3
-export PATH=$PYTHON_HOME/bin:$PATH
-
-pip3 install --upgrade pip #用pip3升级pip
-pip install --upgrade pip # work!!!
-# pip3 install grpcio
-# pip3 install grpcio-tools googleapis-common-protos   
-
-# yum install python-pip
+python3 -m pip install --upgrade pip
+python3 -m pip install tccli #work！
+# pip3 install --upgrade pip #用pip3升级pip
+pip install --upgrade pip # work!!! 但是有网络问题！开vpn也不管用
 
 
 ```

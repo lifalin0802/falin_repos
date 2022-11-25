@@ -2,9 +2,12 @@
 https://mp.weixin.qq.com/s/YwnmOA2Ttl0YIhX_nXnUCQ
 ```bash
 # 手动安装 or 
-$ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz #下载 Helm 二进制文件
+#$ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz #下载 Helm 二进制文件
+$ wget  https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz
 $ tar -zxvf helm-v2.9.1-linux-amd64.tar.gz # 解压缩
 $ cp linux-amd64/helm /usr/local/bin/ # 复制 helm 二进制 到bin目录下
+helm version
+helm 
 
 #shell脚本安装
 $ curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh #
@@ -14,8 +17,8 @@ $ ./get_helm.sh
 
 ### 将 Tiller 安装在 kubernetes 集群中
 ```bash
-helm init #国外
-helm init —upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.9.1  —stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts #国内
+#helm init #国外
+#helm init —upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.9.1  —stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts #国内
 kubectl get po -n kube-system  #查看 tiller 的安装情况
 ```
 

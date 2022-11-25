@@ -393,6 +393,8 @@ kubeadm join 192.168.5.140:6443 --token da2els.6m9ufp9c37vaagy7 \
 kubeadm join 192.168.5.140:6443 --token vebwg0.haex8tp6r3n60fu3 --discovery-token-ca-cert-hash sha256:ff314aa37fa425d9339cff30d3ce72835d4afae65952148a9a04c5bd28c6b878 
 
 kubectl label node node01 node-role.kubernetes.io/worker=worker #kubectl get nodes 时候有个role为none? 的解决办法
+kubectl label ns kube-public tingyun-injection- #删除label
+
 kubectl taint node node01  node-role.kubernetes.io/master-
 kubectl taint node node01 key1-
 kubectl taint nodes master1 node-role.kubernetes.io/master=:NoSchedule
