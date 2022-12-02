@@ -11,6 +11,11 @@ $ docker ps #查看相应的container是否起来 如果没有
 
 ### minikube 安装步骤：
 ```bash
+
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+
 #下载相关镜像
 docker pull registry.aliyuncs.com/google_containers/kube-apiserver:v1.23.3
 docker pull registry.aliyuncs.com/google_containers/kube-controller-manager:v1.23.3
@@ -35,8 +40,38 @@ docker images -a
 minikube image load gcr.io/k8s-minikube/storage-provisioner:v5
 
 #重新运行启动命令：
-$ minikube start --vm-driver=none --registry-mirror=https://registry.docker-cn.com
+$ minikube start --vm-driver=none --registry-mirror=https://registry.docker-cn.com 
+
+$ minikube start --force --driver=docker --vm-driver=none --registry-mirror=https://registry.docker-cn.com --image-mirror-country='cn' --image-repository='registry.cn-hangzhou.aliyuncs.com/google_containers' --base-image='registry.cn-hangzhou.aliyuncs.com/google_containers/kicbase:v0.0.28'
+
+
+
 ```
+### 1.24+ 的kubernetes 用不了docker ?
+解决办法：安装cri-docker 参考`https://baijiahao.baidu.com/s?id=1743733802152777402&wfr=spider&for=pc`
+安装方法 https://github.com/Mirantis/cri-dockerd
+```bash
+#描述：
+# * Pulling base image ...
+#     > registry.cn-hangzhou.aliyun...:  355.77 MiB / 355.78 MiB  100.00% 2.35 Mi
+# * Creating docker container (CPUs=2, Memory=2200MB) ...
+# ! This container is having trouble accessing https://registry.k8s.io
+# * To pull new external images, you may need to configure a proxy: https://minikube.sigs.k8s.io/docs/reference/networking/proxy/
+
+# X Exiting due to RT_DOCKER_MISSING_CRI_DOCKER_NONE: sudo systemctl enable cri-docker.socket: Process exited with status 1
+# stdout:
+
+# stderr:
+# Failed to enable unit: Unit file cri-docker.socket does not exist.
+
+# * Suggestion: Using Kubernetes v1.24+ with the Docker runtime requires cri-docker to be installed
+# * Documentation: https://minikube.sigs.k8s.io/docs/reference/drivers/none
+# * Related issue: https://github.com/kubernetes/minikube/issues/14410
+
+
+
+```
+
 
 
 ```bash
