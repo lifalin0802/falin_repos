@@ -68,6 +68,25 @@ grep -i xx   # 不区分大小写  -i, --ignore-case ignore case distinctions
 ```
 
 
+### 安装kubectl, kubeadm, kubelet
+```bash
+#编辑yum repo 配置文件
+$ cat /etc/yum.repos.d/kubernetes.repo  
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+
+#下载kubelet,kubeadm,kubectl
+yum install -y --nogpgcheck kubelet-1.23.5 kubeadm-1.23.5 kubectl-1.23.5
+
+#启动kubelet 守护进程
+systemctl enable kubelet 
+systemctl start kubelet
+```
 
 ### kubernetes使用：
 ```bash

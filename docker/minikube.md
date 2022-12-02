@@ -73,6 +73,39 @@ $ minikube start --force --driver=docker --vm-driver=none --registry-mirror=http
 ```
 
 
+### 启动minikube
+```bash
+#清除minikube之前的配置
+minikube delete
+
+
+#关闭swap 分区
+swapoff -a     #暂时关闭
+free -m
+vi /etc/fstab  #注释掉swap所在行 永久关闭
+sed -ri 's/.*swap.*/#&/' /etc/fstab # 永久关闭swap 其实就是将swap这一行注释掉
+mount -a #使之生效
+
+reboot         #永久关闭需要重启 
+
+#错误 [ERROR FileContent--proc-sys-net-bridge-bridge-nf-call-iptables]: /proc/sys/net/bridge/bridge-nf-call-iptables contents are not set to 1
+echo "1" >/proc/sys/net/bridge/bridge-nf-call-iptables  
+
+#如果执行上面的命令后提示没有这个文件，则继续执行下面的命令：modprobe br_netfilter
+#执行后再执行上面的echo命令
+
+
+#启动minikube
+minikube start --vm-driver=none --registry-mirror=https://registry.docker-cn.com
+```
+
+
+
+### 查看插件：
+```bash
+minikube addons list
+```
+
 
 ```bash
 $ kubectl describe pod storage-provisioner -n kube-system
