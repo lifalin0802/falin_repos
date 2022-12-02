@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginxapp
+  namespace: dev
+spec:
+  rules:
+  - host: nginxapp.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: service-headless
+            port:
+              number: 80
