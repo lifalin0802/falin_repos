@@ -24,6 +24,7 @@ find /etc -name passwd &2>&1 |less
 nohup XXX &
 tail -f nohup.out
 
+ps -ef|less #一行太长 
 
 ./bg.sh  & #设置成backgroud 后台程序
 jobs -l  #显示所有后台进程

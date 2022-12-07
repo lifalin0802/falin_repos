@@ -244,3 +244,89 @@ Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists fo
 Events:  
                     <none>
 ```
+### kuboard安装：
+用户名密码：admin/Kuboard123
+
+```bash
+kuboard
+```
+
+### kubernetes-dashboard 安装：
+```yaml
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  type: NodePort
+  ports:
+    - port: 443
+      targetPort: 8443
+      nodePort: 30001
+  selector:
+    k8s-app: kubernetes-dashboard
+```
+
+访问： https://192.168.5.100:30001/#/login
+
+
+### 难以登录kubernetes-dashboard, 所有的资源加载不了？
+#### 创建service Account
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
+```
+#### 获取登录token 都出来了
+```bash
+k get sa -A |grep admin-user
+[root@centos kubernetes-dashboard]# k get sa -A |grep admin-user
+kubernetes-dashboard   admin-user                           1         5m11s
+[root@centos kubernetes-dashboard]# k describe sa admin-user -n kubernetes-dashboard
+Name:                admin-user
+Namespace:           kubernetes-dashboard
+Labels:              <none>
+Annotations:         <none>
+Image pull secrets:  <none>
+Mountable secrets:   admin-user-token-9vlrk
+Tokens:              admin-user-token-9vlrk
+Events:              <none>
+[root@centos kubernetes-dashboard]# k describe secret admin-user-token-9vlrk 
+Error from server (NotFound): secrets "admin-user-token-9vlrk" not found
+[root@centos kubernetes-dashboard]# k describe secret admin-user-token-9vlrk -n kubernetes-dashboard
+Name:         admin-user-token-9vlrk
+Namespace:    kubernetes-dashboard
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: admin-user
+              kubernetes.io/service-account.uid: 351a67df-a2ae-4878-a27b-c92ff8e524df
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1111 bytes
+namespace:  20 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6InBHS25JZFc3c3NGMHZUQXVVNUZWcmNrYnNobUxCcWxRLXlEVG10MGxST28ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLTl2bHJrIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIzNTFhNjdkZi1hMmFlLTQ4NzgtYTI3Yi1jOTJmZjhlNTI0ZGYiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6YWRtaW4tdXNlciJ9.ExSXUUdYlDrREvpW6zOI71Gdj1NVSXBy_NT6ADfAxtxmQnfvS7dUZsB5IZtLxBXrXjBsa2j5C7WNlqKmF4P-z1uASsoTuNWbKO5FO6vGxITtRZHFt57T9tThH2TdpK6wPjt5K1DML_9fP2bY_j8v15lDO9NMCRIMCrOwPjnF8s9a80Qs4jP3N-9NW7yXldAjrXFarO2SRF1NanntywSbtrDw_dZ21e-Hf5jN2rkSP9KTiaEVWFJxveC0MA35F_HxIDcjfTaX7Uj4eya23ZY-4r3U8N3a752FbkA8-536L2puGhqEf8NnW5jiMNqyCHb9jR8CSTJMXZMMSae9FmWKeQ
+
+kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+[root@centos kubernetes-dashboard]# kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+eyJhbGciOiJSUzI1NiIsImtpZCI6InBHS25JZFc3c3NGMHZUQXVVNUZWcmNrYnNobUxCcWxRLXlEVG10MGxST28ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLTl2bHJrIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIzNTFhNjdkZi1hMmFlLTQ4NzgtYTI3Yi1jOTJmZjhlNTI0ZGYiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6YWRtaW4tdXNlciJ9.ExSXUUdYlDrREvpW6zOI71Gdj1NVSXBy_NT6ADfAxtxmQnfvS7dUZsB5IZtLxBXrXjBsa2j5C7WNlqKmF4P-z1uASsoTuNWbKO5FO6vGxITtRZHFt57T9tThH2TdpK6wPjt5K1DML_9fP2bY_j8v15lDO9NMCRIMCrOwPjnF8s9a80Qs4jP3N-9NW7yXldAjrXFarO2SRF1NanntywSbtrDw_dZ21e-Hf5jN2rkSP9KTiaEVWFJxveC0MA35F_HxIDcjfTaX7Uj4eya23ZY-4r3U8N3a752FbkA8-536L2puGhqEf8NnW5jiMNqyCHb9jR8CSTJMXZMMSae9FmWKeQ
+```
