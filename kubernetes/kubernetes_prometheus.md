@@ -118,7 +118,7 @@ PID   USER     TIME  COMMAND
 #登录 thanos-sidecar 
 [root@centos ~]# k exec -it prometheus-k8s-0 -n monitoring --container thanos-sidecar -- /bin/sh
 / $ ps -ef|grep sidecar
-    1 1000      4:29 /bin/thanos sidecar --prometheus.url=http://localhost:9090/ --grpc-address=:10901 --http-address=:10902 --objstore.config=type: COS config:   bucket: "tke-thanos"   region: "ap-beijing"   app_id: "1302259445"   secret_key: "cy4vWrwmMhla9TXMvFLBm9IBqFOHuIQI"   secret_id: "AKIDc4FBqFNEo7C2cv0oNgiUzDArHQJ0Xrwl"  --tsdb .path=/prometheus
+    1 1000      4:29 /bin/thanos sidecar --prometheus.url=http://localhost:9090/ --grpc-address=:10901 --http-address=:10902 --objstore.config=type: COS config:   bucket: "tke-thanos"   region: "ap-beijing"   app_id: "1302259445"   secret_key: "XX"   secret_id: "XX"  --tsdb .path=/prometheus
    53 1000      0:00 grep sidecar
 # --prometheus.url=http://localhost:9090/ 表示监听的prometheus 的端口
 
