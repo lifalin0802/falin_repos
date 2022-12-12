@@ -38,6 +38,8 @@ echo ${tmp%-*}
 ### 替换，用sed
 ```bash
 
+for i in `ls`; do mv -f $i `echo $i | sed 's/.....$/snail/'`; done # 文件批量改后缀
+
 sed -i "s/\r//" a.sh
 sed -i "s/quay.io/quay-mirror.qiniu.com/" mandatory.yaml
 sed '/this/d' # 去掉this
