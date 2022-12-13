@@ -687,4 +687,5 @@ yum install -y containerd.io
 ctr version
 ctr container ls #查看容器
 ctr images ls #查看镜像
+ctr namespace ls #查看命名空间
 ```
