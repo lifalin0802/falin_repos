@@ -706,6 +706,15 @@ ctr -n k8s.io i tag --force registry.cn-hangzhou.aliyuncs.com/google_containers/
 ctr -n k8s.io i rm k8s.gcr.io/pause:3.2
 ctr -n k8s.io i pull -k k8s.gcr.io/pause:3.2
 
+[root@node02 ~]# crictl images
+IMAGE                                                TAG                 IMAGE ID            SIZE
+docker.io/calico/cni                                 v3.23.3             ecf96bae0aa79       108MB
+docker.io/calico/cni                                 v3.24.0             45f84749206fc       87.4MB
+
+[root@node02 ~]# ctr ns ls
+NAME   LABELS 
+k8s.io        
+moby 
 
 #https://blog.csdn.net/UsakiKokoro/article/details/120333964
 命令	docker	ctr（containerd）	crictl（kubernetes）
