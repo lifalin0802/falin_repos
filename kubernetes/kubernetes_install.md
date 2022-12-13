@@ -688,4 +688,41 @@ ctr version
 ctr container ls #查看容器
 ctr images ls #查看镜像
 ctr namespace ls #查看命名空间
+
+
+#这里容器 每次重启 运行都会生成相应的数字
+#告警 只能知道磁盘满了 但 不知道哪个服务把磁盘沾满了
+du -sh|grep G
+mount |grep /var/lib/container
+
+ctr -n k8s.io c ls
+/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots
+
+
+#https://blog.csdn.net/qq_32907195/article/details/120529037
+ctr image list, ctr i list , ctr i ls
+ctr -n k8s.io i tag registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 k8s.gcr.io/pause:3.2
+ctr -n k8s.io i tag --force registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 k8s.gcr.io/pause:3.2
+ctr -n k8s.io i rm k8s.gcr.io/pause:3.2
+ctr -n k8s.io i pull -k k8s.gcr.io/pause:3.2
+
+
+#https://blog.csdn.net/UsakiKokoro/article/details/120333964
+命令	docker	ctr（containerd）	crictl（kubernetes）
+查看运行的容器	docker ps	ctr task ls/ctr container ls	crictl ps
+查看镜像	docker images	ctr image ls	crictl images
+查看容器日志	docker logs	无	crictl logs
+查看容器数据信息	docker inspect	ctr container info	crictl inspect
+查看容器资源	docker stats	无	crictl stats
+启动/关闭已有的容器	docker start/stop	ctr task start/kill	crictl start/stop
+运行一个新的容器	docker run	ctr run	无（最小单元为pod）
+修改镜像标签	docker tag	ctr image tag	无
+创建一个新的容器	docker create	ctr container create	crictl create
+导入镜像	docker load	ctr image import	无
+导出镜像	docker save	ctr image export	无
+删除容器	docker rm	ctr container rm	crictl rm
+删除镜像	docker rmi	ctr image rm	crictl rmi
+拉取镜像	docker pull	ctr image pull	ctictl pull
+推送镜像	docker push	ctr image push	无
+在容器内部执行命令	docker exec	无	crictl exec
 ```
