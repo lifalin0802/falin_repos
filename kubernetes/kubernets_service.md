@@ -31,26 +31,7 @@ pc-deployment   3/3     3            3           37m
 NAME                       DESIRED   CURRENT   READY   AGE
 httpd-76f7455774           2         2         2       24h
 pc-deployment-557dc8d667   3         3         3       35m
-[root@centos kubeworkspace]# kubectl get pods -n dev -o wide
-NAME                             READY   STATUS    RESTARTS      AGE     IP            NODE     NOMINATED NODE   READINESS                                  GATES
-httpd-76f7455774-2vln2           1/1     Running   1 (23h ago)   24h     172.17.0.7    centos   <none>           <none>
-httpd-76f7455774-v45fb           1/1     Running   0             23h     172.17.0.8    centos   <none>           <none>
-pc-deployment-557dc8d667-p29kd   1/1     Running   0             4m11s   172.17.0.11   centos   <none>           <none>
-pc-deployment-557dc8d667-p2lqz   1/1     Running   0             4m11s   172.17.0.9    centos   <none>           <none>
-pc-deployment-557dc8d667-rkt9r   1/1     Running   0             4m11s   172.17.0.10   centos   <none>           <none>
-[root@centos kubeworkspace]# docker ps|grep nginx
-4c705272d8e5   98ebf73aba75           "nginx -g 'daemon of…"   39 minutes ago   Up 39 minutes                                               k8s_nginx-pod_pc-deployment-557dc8d667-rkt9r_dev_4442c9a5-c192-4830-a844-fba0b095ef03_0
-ada81f0e80a8   98ebf73aba75           "nginx -g 'daemon of…"   39 minutes ago   Up 39 minutes                                               k8s_nginx-pod_pc-deployment-557dc8d667-p29kd_dev_015ef67f-e6ac-43c8-a2b1-b28546595bd8_0
-05ab85aa81cd   98ebf73aba75           "nginx -g 'daemon of…"   39 minutes ago   Up 39 minutes                                               k8s_nginx-pod_pc-deployment-557dc8d667-p2lqz_dev_56b3fecf-6014-488e-b5e8-2bcf6d8fb1b8_0
-d08c20eca922   nginx                  "nginx -g 'daemon of…"   44 hours ago     Up 44 hours                                                 k8s_nginx-pod_nginx-pod-b2796_default_017f4c23-84e7-47b3-b4de-20da9437eabd_0
-063999e74eea   nginx                  "nginx -g 'daemon of…"   44 hours ago     Up 44 hours                                                 k8s_nginx-pod_nginx-pod-mfkv9_default_2dbdf268-d43e-442b-9632-f820254a5ac8_0
-b4840f3f80e0   nginx                  "nginx -g 'daemon of…"   44 hours ago     Up 44 hours                                                 k8s_nginx-pod_nginx-pod-g84mg_default_dca19061-5455-494e-b0ce-0c93b7af00af_0
-6140a38a86a3   k8s.gcr.io/pause:3.6   "/pause"                 44 hours ago     Up 44 hours                                                 k8s_POD_nginx-pod-mfkv9_default_2dbdf268-d43e-442b-9632-f820254a5ac8_0
-30c1b3d45b57   k8s.gcr.io/pause:3.6   "/pause"                 44 hours ago     Up 44 hours                                                 k8s_POD_nginx-pod-b2796_default_017f4c23-84e7-47b3-b4de-20da9437eabd_0
-c8c1c47bcb4b   k8s.gcr.io/pause:3.6   "/pause"                 44 hours ago     Up 44 hours                                                 k8s_POD_nginx-pod-g84mg_default_dca19061-5455-494e-b0ce-0c93b7af00af_0
-[root@centos kubeworkspace]# [root@centos kubeworkspace]# docker ps|grep nginx
-30c1b3d45b57   k8s.gcr.io/pause:3.6   "/pause"                 44 hours ago     Up 44 hours                                                 k8s_POD_nginx-pod-b2796_default_017f4c23-84e7-47b3-b4de-20da9437eabd_0
-c8c1c47bcb4b   k8s.gcr.io/pause:3.6   "/pause"                 44 hours ago     Up 44 hours                                                 k8s_POD_nginx-pod-g84mg_default_dca19061-5455-494e-b0ce-0c93b7af00af_0
+
 
 ```
 

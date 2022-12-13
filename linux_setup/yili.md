@@ -233,7 +233,30 @@ C:\code\springmvc\src\springboot-01-helloworld\target>java -jar springboot-01-he
 ```
 
 
- #首行
 
-单行完全正则
+### coscli 配置
+参考 `https://cloud.tencent.com/document/product/436/63144`
+```bash
+wget https://github.com/tencentyun/coscli/releases/download/v0.12.0-beta/coscli-linux
+chmod 777 coscli-linux
+mv coscli-linux /usr/bin/coscli
+coscli --version # 检测是否安装成功
 
+cat > ~/.cos.yaml << eof
+cos:
+  base:
+    secretid: XXXXXXXXXXXXXXX
+    secretkey: XXXXXXXXXXXXXXXXX
+    sessiontoken: ""
+eof
+
+coscli config init # 一路回车
+coscli config show # 查看配置好的信息	
+
+#添加存储桶
+coscli config add -b prod-wx-public-web-1302259445 -r ap-beijing
+coscli config add -b zx-1302259445  -r ap-beijing
+coscli ls cos://zx-1302259445 -r --include ".*.csv"
+```
+
+tencent [openapi](https://console.cloud.tencent.com/api/explorer?Product=cos&Version=2018-11-26&Action=GetService) 获取所有的存储桶名字

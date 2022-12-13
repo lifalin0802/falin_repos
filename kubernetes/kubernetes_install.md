@@ -68,6 +68,25 @@ grep -i xx   # 不区分大小写  -i, --ignore-case ignore case distinctions
 ```
 
 
+### 安装kubectl, kubeadm, kubelet
+```bash
+#编辑yum repo 配置文件
+$ cat /etc/yum.repos.d/kubernetes.repo  
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+
+#下载kubelet,kubeadm,kubectl
+yum install -y --nogpgcheck kubelet-1.23.5 kubeadm-1.23.5 kubectl-1.23.5
+
+#启动kubelet 守护进程
+systemctl enable kubelet 
+systemctl start kubelet
+```
 
 ### kubernetes使用：
 ```bash
@@ -243,6 +262,9 @@ ls -l /run/containerd/containerd.sock #containerd 所使用的套接字文件 �
 
 
 echo "XX" |base64 -d
+[root@centos ~]# echo -n 'admin'|base64
+YWRtaW4=
+echo 'MWYyZDFlMmU2N2Rm' | base64 --decode
 
 #查看kubeadm config所需的镜像 ：
 kubeadm config images list
@@ -399,6 +421,11 @@ kubectl taint node node01  node-role.kubernetes.io/master-
 kubectl taint node node01 key1-
 kubectl taint nodes master1 node-role.kubernetes.io/master=:NoSchedule
 
+kubectl describe nodes prod-k8s-apm-node-data3  |grep Taints
+kubectl taint node prod-k8s-apm-node-data3  
+kubectl taint node prod-k8s-apm-node-data3 app=bigdata:NoExecute
+
+
 
 kubectl get po coredns-74586cf9b6-4lqmw -n kube-system -o yaml #work
 kubectl get configmap -n kube-system coredns -o yaml 
@@ -441,6 +468,7 @@ kubectl logs xxx -n namespace
 
 
 systemctl status kubelet --full
+systemctl is-enabled firewalld # 查看 firewalld状态
 
 #安装calico
 curl https://projectcalico.docs.tigera.io/manifests/calico-etcd.yaml -o calico.yaml
@@ -646,4 +674,17 @@ cat /opt/kubernetes/cfg/kube-controller-manager.conf
 ```bash
 #强制删除pod
 kubectl delete pod PODNAME --force --grace-period=0 
+```
+
+
+
+```bash
+yum list |grep containd.io
+
+yum install -y containerd.io
+
+#基本命令
+ctr version
+ctr container ls #查看容器
+ctr images ls #查看镜像
 ```

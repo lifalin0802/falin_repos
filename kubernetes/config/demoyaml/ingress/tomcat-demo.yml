@@ -5,8 +5,7 @@ metadata:
   namespace: dev
 spec:
   selector:
-    app: tomcat
-    release: canary
+    app: tomcat-deploy
   ports:
   - name: http
     port: 8080
@@ -26,12 +25,10 @@ spec:
   selector: 
     matchLabels:
       app: tomcat
-      release: canary
   template:
     metadata:
       labels:
         app: tomcat
-        release: canary
     spec:
       containers:
       - name: tomcat

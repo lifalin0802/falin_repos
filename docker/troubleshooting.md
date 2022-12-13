@@ -37,6 +37,10 @@ du -sh
 #查看文件大小
 du -sh test.txt 
 
+#查看目录 文件夹大小 排序
+cd /
+du -sh *|sort -n
+
 docker run -d -p 9000:9000 \
 --restart=always \
 -v /var/run/docker.sock:/var/run/docker.sock \
@@ -52,6 +56,7 @@ docker system prone #清理出来3G
 
 将所有的container 按照占用大小排序：其实没什么用
 ```bash
-[root@centos ~]# du -d1 -h /var/lib/docker/containers |sort -h
+[root@centos ~]# d1 -h /var/lib/docker/containers |sort -h
 
 ```
+du -
