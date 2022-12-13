@@ -357,25 +357,19 @@ free -m
 #!/bin/bash
 num1=123	#num1是长度为3的字符串
 num2=0123	#num2是长度为4的字符串
-echo "======================================"
 
-echo -n "用==比较时："
 if [ $num1 == $num2 ]   #no
-then
-	echo "$num1和$num2相等"
-else
-	echo "$num1和$num2不相等"
-fi
-
-echo "======================================"
-
-echo -n "用-eq比较时："
 if [ $num1 -eq $num2 ] #yes
-then
-	echo "$num1和$num2相等"
-else
-	echo "$num1和$num2不相等"
-fi 
+
+
+#字符串 比较 相等
+
+#!/bin/bash
+#program=$1
+if [[ $program == java ]]; then
+    echo "is java"
+    kubectl patch logconfig -n $ns  log-$ns-$program  --patch-file  patch_java.yaml --type="merge"
+fi
 
 ```
 ### linux中如何转换大小写
