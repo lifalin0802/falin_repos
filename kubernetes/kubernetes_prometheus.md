@@ -72,6 +72,8 @@ find / -type d  -name grafana
 
 
 crictl images #查看本地缓存镜像
+crictl --image-endpoint unix:///run/containerd/containerd.sock images
+
 ss -nltup #查看本地监听端口
 ```
 
@@ -110,7 +112,16 @@ prometheus-k8s-0   prometheus,config-reloader,thanos-sidecar
 [root@centos ~]# k exec -it prometheus-k8s-0 -n monitoring --container prometheus -- /bin/sh
 /prometheus $ ps -ef |less
 PID   USER     TIME  COMMAND
-    1 1000     49:02 /bin/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries --storage.tsdb.retention.time=24h --config.file=/etc/prometheus/config_out/prometheus.env.yaml --storage.tsdb.path=/prometheus --web.enable-lifecycle --web.route-prefix=/ --web.config.file=/etc/prometheus/web_config/web-config.yaml --storage.tsdb.max-block-duration=2h --storage.tsdb.min-block-duration=2h
+    1 1000     49:02 /bin/prometheus 
+    --web.console.templates=/etc/prometheus/consoles 
+    --web.console.libraries=/etc/prometheus/console_libraries 
+    --storage.tsdb.retention.time=24h 
+    --config.file=/etc/prometheus/config_out/prometheus.env.yaml 
+    --storage.tsdb.path=/prometheus 
+    --web.enable-lifecycle 
+    --web.route-prefix=/ 
+    --web.config.file=/etc/prometheus/web_config/web-config.yaml 
+    --storage.tsdb.max-block-duration=2h --storage.tsdb.min-block-duration=2h
    85 1000      0:00 /bin/sh
    90 1000      0:00 ps -ef
 
@@ -118,7 +129,12 @@ PID   USER     TIME  COMMAND
 #登录 thanos-sidecar 
 [root@centos ~]# k exec -it prometheus-k8s-0 -n monitoring --container thanos-sidecar -- /bin/sh
 / $ ps -ef|grep sidecar
-    1 1000      4:29 /bin/thanos sidecar --prometheus.url=http://localhost:9090/ --grpc-address=:10901 --http-address=:10902 --objstore.config=type: COS config:   bucket: "tke-thanos"   region: "ap-beijing"   app_id: "1302259445"   secret_key: "XX"   secret_id: "XX"  --tsdb .path=/prometheus
+    1 1000      4:29 /bin/thanos sidecar 
+    --prometheus.url=http://localhost:9090/ 
+    --grpc-address=:10901 
+    --http-address=:10902 
+    --objstore.config=type: COS config:   bucket: "tke-thanos"   region: "ap-beijing"   app_id: "1302259445"   secret_key: "XX"   secret_id: "XX"  
+    --tsdb .path=/prometheus
    53 1000      0:00 grep sidecar
 # --prometheus.url=http://localhost:9090/ 表示监听的prometheus 的端口
 
@@ -148,6 +164,24 @@ PID   USER     TIME  COMMAND
 
 
 ```
+
+### 原生prometheus-k8s配置：
+```bash
+PID   USER     TIME  COMMAND
+    1 1000      3h48 /bin/prometheus 
+    --web.console.templates=/etc/prometheus/consoles 
+    --web.console.libraries=/etc/prometheus/console_libraries 
+    --storage.tsdb.retention.time=24h 
+    --config.file=/etc/prometheus/config_out/prometheus.env.yaml 
+    --storage.tsdb.path=/prometheus 
+    --web.enable-lifecycle --web.route-prefix=/ 
+    --web.config.file=/etc/prometheus/web_config/web-config.yaml
+   27 1000      0:00 /bin/sh
+   32 1000      0:00 ps -ef
+   33 1000      0:00 less
+```
+
+
 
 ```bash
 # 查看sidecar日志
@@ -208,4 +242,35 @@ metrics.k8s.io/v1beta1          #核心 指标监控昂
 
 
 
-### kub
+### influxdb 安装：
+```bash
+wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.1.1-linux-amd64.tar.gz
+tar xvzf influxdb2-2.1.1-linux-amd64.tar.gz
+cp influxdb2-2.1.1-linux-amd64/influxd /usr/local/bin/
+./influxd
+#打开浏览器，输入127.0.0.1：8086，点击“Get Started”
+cat > /usr/lib/systemd/system/influxdb.service << eof
+[Unit]
+Description=Influxdb
+After=network.target    
+
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User=influxdb
+Group=influxdb
+Type=forking
+ExecStart=/bin/bash -c "/usr/local/bin/influxd &"
+Restart=on-failure
+
+useradd influxdb
+eof
+
+useradd influxdb
+useradd -r -g influxdb influxdb
+#打开浏览器，输入127.0.0.1：8086，点击“Get Started” 用户名 密码
+#admin Admin_123
+
+```
