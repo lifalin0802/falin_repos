@@ -61,8 +61,8 @@ ping 114.114.114.114
 
 ### 抓包命令：  	
 ```bash
-tcpdump  -i deeptun0 host 192.168.2.142 -nvvvt
-
+tcpdump -i deeptun0 host 192.168.2.142 -nvvvt
+tcpdump -i eth0 host 10.254.176.185 -nvvvt
 
 ```
 

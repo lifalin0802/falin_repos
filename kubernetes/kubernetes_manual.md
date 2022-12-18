@@ -330,3 +330,13 @@ kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get
 [root@centos kubernetes-dashboard]# kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
 eyJhbGciOiJSUzI1NiIsImtpZCI6InBHS25JZFc3c3NGMHZUQXVVNUZWcmNrYnNobUxCcWxRLXlEVG10MGxST28ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLTl2bHJrIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIzNTFhNjdkZi1hMmFlLTQ4NzgtYTI3Yi1jOTJmZjhlNTI0ZGYiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6YWRtaW4tdXNlciJ9.ExSXUUdYlDrREvpW6zOI71Gdj1NVSXBy_NT6ADfAxtxmQnfvS7dUZsB5IZtLxBXrXjBsa2j5C7WNlqKmF4P-z1uASsoTuNWbKO5FO6vGxITtRZHFt57T9tThH2TdpK6wPjt5K1DML_9fP2bY_j8v15lDO9NMCRIMCrOwPjnF8s9a80Qs4jP3N-9NW7yXldAjrXFarO2SRF1NanntywSbtrDw_dZ21e-Hf5jN2rkSP9KTiaEVWFJxveC0MA35F_HxIDcjfTaX7Uj4eya23ZY-4r3U8N3a752FbkA8-536L2puGhqEf8NnW5jiMNqyCHb9jR8CSTJMXZMMSae9FmWKeQ
 ```
+
+
+
+
+### 问题排查：
+```bash
+kubectl run -it --rm --image=busybox:1.28.4 -- sh
+kubectl run -it --rm -n monitoring --image=nicolaka/netshoot -- sh  #网络问题
+```
+

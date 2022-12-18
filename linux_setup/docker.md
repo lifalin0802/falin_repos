@@ -18,8 +18,14 @@ docker image load -i hello.img
 groupadd docker
 usermod -aG docker $USER
 newgrp docker #刷新权限
-
 ```
+
+### 列举docker镜像所有版本
+```bash
+yum install jq -y
+curl 'https://registry.hub.docker.com/v2/repositories/library/debian/tags/'|jq '."results"[]["name"]' 
+```
+
 
 ### 查看宿主机中容器的1号进程对应哪个进程号
 docker inspect containerName |grep Pid
