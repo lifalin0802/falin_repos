@@ -338,5 +338,11 @@ eyJhbGciOiJSUzI1NiIsImtpZCI6InBHS25JZFc3c3NGMHZUQXVVNUZWcmNrYnNobUxCcWxRLXlEVG10
 ```bash
 kubectl run -it --rm --image=busybox:1.28.4 -- sh
 kubectl run -it --rm -n monitoring --image=nicolaka/netshoot -- sh  #网络问题
+
+#选中一个node启动pod
+k run -it --rm --image=nicolaka/netshoot  -n thanos --overrides='{"spec": { "nodeSelector": {"kubernetes.io/hostname": "test-k8s-node-141063-alibjk"}}}' -- sh 
+
+curl http://thanos-query.thanos.svc:9090/metrics  #容器内部看
+
 ```
 

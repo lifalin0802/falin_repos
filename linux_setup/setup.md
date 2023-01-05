@@ -42,9 +42,13 @@ systemctl restart network #后重启网卡
 
 yum -y install ntpdate ntp
 ntpdate cn.pool.ntp.org
+timedatectl set-ntp true
+timedatectl set-timezone Asia/Shanghai
+systemctl restart rsyslog 
+systemctl restart crond
+
 yum install -y chrony #直接是使用默认服务器 同步外网ceph各个主机节点必须同步时间否则各种奇奇怪怪的错误
 systemctl enable --now chronyd  #默认是centos.pool.ntp.org 这个时间服务器  cat /etc/chrony.conf
-timedatectl set-ntp true
 chronyc -a makestep
 
 for i in 11 12 13 14; no ssh cong$1 hostname; done;
@@ -132,6 +136,10 @@ $ source /etc/profile
 # 取消代理
 $ unset http_proxy
 $ unset http_proxy
+
+
+export JAVA_HOME=/opt/openjdk11  #设置环境变量
+unset JAVA_HOME
 ```
 
 
@@ -438,6 +446,22 @@ systemctl restart docker
 docker login http://192.168.5.100  #admin/Harbor12345
 docker login -u admin -p Harbor12345 http://192.168.5.100
 docker login -u lifl@anchnet.com -p <PASSWORD> yldc-docker.pkg.coding.yili.com
+
+docker login -u xx -p xx yldc-docker.pkg.coding.yili.com/apm/install/
+
+docker pull  yldc-docker.pkg.coding.yili.com/apm/install/injector:2.3.0.0 
+
+{
+	"auths": {
+		"yldc-docker.pkg.coding.yili.com": {
+			"username": "xx",
+			"password": "xx",
+			"email": "ylgyy@yili.com",
+			"auth": "xx"
+		}
+	}
+}
+
 
 #harbor 安装：
 #harbor 重要的路径

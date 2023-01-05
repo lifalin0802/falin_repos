@@ -715,7 +715,7 @@ docker.io/calico/cni                                 v3.24.0             45f8474
 NAME   LABELS 
 k8s.io        
 moby 
-
+  
 #https://blog.csdn.net/UsakiKokoro/article/details/120333964
 命令	docker	ctr（containerd）	crictl（kubernetes）
 查看运行的容器	docker ps	ctr task ls/ctr container ls	crictl ps

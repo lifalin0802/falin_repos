@@ -286,7 +286,8 @@ grafana/grafana
 # https://grafana.com/api/dashboards/193 docker的
 #  https://grafana.com/api/dashboards/9276 主机的
 
-# grafana database 配置 https://zhuanlan.zhihu.com/p/468632142 https://www.cnblogs.com/leiuk/p/16467540.html
+# grafana database 配置  http://t.zoukankan.com/lovesKey-p-11436104.html 
+https://zhuanlan.zhihu.com/p/468632142
 
 
 

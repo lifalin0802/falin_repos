@@ -360,7 +360,7 @@ num2=0123	#num2是长度为4的字符串
 
 if [ $num1 == $num2 ]   #no
 if [ $num1 -eq $num2 ] #yes
-
+if [ $num1 -eq $num2 -o 1 -eq 1 ] #or 条件
 
 #字符串 比较 相等
 

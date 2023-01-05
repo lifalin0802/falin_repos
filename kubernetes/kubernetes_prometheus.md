@@ -274,3 +274,16 @@ useradd -r -g influxdb influxdb
 #admin Admin_123
 
 ```
+
+
+
+```bash
+k create secret generic alertmanager-config --from-file=alertmanager-config.yaml -n monitoring
+k create secret generic thanos-objectstorage --from-file=thanos.yaml -n thanos
+k create secret generic codingregistrykey --from-file=.dockerconfigjson -n tingyun
+
+NS=tingyun
+kubectl --namespace $NS  create secret docker-registry codingregistrykey --docker-server=yldc-docker.pkg.coding.yili.com --docker-username=xx --docker-password=xx --docker-email=ylgyy@yili.com
+kubectl --namespace $NS  patch serviceaccount default -p '{"imagePullSecrets": [{"name": "codingregistrykey"}]}'
+kubectl --namespace $NS label secrets codingregistrykey qcloud-app=codingregistrykey
+```
