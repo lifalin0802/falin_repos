@@ -1594,3 +1594,11 @@ http://192.168.5.100:8848/nacos/index.html#/login
 视频：https://www.bilibili.com/video/BV1xN4y157JK/?p=6&spm_id_from=pageDriver&vd_source=0cc4b9db6f2f6ccaae5a998b1e9d12d4
 blog: https://blog.csdn.net/m0_67698950/article/details/124911153
 
+
+### jenkins 安装：
+```bash
+mkdir -p /apps/devops/jenkins
+chmod 777 /apps/devops/jenkins
+docker run -itd -p 9003:8080 -p 9004:50000  --restart always -v /apps/devops/jenkins:/var/jenkins_home --name jenkins  jenkins/jenkins:lts
+```
+
