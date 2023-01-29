@@ -423,8 +423,9 @@ kubectl taint nodes master1 node-role.kubernetes.io/master=:NoSchedule
 
 kubectl describe nodes prod-k8s-apm-node-data3  |grep Taints
 kubectl taint node prod-k8s-apm-node-data3  
+kubectl taint node prod-k8s-apm-node-data1 app=bigdata:NoExecute
+kubectl taint node prod-k8s-apm-node-data2 app=bigdata:NoExecute
 kubectl taint node prod-k8s-apm-node-data3 app=bigdata:NoExecute
-
 
 
 kubectl get po coredns-74586cf9b6-4lqmw -n kube-system -o yaml #work
@@ -586,6 +587,18 @@ root      26047  17362  0 02:13 pts/0    00:00:00 grep --color=auto 19495
 
 ### 等同于docker 查看命令，此处用cri:
 ```bash
+
+VERSION="v1.20.0"
+wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
+tar zxvf crictl-v1.20.0-linux-amd64.tar.gz -C /usr/local/bin
+$ crictl version
+Version:  0.1.0
+RuntimeName:  containerd
+RuntimeVersion:  1.6.8
+RuntimeApiVersion:  v1alpha2
+
+
+
 crictl --runtime-endpoint unix:///run/containerd/containerd.sock  pods
 crictl --runtime-endpoint unix:///run/containerd/containerd.sock  images
 crictl --runtime-endpoint unix:///run/containerd/containerd.sock  ps 
@@ -705,6 +718,10 @@ ctr -n k8s.io i tag registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.
 ctr -n k8s.io i tag --force registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 k8s.gcr.io/pause:3.2
 ctr -n k8s.io i rm k8s.gcr.io/pause:3.2
 ctr -n k8s.io i pull -k k8s.gcr.io/pause:3.2
+
+
+
+
 
 [root@node02 ~]# crictl images
 IMAGE                                                TAG                 IMAGE ID            SIZE

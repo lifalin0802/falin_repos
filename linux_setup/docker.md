@@ -310,7 +310,7 @@ After=network-online.target
 
 [Service]
 User=prometheus
-ExecStart=/usr/local/node_exporter/node_exporter
+ExecStart=/usr/local/bin/node_exporter
 
 [Install]
 WantedBy=default.target

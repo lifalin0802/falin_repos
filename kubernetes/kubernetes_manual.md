@@ -40,6 +40,9 @@ kubectl get service serviceName -o yaml > backup.yaml
 kubectl get service -o yaml > backup.yaml  #导出所有service
 kubectl get ing web-ingress -o yaml > backup.yaml
 
+k api-versions  #查看
+k api-resources
+
 ```
 
 
@@ -345,4 +348,49 @@ k run -it --rm --image=nicolaka/netshoot  -n thanos --overrides='{"spec": { "nod
 curl http://thanos-query.thanos.svc:9090/metrics  #容器内部看
 
 ```
+### 查看containerd 磁盘使用空间
+```bash
+cd /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots
+du sh ./* |grep G #找到超过一个G的文件夹
+[root@prod-k8s-cxp-node-9 /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots]# du -sh ./*|grep G
+11G	./159386
+1.2G	./160070
+4.5G	./82419
 
+mount |grep /var/lib/containerd |grep 159386
+[root@prod-k8s-cxp-node-9 /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots]# mount|grep /var/lib/containerd|grep 159386
+overlay on /run/containerd/io.containerd.runtime.v2.task/k8s.io/d4b98ad13820eeac1e2ad7a67309311b63d44ec8d578646fff233491d3022321/rootfs type overlay (rw,relatime,lowerdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/159385/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/201/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/200/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/199/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/198/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/197/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/196/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/195/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/117/fs,upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/159386/fs,workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/159386/work)
+
+ctr -n k8s.io c ls |grep <containerid> #找到容器运行时的名字，ns
+[root@prod-k8s-cxp-node-9 /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots]# ctr -n k8s.io c ls |grep d4b98ad13820eeac1e2ad7a67309311b63d44ec8d578646fff233491d3022321
+d4b98ad13820eeac1e2ad7a67309311b63d44ec8d578646fff233491d3022321    yldc-docker.pkg.coding.yili.com/cms/docker/cms-user-prod:48                                                                                                          io.containerd.runc.v2 
+
+df -h #等同于mount 
+
+[root@prod-k8s-cxp-node-9 ~]# df -h 
+overlay         296G   42G  239G  15% /run/containerd/io.containerd.runtime.v2.task/k8s.io/db029f3ac2375e94edddfc934bb4e6a82ad7e7d95ab452ac09e1eb4cc0046aea/rootfs
+[root@prod-k8s-cxp-node-9 ~]# mount |grep db029f3ac237
+overlay on /run/containerd/io.containerd.runtime.v2.task/k8s.io/db029f3ac2375e94edddfc934bb4e6a82ad7e7d95ab452ac09e1eb4cc0046aea/rootfs type overlay (rw,relatime,lowerdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118516/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118515/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118514/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118513/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118512/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/63043/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/33842/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/1397/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/1396/fs,upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/201018/fs,workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/201018/work)
+
+du sh  #查看本文件夹一共多大
+du sh ./*  #查看各个文件夹分别多大
+```
+
+### 查看containerd 挂在路径
+```bash
+[root@prod-k8s-cxp-node-9 ~]# cd /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots
+[root@prod-k8s-cxp-node-9 ~]# mount |grep /var/lib/containerd
+overlay on /run/containerd/io.containerd.runtime.v2.task/k8s.io/cc37b2bbdf7bc2581b5c4d6b4b3a889847646b126129a17faf0402fc7e617c06/rootfs type overlay (rw,relatime,lowerdir/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/199985/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/199984/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/199983/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/199982/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/199981/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/199980/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/199979/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/199978/fs,upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/200902/fs,workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/200902/work)
+overlay on /run/containerd/io.containerd.runtime.v2.task/k8s.io/db029f3ac2375e94edddfc934bb4e6a82ad7e7d95ab452ac09e1eb4cc0046aea/rootfs type overlay (rw,relatime,
+lowerdir/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118516/fs
+:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118515/fs
+:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118514/fs
+:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118513/fs
+:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118512/fs
+:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/63043/fs
+:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/33842/fs
+:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/1397/fs
+:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/1396/fs,
+upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/201018/fs,
+workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/201018/work)
+```

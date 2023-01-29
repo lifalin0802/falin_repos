@@ -60,3 +60,52 @@ kube-scheduler-centos            1/1     Running   9 (14h ago)    13d
 #### 官方模板：
 pv：  
 https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+
+
+### pvc storeageclass demo:
+
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: baiteda-service-gateway
+  namespace: yida-center-uat
+spec:
+  template:
+    spec:
+      volumes:
+      - name: upload
+        persistentVolumeClaim:
+          claimName: yiday-upload-uat   #pvc声明
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    pv.kubernetes.io/bind-completed: "yes"
+    pv.kubernetes.io/bound-by-controller: "yes"
+    volume.beta.kubernetes.io/storage-provisioner: com.tencent.cloud.csi.tcfs.cfs-pub
+  finalizers:
+  - kubernetes.io/pvc-protection 
+  name: yiday-upload-uat
+  namespace: yida-center-uat
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: cfs-pub  #标记storageclass类型
+  volumeMode: Filesystem
+  volumeName: pvc-fcb3b10d-ce54-485b-bc54-f91de311421a
+status:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 10Gi
+  phase: Bound
+
+```
+

@@ -16,8 +16,9 @@ hostnamectl set-hostname Nexus  #设置主机名
 cat /etc/hostname  #检查主机名
 reboot # 重启机器
 
+#查看主机名
+cat /etc/hosts 
 
-vim /etc/hosts #编辑本地hosts文件
 
 #安装epel 要先设置http_proxy 代理
 yum install -y epel-release
@@ -1350,11 +1351,20 @@ taskkill /f /pid 1868
 
 docker images java #查询docker 镜像版本
 
+
 #退出容器
 exit 
 
 ```
+## list docker image tags 
+```bash
+curl -L -s https://registry.hub.docker.com/v2/repositories/library/centos/tags| jq '."results"[]["name"]'
+```
 
+```bash
+dockertags ubuntu # list all tags of ubuntu
+dockertags php apache # list all php tags php containing 'apache'
+```
 
 ### dockerfile docker 编译：
 分阶段编译 最小镜像
@@ -1599,6 +1609,7 @@ blog: https://blog.csdn.net/m0_67698950/article/details/124911153
 ```bash
 mkdir -p /apps/devops/jenkins
 chmod 777 /apps/devops/jenkins
-docker run -itd -p 9003:8080 -p 9004:50000  --restart always -v /apps/devops/jenkins:/var/jenkins_home --name jenkins  jenkins/jenkins:lts
+docker run -itd -p 9003:8080 -p 9004:50000  --restart always \
+ -v /apps/devops/jenkins:/var/jenkins_home --name jenkins  jenkins/jenkins:lts
 ```
 

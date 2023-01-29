@@ -67,6 +67,8 @@ k describe pod grafana-5d58bc4789-fmwkf -n kube-system
 k get crd -A
 k get servicemonitors -A
 
+k describe svc kube-scheduler -n kube-system |grep -i endpoints 
+
 
 find / -type d  -name grafana
 
@@ -235,6 +237,7 @@ Custom Metrics(自定义指标)：由Prometheus Adapter提供API custom.metrics.
 [root@centos ~]# k api-versions |grep metric
 custom.metrics.k8s.io/v1beta1  #自定义指标监控昂
 metrics.k8s.io/v1beta1          #核心 指标监控昂
+
 ```
 
 
@@ -287,3 +290,11 @@ kubectl --namespace $NS  create secret docker-registry codingregistrykey --docke
 kubectl --namespace $NS  patch serviceaccount default -p '{"imagePullSecrets": [{"name": "codingregistrykey"}]}'
 kubectl --namespace $NS label secrets codingregistrykey qcloud-app=codingregistrykey
 ```
+
+### starrocks
+```bash
+cd  /home/lifalin/code/k8s-prometheus-grafana/prometheus/prometheus/customerised
+
+```
+
+

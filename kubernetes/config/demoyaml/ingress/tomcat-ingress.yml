@@ -4,7 +4,10 @@ metadata:
   name: ingress-tomcat-http
   namespace: dev
   # annotations: 
-  #   kubernets.io/ingress.class: "nginx"
+  #   kubernets.io/ingress.class: "nginx" 
+  #还可以是     kubernetes.io/ingress.class: prod-pri-ingress tke上的
+  #    kubernetes.io/ingress.class: nginx-in aliyun上的
+  #作用等同于  ingressClassName: ingress-pri ctyun上的
 spec:
   # ingressClassName: nginx
   rules:

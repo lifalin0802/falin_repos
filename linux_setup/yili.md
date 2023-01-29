@@ -109,6 +109,7 @@ git checkout .  #撤销所有未提交的修改
 wget https://github.com/vmware-tanzu/velero/releases/download/v1.5.2/velero-v1.5.2-linux-amd64.tar.gz
 ## 解压
 tar -xvf velero-v1.5.2-linux-amd64.tar.gz
+tar -cvf xxx.tar  ./ #打包当前文件夹所有文件
 ## 移动velero可执行文件
 mv velero-v1.5.2-linux-amd64/velero /usr/bin/
 
