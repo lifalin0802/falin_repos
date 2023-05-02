@@ -51,7 +51,7 @@ egrep 'pattern1.*pattern2' filename
 pgrep nginx
 
 grep -n "^$" file1 #查询file1里面空行所在行号
-
+grep -rl 'mirrors.tencent.com' /home/lifalin/code #遍历文件内容
 
 $ egrep  'Tech|Sales' employee.txt  # or
 100 Thomas Manager Sales $5,000

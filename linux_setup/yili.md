@@ -98,8 +98,13 @@ velero backup delete test-k8s-20221017
 
 git add --all .  #提交所有的修改之前做
 git checkout .  #撤销所有未提交的修改
+git reset --hard  #撤销所有未提交的修改
+git config --global user.name "lifl@anchnet.com"
+git config --global user.email "lifl@anchnet.com"
 
-
+ssh-keygen -t rsa -C "lifl@anchnet.com"
+#变更origin地址
+git remote set-url origin git@e.coding.yili.com:yldc/yilicloud/terraform.git
 ```
 
 ### velero 安装：

@@ -5,6 +5,9 @@ CREATE DATABASE grafana
 --CREATE USER ‘username’@‘host’ IDENTIFIED BY ‘password’;
 CREATE USER 'grafana'@'%' IDENTIFIED BY 'Grafana_123';
 
+-- nacos mysql 账密 root/nacos_New@123
+CREATE USER 'prod_cxp_nacos'@'%' IDENTIFIED BY '23!Sj#%Q@W$yQd@7';
+
 --更更改权限
 alter user 'root'@'%' IDENTIFIED BY 'Grafana_123';
 
@@ -13,8 +16,7 @@ UPDATE mysql.user SET Password=PASSWORD('Grafana_123') WHERE User='grafana';
 
 --赋权
 --GRANT privilege ON databasename.tablename TO ‘username’@‘host’
-GRANT ALL ON grafana.* TO grafana@'%' IDENTIFIED BY 'Grafana_123';
-
+GRANT ALL ON grafana.* TO grafana@'%';  
 
 
 --SET PASSWORD FOR ‘username’@‘host’ = PASSWORD(‘newpassword’);

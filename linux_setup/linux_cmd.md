@@ -13,8 +13,15 @@ Current mode:                   enforcing   #开启的状态
 getenforce #c查看selinux 当前状态
 
 systemctl stop firewalld 
-
+#开放 10909 和 9876 端口
+firewall-cmd --zone=public --add-port=10909/tcp --permanent
+firewall-cmd --zone=public --add-port=9876/tcp --permanent
+systemctl restart firewalld.service
+firewall-cmd --reload
 ```
+
+
+
 
 
 ### iptables, icmp:

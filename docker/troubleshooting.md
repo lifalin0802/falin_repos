@@ -37,9 +37,9 @@ du -sh
 #查看文件大小
 du -sh test.txt 
 
-#查看目录 文件夹大小 排序
+
 cd /
-du -sh *|sort -n
+du -sh *|sort -n #查看目录 文件夹大小 排序
 
 docker run -d -p 9000:9000 \
 --restart=always \

@@ -280,15 +280,38 @@ useradd -r -g influxdb influxdb
 
 
 
-```bash
+```bashvs
 k create secret generic alertmanager-config --from-file=alertmanager-config.yaml -n monitoring
 k create secret generic thanos-objectstorage --from-file=thanos.yaml -n thanos
 k create secret generic codingregistrykey --from-file=.dockerconfigjson -n tingyun
 
+k delete secret additional-configs -n monitoring
+k create secret generic additional-configs --from-file=prometheus-additional.yaml -n monitoring
+k rollout restart sts prometheus-k8s -n monitoring
+
+
+k delete secret additional-configs-kafka -n monitoring
+k create secret generic additional-configs-kafka --from-file=prometheus-additional.yaml -n monitoring
+
+
+k rollout restart sts prometheus-node-monitoring -n monitoring
+
+
+k delete secret arms-am-config  -n monitoring
+k create secret generic arms-am-config --from-file=arms-alertmanager-config.yaml -n monitoring
+
+
+
+
 NS=tingyun
-kubectl --namespace $NS  create secret docker-registry codingregistrykey --docker-server=yldc-docker.pkg.coding.yili.com --docker-username=xx --docker-password=xx --docker-email=ylgyy@yili.com
+kubectl --namespace $NS  create secret docker-registry codingregistrykey --docker-server=yldc-docker.pkg.coding.yili.com --docker-username=PBhHhCzPXl --docker-password=3446bb8ecbc0e712cbc4e3c7ccbb1d7c80cafced --docker-email=ylgyy@yili.com
 kubectl --namespace $NS  patch serviceaccount default -p '{"imagePullSecrets": [{"name": "codingregistrykey"}]}'
 kubectl --namespace $NS label secrets codingregistrykey qcloud-app=codingregistrykey
+
+
+
+
+{"auths":{"yldc-docker.pkg.coding.yili.com":{"username":"PBhHhCzPXl","password":"3446bb8ecbc0e712cbc4e3c7ccbb1d7c80cafced","email":"ylgyy@yili.com","auth":"UEJoSGhDelBYbDozNDQ2YmI4ZWNiYzBlNzEyY2JjNGUzYzdjY2JiMWQ3YzgwY2FmY2Vk"}}}
 ```
 
 ### starrocks

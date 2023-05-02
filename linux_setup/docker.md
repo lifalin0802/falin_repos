@@ -23,7 +23,8 @@ newgrp docker #刷新权限
 ### 列举docker镜像所有版本
 ```bash
 yum install jq -y
-curl 'https://registry.hub.docker.com/v2/repositories/library/debian/tags/'|jq '."results"[]["name"]' 
+curl 'https://registry.hub.docker.com/v2/repositories/library/debian/tags/'|jq '."results"[]["name"]' # docker image version
+
 ```
 
 
@@ -280,7 +281,7 @@ docker port cadvisor #查看容器端口
 docker run -d \
 --name=grafana \
 -p 3000:3000 \
-grafana/grafana
+grafana/grafana:9.1.7
 
 #grafana中添加模板 ui界面中选择import, ，
 # https://grafana.com/api/dashboards/193 docker的
@@ -295,16 +296,17 @@ https://zhuanlan.zhihu.com/p/468632142
 
 ###  安装 node_exporter 
 ```bash
-wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
-tar zxf node_exporter-1.0.1.linux-amd64.tar.gz
+wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
+tar zxf node_exporter-1.5.0.linux-amd64.tar.gz
+mv node_exporter-1.5.0.linux-amd64/node_exporter /usr/local/bin
 
 id prometheus >/dev/null 2>&1 ||\
 useradd --no-create-home -s /bin/false prometheus
-chown -R prometheus:prometheus ${install_path}node_exporter/
+chown -R prometheus:prometheus /usr/local/bin/node_exporter
 
-vim /usr/lib/systemd/system/node_exporter.service
+cat >> /usr/lib/systemd/system/node_exporter.service << eof
 [Unit]
-Description=Node Exporter
+Description=Node Exporter 
 Wants=network-online.target
 After=network-online.target
 
@@ -314,6 +316,10 @@ ExecStart=/usr/local/bin/node_exporter
 
 [Install]
 WantedBy=default.target
+eof
+
+systemctl daemon-reload 
+systemctl start node_exporter
 
 #可以浏览http://192.168.5.100:9100/metrics 查看主机监控情况
 

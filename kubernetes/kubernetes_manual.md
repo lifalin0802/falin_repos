@@ -8,6 +8,9 @@
 kubectl run d1 --image httpd:alpine --port 80 
 pod/d1 created
 
+#删除所有pod
+kubectl delete --all networkpolicy --namespace=monitoring
+
 
 kubectl create deploy netshoot --image=nicolaka/netshoot -- /bin/sh -c 'sleep 36000'
 
@@ -42,7 +45,47 @@ kubectl get ing web-ingress -o yaml > backup.yaml
 
 k api-versions  #查看
 k api-resources
+kubectl api-resources -o wide --sort-by name
+kubectl get events -A
+k get componentstatus #查看状态
+k cluster-info
+kubectl get --raw '/healthz?verbose' #查看调度程序、控制器管理器、etcd节点是否健康。
+[root@localhost tencentcloud]# k get componentstatus
+Warning: v1 ComponentStatus is deprecated in v1.19+
+NAME                 STATUS      MESSAGE                                                                                       ERROR
+controller-manager   Unhealthy   Get "http://127.0.0.1:10252/healthz": dial tcp 127.0.0.1:10252: connect: connection refused   
+scheduler            Unhealthy   Get "http://127.0.0.1:10251/healthz": dial tcp 127.0.0.1:10251: connect: connection refused   
+etcd-1               Healthy     {"health":"true","reason":""}                                                                 
+etcd-0               Healthy     {"health":"true"}   
+[root@localhost tencentcloud]# k cluster-info
+Kubernetes control plane is running at https://cls-dyz4wcd3.ccs.tencent-cloud.com
+CoreDNS is running at https://cls-dyz4wcd3.ccs.tencent-cloud.com/api/v1/namespaces/kube-system/services/kube-dns:dns-tcp/proxy
 
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+[root@localhost tencentcloud]#  kubectl get --raw '/healthz?verbose'
+[+]ping ok
+[+]log ok
+[+]etcd ok
+[+]poststarthook/start-kube-apiserver-admission-initializer ok
+[+]poststarthook/generic-apiserver-start-informers ok
+[+]poststarthook/priority-and-fairness-config-consumer ok
+[+]poststarthook/priority-and-fairness-filter ok
+[+]poststarthook/start-apiextensions-informers ok
+[+]poststarthook/start-apiextensions-controllers ok
+[+]poststarthook/crd-informer-synced ok
+[+]poststarthook/bootstrap-controller ok
+[+]poststarthook/rbac/bootstrap-roles ok
+[+]poststarthook/scheduling/bootstrap-system-priority-classes ok
+[+]poststarthook/priority-and-fairness-config-producer ok
+[+]poststarthook/start-cluster-authentication-info-controller ok
+[+]poststarthook/aggregator-reload-proxy-client-cert ok
+[+]poststarthook/start-kube-aggregator-informers ok
+[+]poststarthook/apiservice-registration-controller ok
+[+]poststarthook/apiservice-status-available-controller ok
+[+]poststarthook/kube-apiserver-autoregistration ok
+[+]autoregister-completion ok
+[+]poststarthook/apiservice-openapi-controller ok
+healthz check passe
 ```
 
 
@@ -393,4 +436,9 @@ lowerdir/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118
 :/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/1396/fs,
 upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/201018/fs,
 workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/201018/work)
+```
+
+### 拷贝文件到本地
+```bash
+kubectl cp -n hadoop hadoop-hadoop-yarn-rm-0:/usr/local/hadoop/application_1564318400358_0562_1 ./
 ```

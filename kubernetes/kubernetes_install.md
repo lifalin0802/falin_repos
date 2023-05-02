@@ -752,3 +752,9 @@ moby
 推送镜像	docker push	ctr image push	无
 在容器内部执行命令	docker exec	无	crictl exec
 ```
+
+
+### 清除Evicted Pod
+```
+kgp -A --field-selector status.phase==Failed -ojson |jq '.items[] |"kubectl delete pods \(.metadata.name) -n \(.metadata.namespace)"' |xargs -n 1 bash -c
+```

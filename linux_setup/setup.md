@@ -5,7 +5,7 @@ yum search ifconfig #查找包
 yum install net-tools
 
 vi /etc/sysconfig/network-scripts/ifcfg-ens192
-BOOTPROTO="static"
+BOOTPROTO="static" 
 ONBOOT="yes"   
 IPADDR=192.168.2.99  #在192.168.2.116上
 GATEWAY=192.168.2.1  #设置 网关
@@ -335,6 +335,36 @@ python3 -m pip install tccli #work！
 pip install --upgrade pip # work!!! 但是有网络问题！开vpn也不管用
 
 
+```
+### yq安装 读取yaml
+```bash
+wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
+    chmod +x /usr/bin/yq
+yq .test.database database.yml
+```
+### jq  读取 json
+```bash
+jq -r (or jq --raw-output) #without quotes, read raw strings, not JSON texts
+tccli cdb DescribeDBInstances --cli-unfold-argument --region ap-beijing --Vips '172.23.11.130'|jq .Items[0].InstanceId -r
+```
+
+
+```yaml
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: d360
+  host: localhost
+  username: root
+  password: password
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: sample
+  host: localhost
+  username: root
+  password: password
 ```
 
 
@@ -823,6 +853,8 @@ elasticsearch.password: "Clouddeep@8890"
 
 ### 安装mysql
 ```bash
+
+yum install mysql #若只安装mysql-client这个命令就可以
 wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.37-linux-glibc2.12-i686.tar.gz
 tar -xvf mysql-5.7.24-linux-glibc2.12-x86_64.tar.gz
 mv mysql-5.7.22-linux-glibc2.12-x86_64 /usr/local/mysql 
@@ -1571,6 +1603,9 @@ done
 
 crontab -e    # 编辑crontab 指令
 crontab -l    # 查看 定时任务 列表
+
+0 8 * * * /bin/bash   /project/cronjob/clear_image.sh 
+
 0 0 1,15 * * /bin/bash   /project/cronjob/clear_image.sh  # 每个月1号15号运行该脚本  s h d m w
 0 6-12/2 * 11 * /usr/bin/httpd.sh #Crontab在11月份内，每天的早上6点到12点中，每隔2小时执行一次/use/bin/httpd.sh
 ```
