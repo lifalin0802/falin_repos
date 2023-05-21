@@ -21,4 +21,14 @@ tf init
 tf import alicloud_log_alert.example3 projectid:alertid
 #module 如何使用
 
+terraform init -plugin-dir=.terraform/providers #指定provider 路径
+
+```
+
+### terraform 带参数
+https://stackoverflow.com/questions/70689512/terraform-check-if-resource-exists-before-creating-it
+```bash
+terraform init
+terraform apply -auto-approve -var bucket_name=my-bucket 
+bucket=$(terraform output bucket)
 ```
