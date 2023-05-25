@@ -719,7 +719,7 @@ ctr -n k8s.io i tag --force registry.cn-hangzhou.aliyuncs.com/google_containers/
 ctr -n k8s.io i rm k8s.gcr.io/pause:3.2
 ctr -n k8s.io i pull -k k8s.gcr.io/pause:3.2
 
-
+journalctl -xefu kubelet #查看kubelet 日志
 
 
 
@@ -735,9 +735,9 @@ moby
   
 #https://blog.csdn.net/UsakiKokoro/article/details/120333964
 命令	docker	ctr（containerd）	crictl（kubernetes）
-查看运行的容器	docker ps	ctr task ls/ctr container ls	crictl ps
-查看镜像	docker images	ctr image ls	crictl images
-查看容器日志	docker logs	无	crictl logs
+查看运行的容器	docker ps	      ctr -n k8s.io task ls/ctr container ls	crictl ps
+查看镜像	docker images   	   ctr -n k8s.io i ls	            crictl images
+查看容器日志	docker logs     	无	                      crictl logs 
 查看容器数据信息	docker inspect	ctr container info	crictl inspect
 查看容器资源	docker stats	无	crictl stats
 启动/关闭已有的容器	docker start/stop	ctr task start/kill	crictl start/stop
