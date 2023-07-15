@@ -18,4 +18,4 @@ go env # 查看环境变量
 ```
 
 go.mod 是执行go init 生成的
-go.sum  是在go get 时 生成的
+go.sum  是在go get 时 生成的    

@@ -35,7 +35,7 @@ jenkins_falin ip: 192.168.2.142 @ 192.168.2.223
 ### 连不了网？
 重新编辑网卡，重启：
 ```bash
-vi /etc/sysconfig/network-scripts/ifcfg-ens192
+vi /etc/sysconfig/network-scripts/ifcfg-ens33
 ONBOOT="yes"   # 设置为yes
 systemctl restart network #后重启网卡
 
@@ -96,7 +96,8 @@ yum makecache
 
 yum install -y yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum install docker-ce -y
+# yum install docker-ce -y
+yum install -y docker-ce docker-ce-cli containerd.io #安装新版 docker
 systemctl start docker
 systemctl enable docker
 
@@ -115,6 +116,7 @@ $ curl -sSL  "https://github.com/docker/compose/releases/download/1.29.0/docker-
 
 $ chmod +x /usr/local/bin/docker-compose
 $ docker-compose --version 
+docker-compose ps 
 
 #启动服务
 docker-compose -f docker-compose.yml up -d
@@ -344,6 +346,9 @@ yq .test.database database.yml
 ```
 ### jq  读取 json
 ```bash
+yum install --downloadonly --downloaddir=/opt/module/jq jq #离线下载 先不安装
+yum deplist jq
+
 jq -r (or jq --raw-output) #without quotes, read raw strings, not JSON texts
 tccli cdb DescribeDBInstances --cli-unfold-argument --region ap-beijing --Vips '172.23.11.130'|jq .Items[0].InstanceId -r
 ```
@@ -460,7 +465,7 @@ wget https://github.com/goharbor/harbor/releases/download/v1.9.3/harbor-offline-
 tar xf harbor-offline-installer-v1.9.3.tgz
 cp harbor.yml harbor.yml.bak  
 sed -i "s|reg.mydomain.com|192.168.5.100|g" harbor/harbor.yml  #调整配置文件
-sed -i "s|Harbor12345|whsir.com|g" harbor/harbor.yml
+sed -i "s|Harbor12345|whsir.com|g" harbor/harbor.yml  #
 
 ./harbor/install.sh --with-clair #安装harbor
 
@@ -475,13 +480,12 @@ systemctl restart docker
 ./harbor/install.sh #重启docker ，因为cs 同在一个机器
 
 docker login http://192.168.5.100  #admin/Harbor12345
-docker login -u admin -p Harbor12345 http://192.168.5.100
+docker login -u admin -p whsir.com http://192.168.5.100
 docker login -u lifl@anchnet.com -p <PASSWORD> yldc-docker.pkg.coding.yili.com
 
 docker login -u xx -p xx yldc-docker.pkg.coding.yili.com/apm/install/
 
 docker pull  yldc-docker.pkg.coding.yili.com/apm/install/injector:2.3.0.0 
-
 {
 	"auths": {
 		"yldc-docker.pkg.coding.yili.com": {
@@ -526,6 +530,28 @@ mv XX /project/devops_web/
 
 wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890'  http://139.217.185.199:18180/redcore_manager.6.8.8.635e806.tar.gz
 wget -c --http-user=clouddeep --http-passwd='Clouddeep@8890'  http://139.217.185.199:18180/deeppush.1.2.3.b229161.tar.gz 
+```
+vmware-vdiskmanager.exe -r "E:\CentOS5\CentOS 64 位-cl1-000003.vmdk" -t 0 "E:\CentOS5\test\CentOS 64 位-cl1-000003.vmdk"
+
+
+### 磁盘清理
+```bash
+
+sudo rm -rf /var/log/* #清理日志文件 
+sudo rm -rf /tmp/*  #清理临时文件
+
+journalctl --vacuum-time=1w #只保留一周的日志
+journalctl --vacuum-size=10M #只保留10M的日志
+yum clean all #清理yum缓存
+
+package-cleanup --oldkernels --count=1 #清理老内核包
+
+docker system df # 查看docker磁盘使用
+docker system prune #会删除停止的容器、无用的数据卷和网络和 dangling 镜像
+docker system prune -a #加上 -a 会一并删除没有容器使用Docker镜像  能清理出来4个G~!!!
+
+df -hl /var/lib/docker  #查看docker占用情况
+find /var/lib/docker -name *-json.log|xargs rm -rf #删除所有container的日志，一般以-json.log结尾：
 ```
 
 

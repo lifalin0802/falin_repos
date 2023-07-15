@@ -12,9 +12,6 @@ pod/d1 created
 kubectl delete --all networkpolicy --namespace=monitoring
 
 
-kubectl create deploy netshoot --image=nicolaka/netshoot -- /bin/sh -c 'sleep 36000'
-
-
 kubectl get deployments #没有东西
 kubectl get deployments -n dev #有了
 kubectl get pods #有了
@@ -343,6 +340,9 @@ subjects:
 ```
 #### 获取登录token 都出来了
 ```bash
+
+kubectl create token admin-user --namespace kubernetes-dashboard # 如果没有token, 可以用这个命令产生
+
 k get sa -A |grep admin-user
 [root@centos kubernetes-dashboard]# k get sa -A |grep admin-user
 kubernetes-dashboard   admin-user                           1         5m11s

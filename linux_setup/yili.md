@@ -10,15 +10,19 @@ kubecm -h
 
 #参考 https://blog.csdn.net/u014636124/article/details/121376911
 kubecm add -f C:\Users\lifal\.kube\cls-dyz4wcd3-config #work ,
-#后边选择overrite, rename，merge
+#后边选择overrite, rename，merge 
 
 
-kubecm merge -f /root/.kube/config
+kubecm merge -f /root/.kube/config 
 
-kubectl config view
+kubectl config view 
+kubectl config --kubeconfig=test-kubeconfig use-context contexts.test
+kubectl --kubeconfig=/home/lifalin/test-kubeconfig get node  #加载 kubeconfig配置文件 远程集群
 
 
-kubectl patch logconfig $logconfigName --patch-file patch-java2.yaml --type="merge"
+
+
+kubectl patch logconfig $logconfigName --patch-file patch-java2.yaml --type="merge" 
 kubectl patch logconfig log-wx-camp-double11-prod-nginx  --patch-file patch.yaml --type="merge"
 
 k get ds -A|grep velero  #查看所有的daemonset
@@ -28,7 +32,7 @@ k get ns 2>&1 | head -n 10 # get first line of a linux command's output
 
 #不work
 powershell设置环境变量：
-$Env:KUBECONFIG=("$HOME\.kube\config;$HOME\.kube\cls-dyz4wcd3-config")
+$Env:KUBECONFIG=("$HOME\.kube\config;$HOME\.kube\cls-dyz4wcd3-config") 
 Get-ChildItem Env:KUBECONFIG #查看环境变量
 ```
 
@@ -41,13 +45,13 @@ Get-ChildItem Env:KUBECONFIG #查看环境变量
 chsh -s /bin/bash #切换成bash模式 然后重新开启一个terminal 即可
 chsh -s /usr/local/bin/zsh  #切换成zsh模式
 
-yum -y install epel-release
+yum -y install epel-release 
 yum install python-pip
 # pip install tccli
 
-pip3 install --upgrade pip
+pip3 install --upgrade pip  
 pip3 install tccli #即使安装成功了，也是不能用，因为提示升级到python3 最高版本
-python3 -m pip install tccli #又不管用了
+python3 -m pip install tccli #又不管用了 
 pip3 install --force-reinstall tccli  #http://www.cppblog.com/jack-wang/archive/2022/07/28/229378.html
 find / -name tccli
 
@@ -55,7 +59,7 @@ find / -name tccli
 cd /home/lifalin/code/tccli
 
 # python3 -m venv tutorial-env
-# source tutorial-env/bin/activate
+# source tutorial-env/bin/activate  
 
 #step2 安装
 pip3 install tccli
@@ -98,29 +102,9 @@ velero backup delete test-k8s-20221017
 
 git add --all .  #提交所有的修改之前做
 git checkout .  #撤销所有未提交的修改
-git reset --hard  #撤销所有未提交的修改
-git config --global user.name "lifl@anchnet.com"
-git config --global user.email "lifl@anchnet.com"
 
-ssh-keygen -t rsa -C "lifl@anchnet.com"
-#变更origin地址
-git remote set-url origin git@e.coding.yili.com:yldc/yilicloud/terraform.git
-```
-
-### git推送失敗
-```bash
-# 報錯信息： Add correct host key in /Users/yuanting/.ssh/known_hosts to get rid of this message.
-#解決辦法：
-step 1: ssh-keygen -R +输入服务器的IP
-step 2: 找一个空目录，直接git clone
-step 3: 输入fcdsa fingerprint keys: 哪里找?  github ssh keys 页面里：
 
 ```
-### git 更新 参考https://blog.csdn.net/lixiaomei0623/article/details/121361571
-```bash
-
-```
-
 
 ### velero 安装：
 参考：
@@ -129,14 +113,13 @@ step 3: 输入fcdsa fingerprint keys: 哪里找?  github ssh keys 页面里：
 wget https://github.com/vmware-tanzu/velero/releases/download/v1.5.2/velero-v1.5.2-linux-amd64.tar.gz
 ## 解压
 tar -xvf velero-v1.5.2-linux-amd64.tar.gz
-tar -cvf xxx.tar  ./ #打包当前文件夹所有文件
 ## 移动velero可执行文件
 mv velero-v1.5.2-linux-amd64/velero /usr/bin/
 
 #安装成功后可以
 # 配置velero 后端存储为腾讯云cos 参考 https://www.cnblogs.com/cloudstorageangel/p/14184088.html
 velero backup-location get  #查看存储位置状态，显示“Avaliable”，则说明访问 COS 正常
-[root@centos lifalin]# velero backup-location get
+[root@centos lifalin]# velero backup-location get 
 NAME      PROVIDER   BUCKET/PREFIX           PHASE       LAST VALIDATED                  ACCESS MODE
 default   aws        tke-velero-1302259445   Available   2022-10-17 13:34:13 +0800 CST   ReadWrite
 
@@ -215,7 +198,7 @@ kubectl -n monitoring patch  deployments prometheus-grafana --patch '{
 }'
 
 
-java -Dspring.output.ansi.enabled=ALWAYS -jar springboot-01-helloworld-1.0-SNAPSHOT.jar
+java -Dspring.output.ansi.enabled=ALWAYS -jar springboot-01-helloworld-1.0-SNAPSHOT.jar 
 
 docker run  --entrypoint  -p 8089:8080 hellojava:7
 docker run --entrypoint="/bin/bash java -Dspring.output.ansi.enabled=ALWAYS -jar springboot-01-helloworld-1.0-SNAPSHOT.jar"  -p 8089:8080 hellojava:7
@@ -272,12 +255,12 @@ cos:
 eof
 
 coscli config init # 一路回车
-coscli config show # 查看配置好的信息
+coscli config show # 查看配置好的信息	
 
 #添加存储桶
 coscli config add -b prod-wx-public-web-1302259445 -r ap-beijing
 coscli config add -b zx-1302259445  -r ap-beijing
-coscli ls cos://zx-1302259445 -r --include ".*.csv"
+coscli ls cos://prod-wx-public-web-1302259445 -r --include ".*.csv"
 ```
 
 tencent [openapi](https://console.cloud.tencent.com/api/explorer?Product=cos&Version=2018-11-26&Action=GetService) 获取所有的存储桶名字

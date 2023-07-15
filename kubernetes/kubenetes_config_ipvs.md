@@ -33,7 +33,7 @@ yum install ipvsadm -y
 ```bash
 
 route add host 192.168.1.150 dev lo:1 #直接添加 机器重启之后 会丢失 
-route -n #查看一下岗添加的
+route -n #查看一下刚添加的 也用于calico等网络插件安装后，node节点上查看路由表使用情况
 echo "route add host 192.168.1.150 dev lo:1" >> /etc/rc.local #永久保存
 
 ipvsadm -A -t 192.168.1.150:80 -s rr

@@ -310,12 +310,13 @@ cd /etc/kubernetes/pki
 sshpass -p "lfl" scp centos:/opt/certs/ca.pem ca.crt
 sshpass -p "lfl" scp centos:/opt/certs/ca-key.pem ca.key
 
+
+
 kubeadm init \
 --apiserver-advertise-address=192.168.5.140 \
 --image-repository registry.aliyuncs.com/google_containers \
-#--kubernetes-version=1.24.0 \
 --service-cidr=10.96.0.0/16 \
-#--cri-socket=/var/run/crio/crio.sock \
+--pod-network-cidr=10.244.0.0/16 \
 --upload-certs
 
 
@@ -397,6 +398,13 @@ kubeadm join 192.168.5.140:6443 --token da2els.6m9ufp9c37vaagy7 \
 ./init.sh: line 16: --upload-certs: command not found
 
 
+
+token create --print-join-command #重新获取master的token
+[root@master01 tigera-operator]# kubeadm token create --print-join-command
+kubeadm join 192.168.5.140:6443 --token knsqgq.cr889wp2v2vpcj2x --discovery-token-ca-cert-hash sha256:3989f9b70736ad3ea00b0a0ac1bbf5548691c9f3547cf3becf410219907ea3ce 
+
+
+
 #此时我的kubectl 还是不能用必须运行  .kube/config 和export 那一段才行 不然报错 
 
 
@@ -473,6 +481,9 @@ systemctl is-enabled firewalld # 查看 firewalld状态
 
 #安装calico
 curl https://projectcalico.docs.tigera.io/manifests/calico-etcd.yaml -o calico.yaml
+ https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/tigera-operator.yaml
+
+
 
 
 cat /etc/kubernetes/pki/etcd/ca.crt | base64 -w 0
@@ -633,6 +644,8 @@ calicoctl get nodes
 calicoctl get ippool -o wide #
 
 
+cd /opt/cni/bin  #网络cni 配置
+
 #coredns起不来？ 用以下方法
 rm -rf /etc/cni/net.d/*
 rm -rf /var/lib/cni/calico
@@ -719,7 +732,7 @@ ctr -n k8s.io i tag --force registry.cn-hangzhou.aliyuncs.com/google_containers/
 ctr -n k8s.io i rm k8s.gcr.io/pause:3.2
 ctr -n k8s.io i pull -k k8s.gcr.io/pause:3.2
 
-journalctl -xefu kubelet #查看kubelet 日志
+journalctl -xefu kubelet -n 10 #查看kubelet 日志
 
 
 

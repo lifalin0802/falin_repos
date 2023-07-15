@@ -109,6 +109,7 @@ docker run -dit entrydemo /bin/bash  #
 docker network create -d bridge --subnet "192.168.2.0/24" --gateway "192.168.2.1" br0  #
 
 docker network ls #查看自定义的bridge
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id #查看容器网络
 docker run -it --name b1 --network br0 busybox
 
 docker network create -d bridge --subnet "192.168.5.0/24" --gateway "192.168.5.2" br0  #错误！！执行之后ssh就立刻断连接了！！！查看发现多了 这个网卡 br-1e23d51908ea，从windows宿主机tracert 到这台linux虚拟机都不对了 发现下一条变成了19.168.167.99 ？
@@ -228,7 +229,10 @@ docker stats containername
 docker stats --no-stream 144d212470fa |awk '{print $3}' #no stream 非交互式
 docker stats --no-stream 144d212470fa |awk 'NR!=1{print $3}'
 
-
+docker run -d --name prometheus -p 9090:9090 \
+-v /etc/prometheus:/etc/prometheus \
+-v /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+prom/prometheus:latest
 
 
 [root@centos ~]# cat /etc/prometheus/prometheus.yml|grep -Ev '*#|^$'

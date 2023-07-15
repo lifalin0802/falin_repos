@@ -13,6 +13,10 @@ find / -name "*.mp4" -exec rm -rf {} \;  #找到某些文件 删除
 ```
 
 
+### markdown 粘贴图片
+control + alt + v 
+
+
 ### 进程通信：
 ```bash
 
@@ -102,7 +106,26 @@ $ ifconfig ens192   # 只显示某个网卡的信息
 rpm -ql yum-config-manager 
 rpm -e  zsh  #-e 卸载
 journalctl -u jenkins.service #查看安装日志
-systemctl status -l kibana 
+systemctl status -l kibana  # -l 输出完整 systemctl 日志 
+
+
+#卸载docker
+rpm -qa |grep docker-ce
+
+
+
+定位该类问题，经常会用到的命令有：
+
+systemctl list-unit-files 列出所有可用的Unit
+systemctl list-units 列出所有正在运行的Unit
+systemctl --failed 列出所有失败单元
+systemctl mask httpd.service 禁用服务
+systemctl unmask httpd.service
+systemctl kill httpd 杀死服务
+systemd-analyze critical-chain：分析启动时的关键链
+systemd-analyze blame 分析启动时各个进程花费的时间
+
+
 ```
 
 

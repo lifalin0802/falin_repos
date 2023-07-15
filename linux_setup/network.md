@@ -199,6 +199,8 @@ ens33            1500     1621      0      0 0          1094      0      0      
 lo              65536   391996      0      0 0        391996      0      0      0 LRU
 virbr0           1500        0      0      0 0             0      0      0      0 BMU
 
+ifconfig eth0 mtu 1400  #改变ntu的值 重启之后会复原
+ip link set dev eth0 mtu 1400
 
 ```
 

@@ -13,23 +13,8 @@ May 14 20:21:01 centos systemd[1]: Failed to start Docker Application Container 
 
 ```
 
-### 查看docker占用情况：
-```bash
-[root@centos ~]# df -hl /var/lib/docker
-Filesystem               Size  Used Avail Use% Mounted on
-/dev/mapper/centos-root   17G   17G   20K 100% /
-```
-
-### 解决办法：
-删除所有container的日志，一般以-json.log结尾：
-```bash
-find /var/lib/docker -name *-json.log|xargs rm -rf
-systemctl start docker
 
 
-
-
-```
 ### 查看磁盘大小：
 ```bash
 #查看当前磁盘空间大小

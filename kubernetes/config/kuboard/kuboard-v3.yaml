@@ -218,16 +218,16 @@ spec:
                 name: kuboard-v3-config
           image: 'eipwork/kuboard:v3'
           imagePullPolicy: Always
-          livenessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /kuboard-resources/version.json
-              port: 80
-              scheme: HTTP
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
+          # livenessProbe:
+          #   failureThreshold: 3
+          #   httpGet:
+          #     path: /kuboard-resources/version.json
+          #     port: 80
+          #     scheme: HTTP
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
           name: kuboard
           ports:
             - containerPort: 80
@@ -242,16 +242,16 @@ spec:
             - containerPort: 10081
               name: peer-u
               protocol: UDP
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /kuboard-resources/version.json
-              port: 80
-              scheme: HTTP
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
+          # readinessProbe:
+          #   failureThreshold: 3
+          #   httpGet:
+          #     path: /kuboard-resources/version.json
+          #     port: 80
+          #     scheme: HTTP
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
           resources: {}
           # startupProbe:
           #   failureThreshold: 20
