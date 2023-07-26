@@ -100,11 +100,6 @@ velero restore create --from-backup test-k8s-20221017
 velero backup delete test-k8s-20221017
 
 
-git add --all .  #提交所有的修改之前做
-git checkout .  #撤销所有未提交的修改
-
-ssh-add ~/.ssh/id_rsa_tw #添加账号
-ssh-add ~/.ssh/id_rsa
 ```
 
 ### velero 安装：
