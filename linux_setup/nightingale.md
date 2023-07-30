@@ -60,7 +60,7 @@ nohup ./n9e webapi &> webapi.log &
 
 ### 配置采集器 catagraf
 ```bash
-wge  https://github.com/flashcatcloud/categraf/releases/download/v0.2.35/categraf-v0.2.35-linux-amd64.tar.gz
+wget  https://github.com/flashcatcloud/categraf/releases/download/v0.3.16/categraf-v0.3.16-linux-amd64.tar.gz
 vim /opt/n9e/categraf/conf/config.toml
 
 ```
