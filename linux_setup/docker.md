@@ -17,7 +17,7 @@ docker image load -i hello.img
 
 groupadd docker
 usermod -aG docker $USER
-newgrp docker #刷新权限
+newgrp docker #刷新权限  
 ```
 
 ### 列举docker镜像所有版本

@@ -15,10 +15,6 @@ kubecm add -f C:\Users\lifal\.kube\cls-dyz4wcd3-config #work ,
 
 kubecm merge -f /root/.kube/config 
 
-kubectl config view 
-kubectl config --kubeconfig=test-kubeconfig use-context contexts.test
-kubectl --kubeconfig=/home/lifalin/test-kubeconfig get node  #加载 kubeconfig配置文件 远程集群
-
 
 
 
@@ -35,6 +31,27 @@ powershell设置环境变量：
 $Env:KUBECONFIG=("$HOME\.kube\config;$HOME\.kube\cls-dyz4wcd3-config") 
 Get-ChildItem Env:KUBECONFIG #查看环境变量
 ```
+
+### kubectl 切换上下文
+```bash
+kubectl config view 
+kubectl config --kubeconfig=test-kubeconfig use-context contexts.test
+kubectl --kubeconfig=/home/lifalin/test-kubeconfig get node  #加载 kubeconfig配置文件 远程集群
+kubectl config get-contexts #查看
+# -1a-multi-twc_europe-west3_twc-cluster➜  ~ kubectl config get-contexts
+# CURRENT   NAME                                                       CLUSTER                                                    AUTHINFO                                                   NAMESPACE
+# *         gke_fr-prd-teamworkretail_asia-northeast1_prd-twr-common   gke_fr-prd-teamworkretail_asia-northeast1_prd-twr-common   gke_fr-prd-teamworkretail_asia-northeast1_prd-twr-common
+#           gke_fr-qa-eu-1a-multi-twc_europe-west3_twc-cluster         gke_fr-qa-eu-1a-multi-twc_europe-west3_twc-cluster         gke_fr-qa-eu
+
+k config use-context  gke_fr-qa-eu-1a-multi-twc_europe-west3_twc-cluster #切换
+# ➜  ~ k config use-context gke_fr-prd-teamworkretail_asia-northeast1_prd-twr-common
+# Switched to context "gke_fr-prd-teamworkretail_asia-northeast1_prd-twr-common".
+
+
+```
+
+
+
 
 ```bash
 

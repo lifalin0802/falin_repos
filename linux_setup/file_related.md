@@ -11,7 +11,7 @@ stdin, stdout, stderr:
 
 find /etc -name passwd 1>find.out 2>find.err
 find /etc -name passwd 2>find.err >find.out
-find /etc -name passwd 2>find.err 1>find.out
+find /etc -name passwd 2>find.err 1>find.out 
 
 #将所有标准输出及标准错误都输出至文件，可用&表示全部1和2的信息
 find /etc -name passwd &>find.all 或 find /etc -name passwd >find.all 2>&1 
