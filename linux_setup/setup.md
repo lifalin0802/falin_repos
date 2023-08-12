@@ -554,7 +554,31 @@ df -hl /var/lib/docker  #查看docker占用情况
 find /var/lib/docker -name *-json.log|xargs rm -rf #删除所有container的日志，一般以-json.log结尾：
 ```
 
+### 内核升级
+```bash
+yum --enablerepo="elrepo-kernel" list --showduplicates| sort -r|grep kernel-ml.x86-64
+[root@master01 ~]# yum --enablerepo="elrepo-kernel" list --showduplicates| sort -r|grep kernel-ml.x86-64
+...
+Error getting repository data for elrepo-kernel, repository not found # 此处报错 所以使用下一行
 
+#添加elrepo源：使用以下命令将elrepo源添加到你的系统中
+sudo rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+sudo rpm -Uvh https://www.elrepo.org/elrepo-release-7.0-4.el7.elrepo.noarch.rpm
+
+
+yum --enablerepo=elrepo-kernel install kernel-ml -y
+yum --enablerepo="elrepo-kernel" install kernel-ml-devel -y
+
+cat /etc/grub2.cfg |grep Core #查看目前装了哪些linux版本
+[root@master01 ~]# cat /etc/grub2.cfg |grep Core 
+menuentry 'CentOS Linux (6.4.10-1.el7.elrepo.x86_64) 7 (Core)' --class centos --class gnu-linux --class gnu --class os --unrestricted $menuentry_id_option 'gnulinux-3.10.0-1062.el7.x86_64-advanced-e21bae98-ba77-413e-ac2c-f0b78643ebe9' {
+menuentry 'CentOS Linux (3.10.0-1062.el7.x86_64) 7 (Core)' --class centos --class gnu-linux --class gnu --class os --unrestricted $menuentry_id_option 'gnulinux-3.10.0-1062.el7.x86_64-advanced-e21bae98-ba77-413e-ac2c-f0b78643ebe9' {
+menuentry 'CentOS Linux (0-rescue-13eb48799e6a4dbb856bf8458a47f4a0) 7 (Core)' --class centos --class gnu-linux --class gnu --class os --unrestricted $menuentry_id_option 'gnulinux-0-rescue-13eb48799e6a4dbb856bf8458a47f4a0-advanced-e21bae98-ba77-413e-ac2c-f0b78643ebe9' {
+
+grub2-mkconfig -o /boot/grub2/grub.cfg #更新引导管理器：更新引导管理器以便识别新安装的内核
+grub2-set-default 'CentOS Linux (6.4.10-1.el7.elrepo.x86_64) 7 (Core)' #或者使用这个
+reboot #重启
+```
 
 ### 磁盘扩容方法：
 ```bash
