@@ -29,6 +29,7 @@ ps -ef|less #一行太长
 ./bg.sh  & #设置成backgroud 后台程序
 jobs -l  #显示所有后台进程
 fg 1 #将1号进程提成前台程序 ctrl+c可以结束该进程
+%1  #macbook上 等同于foreground the process
 kill %%1  #停止进程
 
 

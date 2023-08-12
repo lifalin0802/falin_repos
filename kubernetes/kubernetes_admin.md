@@ -46,7 +46,7 @@ roleRef:
   name: cluster-admin
 subjects:
 - apiGroup: rbac.authorization.k8s.io
-  kind: Group
+  kind: Group  #注意不是ServiceAccount了, 而是Group
   name: system:masters #
 
 
