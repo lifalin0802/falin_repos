@@ -771,3 +771,52 @@ moby
 ```
 kgp -A --field-selector status.phase==Failed -ojson |jq '.items[] |"kubectl delete pods \(.metadata.name) -n \(.metadata.namespace)"' |xargs -n 1 bash -c
 ```
+
+
+### 下线某个节点
+
+```bash
+# 配置节点不可调度
+kubectl cordon <NODE_NAME>
+kubectl drain --ignore-daemonsets <NODE_NAME> # --ignore-daemonsets 选项为忽略DaemonSet类型的pod，此时应该会触发pod重启
+
+```
+#### 强制删除pod
+对于statefulset创建的Pod，kubectl drain的说明如下：  
+kubectl drain操作会将相应节点上的旧Pod删除，并在可调度节点上面起一个对应的Pod。当旧Pod没有被正常删除的情况下，新Pod不会起来。例如：旧Pod一直处于Terminating状态。  
+对应的解决方式是通过重启相应节点的kubelet，或者强制删除该Pod。
+```bash
+# 获取node节点上所有的pod名称
+kubectl get pod -A -o wide | grep <NODE_NAME>
+# 删除pod资源，重新调度到其他节点
+kubectl delete pod -n <NAMESPACE> <POD_NAME>
+```
+#### 删除节点
+```bash
+kubectl delete node <NODE_NAME>
+```
+### 升级集群
+https://kubernetes.io/zh-cn/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+#### 升级master节点
+```bash
+# 将 <node-to-drain> 替换为你要腾空的控制面节点名称
+kubectl drain <node-to-drain> --ignore-daemonsets
+kubectl delete nodes k8s-master-03
+
+kubeadm upgrade plan
+kubeadm upgrade apply v1.27.x #第一个控制面节点
+kubeadm upgrade node  #对于其它控制面节点
+
+yum install -y kubelet-1.27.x-0 kubectl-1.27.x-0 --disableexcludes=kubernetes
+systemctl daemon-reload
+systemctl restart kubelet
+kubectl uncordon <node-to-uncordon>  #解除节点的保护 
+```
+#### 从故障状态恢复
+如果 kubeadm upgrade 失败并且没有回滚，例如由于执行期间节点意外关闭， 你可以再次运行 kubeadm upgrade。 此命令是幂等的，并最终确保实际状态是你声明的期望状态。
+要从故障状态恢复，你还可以运行 kubeadm upgrade apply --force 而无需更改集群正在运行的版本。
+在升级期间，kubeadm 向 /etc/kubernetes/tmp 目录下的如下备份文件夹写入数据：
+```bash
+kubeadm-backup-etcd-<date>-<time> #包含当前控制面节点本地 etcd 成员数据的备份。 如果 etcd 升级失败并且自动回滚也无法修复，则可以将此文件夹中的内容复制到 /var/lib/etcd 进行手工修复。如果使用的是外部的 etcd，则此备份文件夹为空。
+kubeadm-backup-manifests-<date>-<time> #包含当前控制面节点的静态 Pod 清单文件的备份版本。 如果升级失败并且无法自动回滚，则此文件夹中的内容可以复制到 /etc/kubernetes/manifests 目录实现手工恢复。 如果由于某些原因，在升级前后某个组件的清单未发生变化，则 kubeadm 也不会为之生成备份版本。
+```
