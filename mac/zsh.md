@@ -34,3 +34,8 @@ source /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highli
 zsh #每次切换到zsh, 从bash中
 ```
 
+### 以root身份运行某app
+```bash
+alias code="echo \"run vscode as root\" && sudo /Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron"
+```
+

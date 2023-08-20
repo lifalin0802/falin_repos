@@ -922,6 +922,7 @@ yum install mysql-community-libs-5.7.37-1.el7.x86_64.rpm mysql-community-libs-co
 yum install mysql-community-client-5.7.37-1.el7.x86_64.rpm 
 yum install mysql-community-server-5.7.37-1.el7.x86_64.rpm
 
+#mysql设置免密登录
 echo 'skip-grant-tables' > /etc/my.cnf  # 跳过授权表,run this command for logging in without passwd
 mysql -u root # 空密码登录
 mysql> UPDATE mysql.user SET authentication_string=password('Clouddeep@8890') WHERE User='root';  # 更新密码

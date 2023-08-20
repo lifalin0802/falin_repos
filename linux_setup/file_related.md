@@ -95,6 +95,20 @@ sudo -i
 
 ```
 
+### linux系统日志如何查看
+```bash
+dmesg #查看内核日志
+journalctl  #查看systemd日志 括系统启动、服务日志和其他系统事件日志 journalctl -xe 最近的系统事件和错误日志
+tail /var/log/messages #文件包含了系统的重要日志信息，如系统启动信息、内核、网络和其他服务的相关日志。
+tail /var/log/syslog #包含Linux系统的综合日志信息，记录了各种系统活动和服务日志。
+tail /var/log/auth.log #包含了身份验证和授权相关的日志。
+tail /var/log/dmesg #包含了内核环缓冲区的内容，可以查看与系统和硬件相关的信息。
+
+ls /var/log/containers/XXX.log #容器日志输出,这种默认的日志驱动方式，实际上是将容器的日志输出写入到节点主机上的文件中
+tail /var/log/pods/<pod-namespace>_<pod-name>_<container-name>/<container-id>/
+```
+
+
 
 ```bash
 lsof -i :8181

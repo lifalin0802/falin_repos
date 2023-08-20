@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-sts
+  namespace: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: mysql 
+  replicas: 1
+  template: 
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      volumes:
+      - name: mysql-sts-config
+        configMap:
+          name: mysql-sts-config
+      containers:
+      - name: mysql-pod
+        image: mysql:8.1.0
+        ports:
+        - name: mysql-port
+          containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123456" 
+        volumeMounts:
+          - name: data
+            mountPath: /var/lib/mysql
+          - name: mysql-sts-config  #configmap name
+            mountPath: /etc/mysql/my.cnf
+            subPath: my.cnf
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        storageClassName: standard
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 500Mi
+

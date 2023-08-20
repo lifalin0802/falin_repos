@@ -1,3 +1,35 @@
+
+
+
+
+### 外接mysql 
+```sql
+alter user 'root'@'localhost' identified by '123456';
+
+CREATE DATABASE IF NOT EXISTS grafana default charset utf8 COLLATE utf8_general_ci;
+create user grafana identified by 'grafana';
+grant all on grafana.* to 'grafana'@'%';
+flush privileges;
+```
+
+### grafana更改登录账密
+还在使用sqlite的情况下
+```bash
+k exec -it -n prometheus prometheus-grafana-cb95847d8-9xx9d -- sh  #
+./bin/grafana-cli admin reset-admin-password admin
+```
+如果已经改为mysql作为后台数据库
+```bash
+mysql -uroot -p -h mysql.prometheus.svc
+mysql> use grafana;
+mysql> update grafana.user set password='59acf18b94d7eb0694c61e60ce44c110c7a683ac6a8f09580d626f90f4a242000746579358d77dd9e570e83fa24faa88a8a6', salt = 'F3FAxVm33R' where login = 'admin';
+mysql> quit;
+```
+
+k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
+k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
+k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
+
 ### 基本操作：
 ```sql
 
