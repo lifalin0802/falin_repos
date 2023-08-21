@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: otel-collector-conf
+ namespace: opentelemetry
+ labels:
+   app: opentelemetry
+   component: otel-collector-conf
+data:
+ otel-collector-config: |
+   receivers:
+     otlp:
+       protocols:
+         grpc:
+         http:
+   exporters:
+     otlp/aspecto:
+       endpoint: otelcol.aspecto.io:4317
+       headers:
+         Authorization: ${ASPECTO_API_KEY}
+     jaeger:
+       endpoint: localhost:14250
+       tls:
+         insecure: true 
+     logging:
+   processors:
+     Batch:
+     resource:
+       attributes:
+         - key: test.key
+           value: "test-value"
+           action: insert
+   extensions:
+     health_check:
+     zpages:
+       endpoint: :55679
+   service:
+     telemetry:
+       logs:
+         level: "debug"
+     extensions: [zpages, health_check]
+     pipelines:
+       traces:
+         receivers: [otlp]
+         processors: [batch]
+         exporters: [logging, jaeger, otlp/aspecto]
