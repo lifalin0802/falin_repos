@@ -25,7 +25,7 @@ data:
          insecure: true 
      logging:
    processors:
-     Batch:
+     batch:
      resource:
        attributes:
          - key: test.key
@@ -43,5 +43,5 @@ data:
      pipelines:
        traces:
          receivers: [otlp]
-         processors: [batch]
+         processors: []
          exporters: [logging, jaeger, otlp/aspecto]

@@ -108,7 +108,8 @@ ls /var/log/containers/XXX.log #容器日志输出,这种默认的日志驱动�
 tail /var/log/pods/<pod-namespace>_<pod-name>_<container-name>/<container-id>/
 ```
 
-
+10.16.68.52 (nic0)	35.198.111.29
+10.16.68.57 (nic0)	34.107.32.52
 
 ```bash
 lsof -i :8181
