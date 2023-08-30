@@ -21,3 +21,14 @@ tf import alicloud_log_alert.example3 projectid:alertid
 #module 如何使用
 
 ```
+
+
+
+```bash
+tss export --env uq_nl_prd_eu --config config.yaml
+zip -q -r -m -o dump_before_import.zip uq_nl_prd_eu
+tss import --env uq_nl_prd_eu --config config.yaml --pos-file FREU-2508_TSSIMport_MD.csv
+#tss import --env uq_nl_prd_eu --config config.yaml --sd-file FRSEA-1141_UQID_3Stores_TSSImport_SD.csv
+tss export --env uq_nl_prd_eu --config config.yaml
+zip -q -r -m -o dump_after_import.zip uq_nl_prd_eu
+```

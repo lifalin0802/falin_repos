@@ -145,20 +145,117 @@ ip netns exec ns1 ip addr
 ip netns exec ns0 ip addr add 192.0.0.1/24 dev veth0 
 ip netns exec ns1 ip addr add 192.0.0.2/24 dev veth1
 
+```
 
+```bash
 docker network create -d bridge --subnet "192.168.2.0/24" --gateway "192.168.2.1" br0   
 docker network ls
 docker run -it --name b1 --network br0 busybox
-
-
-
 
 [root@localhost ~]# docker run -it --name t1 --network bridge --rm busybox
 / # cat /etc/hosts
 127.0.0.1 localhost
 
 ```
+`kubectl get pod multi-container-pod -o jsonpath={.status.podIP}`
 
+#### ip netns list
+```bash
+gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a ~ # ip netns list
+cni-f5965155-3a25-d093-6151-d4d57986c41a (id: 0)
+cni-6f88984a-5f5e-ac5d-6ac1-f0b02e90f7ca (id: 22)
+cni-a48950b5-fe9b-4734-b977-194e524216da (id: 21)
+cni-e13aba5b-920d-5a7e-5c79-19a3dd901164 (id: 20)
+cni-6d97819b-9df2-3e7b-7745-dc363be9f783 (id: 19)
+cni-616ddbf9-7696-23a1-0138-1e5ac6600a1d (id: 18)
+cni-012869c6-14a3-21e9-5e5d-e3c2b159dca5 (id: 16)
+cni-9e381566-e8f5-75d8-c584-c94449782775 (id: 15)
+cni-117e1f68-a757-cbd8-9353-69d71d16fa9f (id: 14)
+cni-408d7fa8-1eb5-98c5-6936-ee2e16f760a6 (id: 13)
+cni-e95a06bc-2306-2ed6-e0b0-11aa12e60ef2 (id: 12)
+cni-468b9573-e0f6-bdf2-db2a-3620ea7cdafd (id: 11)
+cni-38ede521-ca73-565b-0f71-842f214c7943 (id: 10)
+cni-a3f29d80-7828-1b68-18df-3c7748604630 (id: 4)
+cni-0886c3bd-0bd1-8662-c055-d410bb5176ac (id: 9)
+cni-a0ad1e23-609e-a932-56bf-de8047157ecd (id: 5)
+cni-39187cfe-fa4f-0614-fef8-2f98fbe905ed (id: 8)
+cni-a4ef088b-1b39-882a-b35a-a4f9ed6a2f5a (id: 7)
+cni-477f0414-4af8-98ba-7d4c-03052e24027a (id: 6)
+cni-1aa06e4a-0d4b-3bf7-1dfc-b034a5ade446 (id: 3)
+cni-dec45f7b-b65a-29a2-274d-2c0779ad307d (id: 2)
+cni-d15c6046-9c21-147e-63cd-b5f9703bc22c (id: 1)
+```
+
+#### ls -lt /var/run/netns
+```bash
+gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a ~ # ls -lt /var/run/netns
+total 0
+-r--r--r-- 1 root root 0 Aug 22 06:41 cni-f5965155-3a25-d093-6151-d4d57986c41a
+-r--r--r-- 1 root root 0 Aug 21 23:27 cni-6f88984a-5f5e-ac5d-6ac1-f0b02e90f7ca
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-a48950b5-fe9b-4734-b977-194e524216da
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-e13aba5b-920d-5a7e-5c79-19a3dd901164
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-6d97819b-9df2-3e7b-7745-dc363be9f783
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-616ddbf9-7696-23a1-0138-1e5ac6600a1d
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-012869c6-14a3-21e9-5e5d-e3c2b159dca5
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-9e381566-e8f5-75d8-c584-c94449782775
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-117e1f68-a757-cbd8-9353-69d71d16fa9f
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-408d7fa8-1eb5-98c5-6936-ee2e16f760a6
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-e95a06bc-2306-2ed6-e0b0-11aa12e60ef2
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-468b9573-e0f6-bdf2-db2a-3620ea7cdafd
+-r--r--r-- 1 root root 0 Aug 21 17:02 cni-38ede521-ca73-565b-0f71-842f214c7943
+-r--r--r-- 1 root root 0 Aug 11 17:19 cni-a3f29d80-7828-1b68-18df-3c7748604630
+-r--r--r-- 1 root root 0 Jul 18 14:44 cni-0886c3bd-0bd1-8662-c055-d410bb5176ac
+-r--r--r-- 1 root root 0 Jul 18 14:44 cni-a0ad1e23-609e-a932-56bf-de8047157ecd
+-r--r--r-- 1 root root 0 Jul 18 14:42 cni-39187cfe-fa4f-0614-fef8-2f98fbe905ed
+-r--r--r-- 1 root root 0 Jul 18 14:42 cni-a4ef088b-1b39-882a-b35a-a4f9ed6a2f5a
+-r--r--r-- 1 root root 0 Jul 18 14:41 cni-477f0414-4af8-98ba-7d4c-03052e24027a
+-r--r--r-- 1 root root 0 Jul 18 14:41 cni-1aa06e4a-0d4b-3bf7-1dfc-b034a5ade446
+-r--r--r-- 1 root root 0 Jul 18 14:41 cni-dec45f7b-b65a-29a2-274d-2c0779ad307d
+-r--r--r-- 1 root root 0 Jul 18 14:41 cni-d15c6046-9c21-147e-63cd-b5f9703bc22c
+
+```
+#### ip netns exec cni-408d7fa8-1eb5-98c5-6936-ee2e16f760a6  ip a 
+```bash
+#应该就是这个pod opentelemetry-demo-checkoutservice-59bf6bfc7-xrdd5
+gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a ~ # ip netns exec cni-408d7fa8-1eb5-98c5-6936-ee2e16f760a6  ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: eth0@if24: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1460 qdisc noqueue state UP group default 
+    link/ether 6a:b3:eb:65:bd:99 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 10.64.209.22/24 brd 10.64.209.255 scope global eth0
+       valid_lft forever preferred_lft forever
+
+```
+#### ip link | grep -A1 ^24
+```
+gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a ~ # ip link | grep -A1 ^24
+24: vethd4702632@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1460 qdisc noqueue state UP mode DEFAULT group default 
+    link/ether c2:ac:0b:4f:6c:2e brd ff:ff:ff:ff:ff:ff link-netns cni-408d7fa8-1eb5-98c5-6936-ee2e16f760a6
+```
+#### ip netns exec cni-408d7fa8-1eb5-98c5-6936-ee2e16f760a6 netstat -lnp
+```
+gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a ~ # ip netns exec cni-408d7fa8-1eb5-98c5-6936-ee2e16f760a6 netstat -lnp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp6       0      0 :::8080                 :::*                    LISTEN      82743/./checkoutser 
+Active UNIX domain sockets (only servers)
+Proto RefCnt Flags       Type       State         I-Node   PID/Program name     Path
+
+#回到kubectl中看
+ ⚡ root@fli-mbp  ~  k get pod -A -o wide|grep 10.64.209.2  
+otel-demo     opentelemetry-demo-accountingservice-58c549dfcd-nst9m       1/1     Running                  0               8d      10.64.209.20   gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a   <none>           <none>
+otel-demo     opentelemetry-demo-adservice-5d48dfff58-qtcnp               1/1     Running                  0               8d      10.64.209.21   gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a   <none>           <none>
+otel-demo     opentelemetry-demo-checkoutservice-59bf6bfc7-xrdd5          1/1     Running                  0               8d      10.64.209.22   gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a   <none>           <none>
+otel-demo     opentelemetry-demo-emailservice-c45d9b549-wb6bt             1/1     Running                  22 (8h ago)     8d      10.64.209.23   gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a   <none>           <none>
+otel-demo     opentelemetry-demo-ffspostgres-554dfbcb9b-25n54             1/1     Running                  0               8d      10.64.209.24   gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a   <none>           <none>
+otel-demo     opentelemetry-demo-frontend-599dcf8c55-fpb5k                1/1     Running                  0               8d      10.64.209.25   gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a   <none>           <none>
+otel-demo     opentelemetry-demo-loadgenerator-65c6f9d4f7-2ndf5           1/1     Running                  3 (36h ago)     8d      10.64.209.27   gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a   <none>           <none>
+otel-demo     opentelemetry-demo-paymentservice-749587f6fd-5r58c          1/1     Running                  0               8d      10.64.209.28   gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a   <none>           <none>
+otel-demo     opentelemetry-demo-productcatalogservice-5474c9697c-6nh6b   1/1     Running                  0               8d      10.64.209.29   gke-twc-cluster-twc-work-pool-00dbfdfb-ui9a   <none>           <none>
+
+```
 
 
 ###防火墙设置
