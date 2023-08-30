@@ -123,6 +123,12 @@ ip link set x down  # Bring down interface x.
 
 
 ip link add type veth #添加一对veth pair
+ip a
+4: veth0@veth1: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 0a:f4:e2:2d:37:fb brd ff:ff:ff:ff:ff:ff
+5: veth1@veth0: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 5e:7e:f6:59:f0:4f brd ff:ff:ff:ff:ff:ff
+
 
 ip netns add ns0
 ip netns add ns1
@@ -143,6 +149,8 @@ ip netns exec ns1 ip addr add 192.0.0.2/24 dev veth1
 docker network create -d bridge --subnet "192.168.2.0/24" --gateway "192.168.2.1" br0   
 docker network ls
 docker run -it --name b1 --network br0 busybox
+
+
 
 
 [root@localhost ~]# docker run -it --name t1 --network bridge --rm busybox
