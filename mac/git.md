@@ -3,14 +3,14 @@
 
 ### 账号管理
 ```bash
-ssh-keygen -t rsa -C "xxxxx@xx.com"
+ssh-keygen -t rsa -C "lifalin0802@hotmail.com"
 # 在下面输入名字的时候，建议输入不一定的公司要名字，如id_rsa_xxxxxx
 Generating public/private rsa key pair.
 Enter file in which to save the key (/Users/zhaoliangchen/.ssh/id_rsa): id_rsa_xxxxxx
 # 剩下的一直回车
 
 ssh-add ~/.ssh/id_rsa_tw #添加账号
-ssh-add ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_rsa_lifalin_github #个人账号，必须加上
 ssh-add -l #添加后查看
 
 ssh -T git@github.com
