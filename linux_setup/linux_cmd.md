@@ -21,8 +21,22 @@ firewall-cmd --reload
 ```
 
 
+### 处理sudo -i 之后not a sudoers 
+```bash
+cp /etc/sudoers /etc/sudoers.original
+vim /etc/sudoers 
+# 再加一行
+lifalin	ALL=(ALL:ALL) ALL 
+#保存退出，就完成了
 
+#第二种办法  绕开sudo 直接su root 输入账密即可
+```
 
+### vim 快捷键
+```bash
+yy #复制整行 
+n #黏贴到下一行
+```
 
 ### iptables, icmp:
 ```bash
