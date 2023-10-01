@@ -25,11 +25,6 @@ mysql> use grafana;
 mysql> update grafana.user set password='59acf18b94d7eb0694c61e60ce44c110c7a683ac6a8f09580d626f90f4a242000746579358d77dd9e570e83fa24faa88a8a6', salt = 'F3FAxVm33R' where login = 'admin';
 mysql> quit;
 ```
-kubectl describe pod -l app=pgadmin -n xxxx | grep -G "PGADMIN_DEFAULT_.*$"
-
-k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
-k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
-k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
 
 ### 基本操作：
 ```sql

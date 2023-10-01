@@ -9,12 +9,13 @@ Generating public/private rsa key pair.
 Enter file in which to save the key (/Users/zhaoliangchen/.ssh/id_rsa): id_rsa_xxxxxx
 # 剩下的一直回车
 
-ssh-add ~/.ssh/id_rsa_tw #添加账号
+ssh-add ~/.ssh/id_rsa #添加账号
 ssh-add ~/.ssh/id_rsa_lifalin_github #个人账号，必须加上
 ssh-add -l #添加后查看
 
 ssh -T git@github.com
 ssh -T git@bitbucket.org #1
+git push origin master #falin_repos githu上的代码 push时候要关闭clash vpn
 ```
 
 ### git常用命令

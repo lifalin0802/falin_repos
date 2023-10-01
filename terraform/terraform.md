@@ -33,8 +33,8 @@ tf force-unlock [options] LOCK_ID #解锁某个lockID -force
 tss export --env uq_jp_prd --config config.yaml
 
 zip -q -r -m -o dump_before_import.zip uq_jp_prd
-tss import --env uq_jp_prd --config config.yaml --pos-file FREU-2508_TSSIMport_MD.csv
-tss import --env uq_nl_prd_eu --config config.yaml --sd-file FRSEA-1141_UQID_3Stores_TSSImport_SD.csv
+tss import --env uq_jp_prd --config config.yaml --pos-file tss_pos_data_MD_20230925_uq_utc_0922_2.csv
+tss import --env uq_jp_prd --config config.yaml --sd-file tss_pos_data_SD_20230925_uq_utc_0922.csv
 
 tss export --env uq_jp_prd --config config.yaml
 zip -q -r -m -o dump_after_import.zip uq_jp_prd
