@@ -26,10 +26,6 @@ mysql> update grafana.user set password='59acf18b94d7eb0694c61e60ce44c110c7a683a
 mysql> quit;
 ```
 
-k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
-k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
-k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
-
 ### 基本操作：
 ```sql
 

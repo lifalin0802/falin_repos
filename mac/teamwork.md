@@ -4,6 +4,9 @@
 
 ### 暴露到本地端口
 ```bash
+kubectl describe pod -l app=pgadmin | grep -G "PGADMIN_DEFAULT_.*$"
+kubectl describe pod -l app=pgadmin -n xxxx | grep -G "PGADMIN_DEFAULT_.*$"
+kubectl port-forward svc/pgadmin 8080:80 -n xxxx
 k port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090 &
 
 kubectl describe pod -l app=pgadmin | grep -G "PGADMIN_DEFAULT_.*$"

@@ -4,6 +4,8 @@
 
 ### kubecm, kubeconfig:
 ```powershell
+#参考 https://kubecm.cloud/en-us/install
+curl -Lo kubecm.tar.gz https://github.com/sunny0826/kubecm/releases/download/v${VERSION}/kubecm_${VERSION}_Windows_x86_64.tar.gz
 
 kubecm list
 kubecm -h

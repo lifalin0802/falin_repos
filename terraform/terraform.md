@@ -17,7 +17,12 @@ tf state rm alicloud_log_alert.download #只会删本地下载的缓存，不会
 
 tf get 
 tf init
-tf import alicloud_log_alert.example3 projectid:alertid
+#定义
+resource "google_compute_instance" "sql1" {}
+#导入
+tf import google_compute_instance.sql1 fr-test-twc/europe-west3-b/tw-fr-test-sql-1
+
+tf force-unlock [options] LOCK_ID #解锁某个lockID -force
 #module 如何使用
 
 ```
@@ -25,10 +30,12 @@ tf import alicloud_log_alert.example3 projectid:alertid
 
 
 ```bash
-tss export --env uq_nl_prd_eu --config config.yaml
-zip -q -r -m -o dump_before_import.zip uq_nl_prd_eu
-tss import --env uq_nl_prd_eu --config config.yaml --pos-file FREU-2508_TSSIMport_MD.csv
-#tss import --env uq_nl_prd_eu --config config.yaml --sd-file FRSEA-1141_UQID_3Stores_TSSImport_SD.csv
-tss export --env uq_nl_prd_eu --config config.yaml
-zip -q -r -m -o dump_after_import.zip uq_nl_prd_eu
+tss export --env uq_jp_prd --config config.yaml
+
+zip -q -r -m -o dump_before_import.zip uq_jp_prd
+tss import --env uq_jp_prd --config config.yaml --pos-file tss_pos_data_MD_20230925_uq_utc_0922_2.csv
+tss import --env uq_jp_prd --config config.yaml --sd-file tss_pos_data_SD_20230925_uq_utc_0922.csv
+
+tss export --env uq_jp_prd --config config.yaml
+zip -q -r -m -o dump_after_import.zip uq_jp_prd
 ```
