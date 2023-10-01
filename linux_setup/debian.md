@@ -1,3 +1,14 @@
+
+### 安装步骤
+https://zhuanlan.zhihu.com/p/645064573  
+对磁盘进行分区 选择默认分区    
+软件选择 
+- Debian默认环境
+- GNOME
+- SSH Server
+- 标准系统工具
+
+
 ### 设置网卡重启
 ```bash
 vim /etc/network/interfaces
