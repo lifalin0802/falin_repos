@@ -31,6 +31,16 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.
 source /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 
+vim ~/.zshrc 
+plugins=(git
+zsh-autosuggestions
+zsh-syntax-highlighting
+)
+
+source ~/.zshrc
+
+
+
 zsh #每次切换到zsh, 从bash中
 ```
 
