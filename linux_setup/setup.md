@@ -9,6 +9,9 @@ BOOTPROTO="static"
 ONBOOT="yes"   
 IPADDR=192.168.2.99  #在192.168.2.116上
 GATEWAY=192.168.2.1  #设置 网关
+DNS1=8.8.8.8
+
+
 
 systemctl restart network  #重启网卡
 hostnamectl set-hostname Nexus  #设置主机名
