@@ -110,3 +110,9 @@ vmstat -s #or vmstat 回车，查看cpu + memory
 
 
 ```
+
+### 拓展磁盘
+用gparted https://www.addictivetips.com/ubuntu-linux-tips/resize-hard-drive-partitions-on-linux/
+```bash
+yes| pacman -S gparted
+```
