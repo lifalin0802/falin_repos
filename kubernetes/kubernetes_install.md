@@ -236,9 +236,10 @@ EOF
 
 
 #containerd 安装之前 要设置好两个模块
-vi /etc/modules-load.d/containerd.conf
+cat << EOF > /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
+EOF
 
 #调整containerd 配置文件
 containerd config default|tee /etc/containerd/config.toml #将现在默认的配置写入config.toml文件中

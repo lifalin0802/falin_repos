@@ -9,6 +9,9 @@ BOOTPROTO="static"
 ONBOOT="yes"   
 IPADDR=192.168.2.99  #在192.168.2.116上
 GATEWAY=192.168.2.1  #设置 网关
+DNS1=8.8.8.8
+
+
 
 systemctl restart network  #重启网卡
 hostnamectl set-hostname Nexus  #设置主机名
@@ -25,12 +28,6 @@ yum install -y epel-release
 yum install net-tools
 
 ```
-
-### 机器IP 位置：
-```https://192.168.2.70/ui/```  
-jfrog ip: 192.168.2.99 at @ 192.168.2.116  
-jenkins_falin ip: 192.168.2.142 @ 192.168.2.223 
-
 
 ### 连不了网？
 重新编辑网卡，重启：
