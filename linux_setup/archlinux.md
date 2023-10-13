@@ -87,8 +87,10 @@ static domain_name_servers=192.168.232.1 114.114.114.114
 eof
 
 cat >> /etc/resolv.conf << eof
-nameserver 192.168.232.2
+search localdomain
+nameserver 192.168.232.2   #这里一定是XX.2, 地址要指向网关(gateway IP)，而不是 XX.1(宿主机)
 nameserver 114.114.114.114
+nameserver 8.8.8.8
 eof 
 
 #install chrome refered to: https://aur.archlinux.org/packages/google-chrome
@@ -115,4 +117,11 @@ vmstat -s #or vmstat 回车，查看cpu + memory
 用gparted https://www.addictivetips.com/ubuntu-linux-tips/resize-hard-drive-partitions-on-linux/
 ```bash
 yes| pacman -S gparted
+```
+
+
+### 一直乱码
+因为一直没有 合适的字体支持，下载字体就好
+```bash
+pacman -S wqy-zenhei ttf-fireflysun 
 ```

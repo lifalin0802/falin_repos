@@ -3,9 +3,21 @@
 ```bash
 
 #配置镜像源
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.bak
+
 curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS7-Base-163.repo
+wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo 
+
+yum clean all 
+yum makecache fast 
 yum repolist #查看镜像源
 yum list installed
+
+yum clean all
+yum makecache
+yum -y update # work!!
 
 #配置ali镜像源
 cd /etc/yum.repos.d/
@@ -21,7 +33,8 @@ disabled
 
 
 #安装常用工具
-yum install -y yum-utils device-mapper-persistent-data lvm2
+yum install -y yum-utils device-mapper-persistent-data lvm2 
+yum install -y bridge-utils.x86_64
 
 #启用ipv6， ipv4转发
 cat >> /etc/sysctl.conf << eof
@@ -33,10 +46,10 @@ eof
 
 sysctl -p #使之生效
 
-modprobe overlay  #系统加载两个模块
+modprobe overlay  #系统加载两个模块 
 modprobe br_netfilter
 
-echo"1"> /proc/sys/net/ipv4/ip_forward 
+echo "1"> /proc/sys/net/ipv4/ip_forward 
 lsmod #列出内核模块
 
 yum list containerd #找不到！！！！
@@ -122,18 +135,25 @@ node02     Ready      worker          28m   v1.24.3
 mkdir -p /opt/TLS/{download,etcd,k8s}
 
 cd /opt/TLS/download
-wget https://github.com/cloudflare/cfssl/releases/download/v1.6.1/cfssl_1.6.1_linux_amd64
-wget https://github.com/cloudflare/cfssl/releases/download/v1.6.1/cfssljson_1.6.1_linux_amd64
-wget https://github.com/cloudflare/cfssl/releases/download/v1.6.1/cfssl-certinfo_1.6.1_linux_amd64
+wget https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssl_1.6.4_linux_amd64
+wget https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssljson_1.6.4_linux_amd64
+wget https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssl-certinfo_1.6.4_linux_amd64
 chmod +x cfssl*
-cp cfssl_1.6.1_linux_amd64 /usr/local/bin/cfssl
-cp cfssljson_1.6.1_linux_amd64 /usr/local/bin/cfssljson
-cp cfssl-certinfo_1.6.1_linux_amd64 /usr/local/bin/cfssl-certinfo
+cp cfssl_1.6.4_linux_amd64 /usr/local/bin/cfssl
+cp cfssljson_1.6.4_linux_amd64 /usr/local/bin/cfssljson
+cp cfssl-certinfo_1.6.4_linux_amd64 /usr/local/bin/cfssl-certinfo
 
 #签发证书：
 cfssl gencert -initca ca-csr.json | cfssljson -bare ca - 
+➜  certs ll
+total 20K
+-rw-r--r--. 1 root root  294 Oct 13 03:32 ca-config.json
+-rw-r--r--. 1 root root 1.1K Oct 13 03:36 ca.csr
+-rw-r--r--. 1 root root  267 Oct 13 03:36 ca-csr.json
+-rw-------. 1 root root 1.7K Oct 13 03:36 ca-key.pem
+-rw-r--r--. 1 root root 1.4K Oct 13 03:36 ca.pem
 
-cfssl gencert -ca=ca.pem -ca-key=key.pem -config=ca-config.json -profile=client client-csr.json| cfssljson -bare client -
+cfssl gencert -ca=ca.pem -ca-key=key.pem -config=ca-config.json -profile=client ca-csr.json| cfssljson -bare client -
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=../ca-config.json -profile=client server-csr.json | cfssljson -bare server
 sed -i 's/centos-master/localhost.localdomain/g' /etc/kubernetes/kubelet.conf
 
