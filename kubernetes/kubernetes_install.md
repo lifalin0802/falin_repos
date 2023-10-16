@@ -108,25 +108,6 @@ kubectl get nodes --show-labels
 kubectl  label node  node02 node-role.kubernetes.io/worker=
 kubectl  label node  node02 node-role.kubernetes.io/node- #消除标签node
 
-[root@master01 lifalin]# kubectl get nodes
-NAME       STATUS     ROLES           AGE   VERSION
-master01   NotReady   control-plane   67m   v1.24.3
-node02     Ready      <none>          23m   v1.24.3
-[root@master01 lifalin]# kubectl  label node  node02 node-role.kubernetes.io/worker=
-node/node02 labeled
-[root@master01 lifalin]# kubectl  label node  node02 node-role.kubernetes.io/node=
-node/node02 labeled
-[root@master01 lifalin]# kubectl get nodes
-NAME       STATUS     ROLES           AGE   VERSION
-master01   NotReady   control-plane   72m   v1.24.3
-node02     Ready      node,worker     27m   v1.24.3
-[root@master01 lifalin]# kubectl  label node  node02 node-role.kubernetes.io/node-
-node/node02 unlabeled
-[root@master01 lifalin]# kubectl get nodes
-NAME       STATUS     ROLES           AGE   VERSION
-master01   NotReady   control-plane   72m   v1.24.3
-node02     Ready      worker          28m   v1.24.3
-
 ```
 
 ### kubernetes 二进制安装：
@@ -143,30 +124,24 @@ cp cfssl_1.6.4_linux_amd64 /usr/local/bin/cfssl
 cp cfssljson_1.6.4_linux_amd64 /usr/local/bin/cfssljson
 cp cfssl-certinfo_1.6.4_linux_amd64 /usr/local/bin/cfssl-certinfo
 
-#签发证书：
-cfssl gencert -initca ca-csr.json | cfssljson -bare ca - 
-➜  certs ll
-total 20K
--rw-r--r--. 1 root root  294 Oct 13 03:32 ca-config.json
--rw-r--r--. 1 root root 1.1K Oct 13 03:36 ca.csr
--rw-r--r--. 1 root root  267 Oct 13 03:36 ca-csr.json
--rw-------. 1 root root 1.7K Oct 13 03:36 ca-key.pem
--rw-r--r--. 1 root root 1.4K Oct 13 03:36 ca.pem
+# sed -i 's/centos-master/localhost.localdomain/g' /etc/kubernetes/kubelet.conf
 
-cfssl gencert -ca=ca.pem -ca-key=key.pem -config=ca-config.json -profile=client ca-csr.json| cfssljson -bare client -
-cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=../ca-config.json -profile=client server-csr.json | cfssljson -bare server
-sed -i 's/centos-master/localhost.localdomain/g' /etc/kubernetes/kubelet.conf
-
-
+```
+### 写好三个文件，ca-csr.json, ca-config.json, server-csr.json 
+cfssl gencert -profile 别写错，要与ca-config.json 中的profile保持一致 ~！
+可以参考 https://zhuanlan.zhihu.com/p/596891203 https://blog.heylinux.com/en/2021/11/how-to-generate-self-signed-ssl-certificates/
+出错详见 https://blog.csdn.net/qq_44792624/article/details/117332764
+```bash
 mkdir -p /opt/certs
-cat > /opt/certs/ca-csr.json << eof
+
+cat > ca-csr.json << eof
 {
-  "CN": "kubernetes",  #证书颁发的机构名称
+  "CN": "kubernetes",
   "key": {
     "algo": "rsa",
     "size": 2048
   },
-  "names": [
+  "names": [  
     {
       "C": "CN",
       "ST": "Beijing",
@@ -181,8 +156,47 @@ cat > /opt/certs/ca-csr.json << eof
 }
 eof
 
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca - 
 
-cat > /opt/certs/ca-config.json  << eof
+➜  certs ls -lt                                       
+total 20
+-rw-r--r--. 1 root root 1070 Oct 14 03:58 ca.csr      #证书请求
+-rw-------. 1 root root 1679 Oct 14 03:58 ca-key.pem  #根证书的密钥  ca-key.pem ->ca.key
+-rw-r--r--. 1 root root 1363 Oct 14 03:58 ca.pem      #根证书       ca.pem -> ca.crt
+-rw-r--r--. 1 root root  267 Oct 13 03:36 ca-csr.json  #证书请求文件
+
+cat > server-csr.json <<EOF
+{
+    "CN":"server", 
+    "hosts":[
+        "127.0.0.1",
+        "10.0.0.1",
+        "kubernetes",
+        "kubernetes.default",
+        "kubernetes.default.svc",
+        "kubernetes.default.svc.cluster",
+        "kubernetes.default.svc.cluste.local",
+        "192.168.232.132",
+        "192.168.232.140",
+        "192.168.232.100"
+    ],
+    "key":{
+        "algo":"rsa",
+        "size":2048
+    },
+    "names":[
+        {
+            "C":"CN",
+            "L":"Beijing",
+            "ST":"Beijing",
+            "O":"k8s",
+            "OU":"System"
+        }
+    ]
+}
+EOF
+
+cat >> ca-config.json  << EOF
 {
   "signing": {
     "default": {
@@ -201,12 +215,26 @@ cat > /opt/certs/ca-config.json  << eof
     }
   }
 }
-eof
+EOF
 
+# 2. 生成私钥和证书
+# 使用方式 cfssl selfsign HOSTNAME CSRJSON
+# cfssl selfsign www.amjun.com server-csr.json | cfssljson -bare  server
 
+# # 3. 查看证书
+# cfssl certinfo -cert server.pem
 
+# 3. 基于之前生成的ca证书生成证书1
+cfssl gencert \
+-ca=ca.pem \
+-ca-key=ca-key.pem \
+-config=ca-config.json \
+-profile=kubernetes \
+server-csr.json | cfssljson -bare server -
+ 
+# 3. 查看证书
+cfssl certinfo -cert server.pem
 ```
-
 
 
 #### 安装kubectl:
@@ -223,22 +251,20 @@ gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors
 EOF
 
 yum install kubeadm kubelet kubectl  # kubectl 计算节点可以不装？ 计算节点= node节点
-
 systemctl start kubelet
 
 mkdir -p /etc/kubernetes/pki  #创建证书文件路径
 cd /etc/kubernetes/pki 
 #在centos-master节点上 scp拷贝过来ca.pem, ca-key.pem 
-yum install sshpass
-sshpass -p "lfl" scp centos:/opt/certs/ca.pem ca.crt
-sshpass -p "lfl" scp centos:/opt/certs/ca-key.pem ca.key
+# yum install sshpass
+# sshpass -p "lfl" scp centos:/opt/certs/ca.pem ca.crt
+# sshpass -p "lfl" scp centos:/opt/certs/ca-key.pem ca.key
 
+# kubeadm config print init-defaults  > kubeadm-config.yaml #生成kubeadm 配置文件，这里是master 节点用的
+# kubeadm config print join-defaults > kubeadm-config.yaml # 生成join的kubeadm的配置文件，node节点上运行
 
-
-kubeadm config print init-defaults  > kubeadm-config.yaml #生成kubeadm 配置文件，这里是master 节点用的
-kubeadm config print join-defaults > kubeadm-config.yaml # 生成join的kubeadm的配置文件，node节点上运行
-
-
+yum install -y containerd
+containerd config default > /etc/containerd/config.toml
 mv /etc/containerd/config.toml /etc/containerd/config.toml.bak
 
 cat >> /etc/containerd/config.toml <<EOF
@@ -251,8 +277,6 @@ cat > /etc/docker/daemon.json <<EOF
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
 EOF
-
-
 
 
 #containerd 安装之前 要设置好两个模块
@@ -326,19 +350,26 @@ kubeadm reset #如果init 失败，需要reset 一下再 执行上述init
 
 #启动文件
 #!/bin/bash
+yum install -y sshpass
+ssh-copy-id lifalin@192.168.232.132 
+# 上传文件  scp -r /本地文件 用户名@1ip地址:/远程文件目录/
+# 拉取文件 scp -r 用户名@1ip地址:/远程文件目录/远程服务器文件 /本地文件目录/
+scp ca.pem lifalin@archlinux:/opt/certs # scp f1 f2 将f1 -> f2 拷贝方向
+scp ca-key.pem lifalin@archlinux:/opt/certs
+
 mkdir -p /etc/kubernetes/pki
 cd /etc/kubernetes/pki
 sshpass -p "lfl" scp centos:/opt/certs/ca.pem ca.crt
 sshpass -p "lfl" scp centos:/opt/certs/ca-key.pem ca.key
 
 
-
 kubeadm init \
---apiserver-advertise-address=192.168.5.140 \
+--apiserver-advertise-address=192.168.232.132 \
 --image-repository registry.aliyuncs.com/google_containers \
 --service-cidr=10.96.0.0/16 \
 --pod-network-cidr=10.244.0.0/16 \
---upload-certs
+--upload-certs --v=5 \
+--ignore-preflight-errors=all
 
 
 Please, check the contents of the $HOME/.kube/config file.
@@ -418,6 +449,38 @@ kubeadm join 192.168.5.140:6443 --token da2els.6m9ufp9c37vaagy7 \
 ./init.sh: line 15: --service-cidr=10.96.0.0/16: No such file or directory
 ./init.sh: line 16: --upload-certs: command not found
 
+
+#master 节点上不能用kubectl edit 怎么办
+export EDITOR=vim
+
+
+```
+
+### 如何join 节点
+```bash
+
+# 关闭防火墙
+systemctl stop firewalld 
+systemctl disable firewalld
+ 
+# 关闭selinux
+sed -i 's/enforcing/disabled/' /etc/selinux/config  # 永久
+setenforce 0  # 临时
+ 
+# 关闭swap
+swapoff -a  # 临时
+sed -ri 's/.*swap.*/#&/' /etc/fstab    # 永久 
+
+yum install -y kubelet kubectl kubeadm 
+yum install -y containerd.io.x86_64 #和master节点安装的containerd version 版本不一样也没关系? 目前看上去是这样的
+
+hostnamectl set-hostname node1
+cat /etc/hostname
+reboot #重启使hostname生效
+
+
+modprobe br_netfilter
+echo "1" > /proc/sys/net/bridge/bridge-nf-call-iptables
 
 
 token create --print-join-command #重新获取master的token
@@ -727,7 +790,6 @@ kubectl delete pod PODNAME --force --grace-period=0
 
 ```bash
 yum list |grep containd.io
-
 yum install -y containerd.io
 
 #基本命令
@@ -742,6 +804,8 @@ ctr namespace ls #查看命名空间
 du -sh|grep G
 mount |grep /var/lib/container
 
+
+ctr -n k8s.io i ls #containerd image 分namespace 
 ctr -n k8s.io c ls
 /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots
 

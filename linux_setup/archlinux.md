@@ -86,12 +86,13 @@ static routers=192.168.232.2  #gateway
 static domain_name_servers=192.168.232.1 114.114.114.114
 eof
 
-cat >> /etc/resolv.conf << eof
-search localdomain
-nameserver 192.168.232.2   #这里一定是XX.2, 地址要指向网关(gateway IP)，而不是 XX.1(宿主机)
+cat > /etc/resolv.conf.bak << EOF
+search localdomain  
+nameserver 192.168.232.2  
 nameserver 114.114.114.114
 nameserver 8.8.8.8
-eof 
+nameserver 8.8.4.4
+EOF 
 
 #install chrome refered to: https://aur.archlinux.org/packages/google-chrome
 $ curl -sSf https://dl.google.com/linux/chrome/deb/dists/stable/main/binary-amd64/Packages | \
@@ -124,4 +125,43 @@ yes| pacman -S gparted
 因为一直没有 合适的字体支持，下载字体就好
 ```bash
 pacman -S wqy-zenhei ttf-fireflysun 
+```
+
+### 赋予权限 permission of folder written to user
+```bash
+setfacl -m u:lifalin:rwx /home/lifalin/git_repo/google-chrome/
+su lifalin 
+cd /home/lifalin/git_repo/google-chrome/
+makepkg -si
+
+```
+
+# 永久关闭 swap
+refered to https://unix.stackexchange.com/questions/551185/how-do-i-permanently-disable-swap-on-archlinux  
+最重要的两步  
+```bash
+systemctl mask dev-zram0.swap 
+swapoff -a 
+```
+演示：
+```bash
+➜  ~ lsblk           
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   20G  0 disk 
+├─sda1   8:1    0  512M  0 part /boot
+└─sda2   8:2    0 19.5G  0 part /
+sr0     11:0    1 1024M  0 rom  
+zram0  254:0    0  966M  0 disk [SWAP]
+➜  ~ systemctl --type swap
+  UNIT           LOAD   ACTIVE SUB    DESCRIPTION                  
+  dev-zram0.swap loaded active active Compressed Swap on /dev/zram0
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
+SUB    = The low-level unit activation state, values depend on unit type.
+1 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.
+➜  ~ systemctl mask dev-zram0.swap     
+Created symlink /etc/systemd/system/dev-zram0.swap → /dev/null.
+➜  ~ swapoff -a 
 ```
