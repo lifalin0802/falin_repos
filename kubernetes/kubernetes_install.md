@@ -482,6 +482,14 @@ reboot #重启使hostname生效
 modprobe br_netfilter
 echo "1" > /proc/sys/net/bridge/bridge-nf-call-iptables
 
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf 
+br_netfilte
+EOF
+
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
 
 token create --print-join-command #重新获取master的token
 [root@master01 tigera-operator]# kubeadm token create --print-join-command
@@ -553,60 +561,67 @@ master01   NotReady   control-plane   26h   v1.24.3   192.168.5.140   <none>    
 node02     NotReady   worker          43m   v1.24.3   192.168.5.142   <none>        CentOS Linux 7 (Core)   3.10.0-1062.el7.x86_64   containerd://1.6.7
 
 
-#查看报错信息
-kubectl describe pod xxx -n namespace
-kubectl logs xxx -n namespace
-# kubectl logs -n kube-system calico-kube-controllers-775bf69498-xqdbl   #查看日志
-# kubectl describe pod calico-kube-controllers-775bf69498-kfwrk -n kube-system #查看细节 日志
-
-
 systemctl status kubelet --full
 systemctl is-enabled firewalld # 查看 firewalld状态
 
-#安装calico
-curl https://projectcalico.docs.tigera.io/manifests/calico-etcd.yaml -o calico.yaml
- https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/tigera-operator.yaml
+```
+
+### 安装calico
+```bash
+#安装calico 参考 https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/tigera-operator.yaml  #这之后有operator运行，running 成功速度很快
+
+wget -c -O https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/custom-resources.yaml
+
+vim custom-resources.yaml 
+      cidr: 10.244.0.0/16  #更改cidr 值为pod网段
+
+k create -f custom-resources.yam
+watch kubectl get pods -n calico-system # 监控看calico各个组件成功状态，短了几分钟就好，长了需要二十多分钟各个组件才running和 ready 
+```
+
+#### custom-resources.yaml 如下
+```yaml
+# This section includes base Calico installation configuration.
+# For more information, see: https://projectcalico.docs.tigera.io/master/reference/installation/api#operator.tigera.io/v1.Installation
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  # Configures Calico networking.
+  calicoNetwork:
+    # Note: The ipPools section cannot be modified post-install.
+    ipPools:
+    - blockSize: 26
+      cidr: 10.244.0.0/16
+      encapsulation: VXLANCrossSubnet
+      natOutgoing: Enabled
+      nodeSelector: all()
+---
+# This section configures the Calico API server.
+# For more information, see: https://projectcalico.docs.tigera.io/master/reference/installation/api#operator.tigera.io/v1.APIServer
+apiVersion: operator.tigera.io/v1
+kind: APIServer
+metadata:
+  name: default
+spec: {}
+```
 
 
-
-
+```bash
 cat /etc/kubernetes/pki/etcd/ca.crt | base64 -w 0
 
-#替换calico.yaml 中的etcd的证书信息，etcd 地址  refered to :https://www.jianshu.com/p/5d760511b640
+#还有一种安装方式，非官方  refered to :https://www.jianshu.com/p/5d760511b640
 #r如果etcd是http访问的，那就不用配置证书了，直接指定etcd地址就可以了
-#!/bin/bash 
-ETCD_ENDPOINTS="https://192.168.5.140:2379"
-sed -i "s#.*etcd_endpoints:.*#  etcd_endpoints: \"${ETCD_ENDPOINTS}\"#g" calico.yaml
-sed -i "s#__ETCD_ENDPOINTS__#${ETCD_ENDPOINTS}#g" calico.yaml
 
-# ETCD 证书信息
-ETCD_CA=`cat /etc/kubernetes/pki/etcd/ca.crt | base64 | tr -d '\n'`
-ETCD_CERT=`cat /etc/kubernetes/pki/etcd/server.crt | base64 | tr -d '\n'`
-ETCD_KEY=`cat /etc/kubernetes/pki/etcd/server.key | base64 | tr -d '\n'`
-
-# 替换修改
-sed -i "s#.*etcd-ca:.*#  etcd-ca: ${ETCD_CA}#g" calico.yaml
-sed -i "s#.*etcd-cert:.*#  etcd-cert: ${ETCD_CERT}#g" calico.yaml
-sed -i "s#.*etcd-key:.*#  etcd-key: ${ETCD_KEY}#g" calico.yaml
-
-sed -i 's#.*etcd_ca:.*#  etcd_ca: "/calico-secrets/etcd-ca"#g' calico.yaml
-sed -i 's#.*etcd_cert:.*#  etcd_cert: "/calico-secrets/etcd-cert"#g' calico.yaml
-sed -i 's#.*etcd_key:.*#  etcd_key: "/calico-secrets/etcd-key"#g' calico.yaml
-
-sed -i "s#__ETCD_CA_CERT_FILE__#/etc/kubernetes/pki/etcd/ca.crt#g" calico.yaml
-sed -i "s#__ETCD_CERT_FILE__#/etc/kubernetes/pki/etcd/server.crt#g" calico.yaml
-sed -i "s#__ETCD_KEY_FILE__#/etc/kubernetes/pki/etcd/server.key#g" calico.yaml
-
-sed -i "s#__KUBECONFIG_FILEPATH__#/etc/cni/net.d/calico-kubeconfig#g" calico.yaml
-
-
-
-#设置  CALICO_IPV4POOL_CIDR  要和kube-controller-manager 一致 --cluster-cidr=10.244.0.0/16
+#设置  CALICO_IPV4POOL_CIDR  要和kube-controller-manager 一致 --cluster-cidr=10.244.0.0/16，设置成pod网段
  - name: CALICO_IPV4POOL_CIDR
-   value: "10.244.0.0/16"
+   value: "10.244.0.0/16" 
 #修改or添加 网卡参数 IP_AUTODETECTION_METHOD
   - name: IP_AUTODETECTION_METHOD
     value: "interface=ens33"
+
 
 
 #最后apply,
@@ -704,18 +719,34 @@ vi /etc/crictl.yaml #编辑完即刻生效 啥都不用重启
 ```
 
 ### calico 安装：
+参考 https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises
+manifests
 ```bash
-
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/calico.yaml -O
 
 ```
 
 
 ### calicoctl 安装:
+参考 https://docs.tigera.io/calico/latest/operations/calicoctl/install  
+所有节点都需要安装，包括master 和node 节点
 ```bash 
-wget -c https://github.com/projectcalico/calicoctl/releases/download/v3.5.4/calicoctl -O /usr/bin/calicoct
-cp calicoctl /usr/bin
-chmod +x /usr/bin/calicoctl
+curl -L https://github.com/projectcalico/calico/releases/download/v3.26.3/calicoctl-linux-amd64 -o calicoctl
+chmod +x ./calicoctl
+mv calicoctl /usr/local/bin/calicoctl  
+caclicoctl version 
+```
 
+### Install calicoctl as a kubectl plugin on a single host
+```bash
+curl -L https://github.com/projectcalico/calico/releases/download/v3.26.3/calicoctl-linux-amd64 -o kubectl-calico
+chmod +x kubectl-calico
+mv kubectl-calico /usr/local/bin/kubectl-calico
+kubectl-calico -h
+```
+
+
+```bash
 DATASTORE_TYPE=kubernetes KUBECONFIG=~/.kube/config calicoctl node status #命令测试S
 
 #设置环境变量
@@ -725,6 +756,7 @@ calicoctl get workloadendpoints
 
 calicoctl node status #查看bgp情况
 calicoctl get nodes
+calicoctl ipam show --show-blocks
 calicoctl get ippool -o wide #
 
 
