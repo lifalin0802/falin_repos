@@ -59,7 +59,22 @@ gcloud auth login
 gcloud config unset proxy/type
 gcloud config unset proxy/address
 gcloud config unset proxy/port
+gcloud config unset compute/zone
 ```
+
+➜  ~ gcloud auth login
+Your browser has been opened to visit:
+
+    https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8085%2F&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=mwiLt1kJdJRfPMeYvjtfxMlBq5mdDV&access_type=offline&code_challenge=Zfijjbc4UynjZ9-0XfF8YSf7H2c9X7D9jxQL7KXo25A&code_challenge_method=S256
+
+ERROR: gcloud crashed (SSLError): HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
+
+If you would like to report this issue, please run the following command:
+  gcloud feedback
+
+To check gcloud for common problems, please run the following command:
+  gcloud info --run-diagnostics
+
 
 ```bash
 # gcloud config set auth/disable_ssl_validation  True   

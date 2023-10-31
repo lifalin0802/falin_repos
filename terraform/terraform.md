@@ -21,6 +21,7 @@ tf init
 resource "google_compute_instance" "sql1" {}
 #导入
 tf import google_compute_instance.sql1 fr-test-twc/europe-west3-b/tw-fr-test-sql-1
+tf import google_container_node_pool.pool2 europe-west3/twc-cluster/twc-highmem-pool-1
 
 tf force-unlock [options] LOCK_ID #解锁某个lockID -force
 #module 如何使用
@@ -30,12 +31,13 @@ tf force-unlock [options] LOCK_ID #解锁某个lockID -force
 
 
 ```bash
-tss export --env uq_jp_prd --config config.yaml
+tss export --env uq_jp_prd
 
-zip -q -r -m -o dump_before_import.zip uq_jp_prd
-tss import --env uq_jp_prd --config config.yaml --pos-file tss_pos_data_MD_20230925_uq_utc_0922_2.csv
-tss import --env uq_jp_prd --config config.yaml --sd-file tss_pos_data_SD_20230925_uq_utc_0922.csv
+# zip -q -r -m -o dump_before_import.zip uq_jp_prd
+tss import --env uq_jp_prd --pos-file "tss_pos_data_MobilePOS_UQ_utc_1724_20231030.csv"
+# tss import --env gu_jp_prd --sd-file FREU-2666_TSSImport_SD.csv
 
-tss export --env uq_jp_prd --config config.yaml
-zip -q -r -m -o dump_after_import.zip uq_jp_prd
+tss export --env uq_jp_prd 
+# zip -q -r -m -o dump_after_import.zip uq_jp_prd
+
 ```

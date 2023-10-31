@@ -253,6 +253,11 @@ dig @114.114.114.114 baidu.com #用dig 指定域名解析
 
 host  baidu.com 
 
+root@dnovik:~# host -t a prd-teamwork-uqde-identity.fastretailing.com
+prd-teamwork-uqde-identity.fastretailing.com has address 35.241.33.3
+root@dnovik:~# dig prd-teamwork-uqde-identity.fastretailing.com +short A
+35.241.33.3
+
 ```
 
 
