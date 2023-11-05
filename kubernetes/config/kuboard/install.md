@@ -80,3 +80,23 @@ echo -e "\033[31m$(kubectl -n kuboard get secret $(kubectl -n kuboard get secret
 # echo -e "$(kubectl -n kuboard get secret $(kubectl -n kuboard get secret kuboard-admin-token | grep kuboard-admin-token | awk '{print $1}') -o go-template='{{.data.token}}' | base64 -d)"  # 这个是比较简洁的方式
 
 ```
+
+- Override the restartPolicy to OnFailure during deletion:
+```bash
+kubectl delete pod <podname> --restart=OnFailure
+```
+
+- Set a Pod disruption budget of 0 for the Pod, then delete it:
+```bash
+kubectl patch pod <podname> -p '{"spec":{"disruptionBudget":{"maxUnavailable":0}}}'
+kubectl delete pod <podname>
+```
+- Use the --grace-period=0 --force flags to force delete the Pod immediately:
+```bash
+kubectl delete pod <podname> --grace-period=0 --force
+```
+- Delete the Pod and then immediately delete its ReplicaSet or other owner resource to prevent it from recreating the Pod:
+```bash
+kubectl delete pod <podname>
+kubectl delete replicaset <replicasetname> 
+```
