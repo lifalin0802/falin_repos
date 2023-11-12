@@ -31,13 +31,23 @@ tf force-unlock [options] LOCK_ID #解锁某个lockID -force
 
 
 ```bash
-tss export --env uq_jp_prd
+tss export --env uq_jp_prd ---config config_4019.yaml
 
 # zip -q -r -m -o dump_before_import.zip uq_jp_prd
-tss import --env uq_jp_prd --pos-file "tss_pos_data_MobilePOS_UQ_utc_1724_20231030.csv"
-# tss import --env gu_jp_prd --sd-file FREU-2666_TSSImport_SD.csv
+tss import --env uq_jp_prd --pos-file tss_pos_data_MD_20231109_uq_utc_1300_1463.csv --config config_4019.yaml
+tss import --env uq_jp_prd --sd-file tss_pos_data_SD_20231109_uq_utc_1300_1463.csv --config config_4019.yaml
 
-tss export --env uq_jp_prd 
+tss export --env uq_jp_prd --config config_4019.yaml
 # zip -q -r -m -o dump_after_import.zip uq_jp_prd
 
+
+
+```
+
+```bash
+#查看windows license 
+Slmgr –dli #cmd中运行
+# check sql license https://learn.microsoft.com/en-us/answers/questions/1151368/how-to-check-sql-server-activation-with-valid-key
+# 查看domain 
+systeminfo | findstr /B "Domain"  
 ```

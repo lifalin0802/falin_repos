@@ -68,3 +68,11 @@ Address:  198.18.1.181
 route print # 查看本地路由表， 这个是teamwork windows笔记本的，估计是电脑刚拿来装机时候同步策略就同步下来的
 ```
 ![](2023-10-11-21-11-17.png)
+
+
+```sql
+use master
+alter availability group [uqde-stg-1b-ag]
+remove database CloudHQ_UQDE
+go
+```
