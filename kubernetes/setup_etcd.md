@@ -15,6 +15,41 @@ etcdctl --help
 
 
 
+# ectdctl 安装 https://github.com/etcd-io/etcd/releases
+ETCD_VER=v3.5.10
+
+# choose either URL
+GOOGLE_URL=https://storage.googleapis.com/etcd
+GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
+DOWNLOAD_URL=${GOOGLE_URL}
+
+rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+rm -rf /tmp/etcd-download-test && mkdir -p /tmp/etcd-download-test
+
+curl -L ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd-download-test --strip-components=1
+rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+
+/tmp/etcd-download-test/etcd --version
+/tmp/etcd-download-test/etcdctl version
+/tmp/etcd-download-test/etcdutl version
+
+# start a local etcd server
+/tmp/etcd-download-test/etcd
+
+# write,read to etcd
+/tmp/etcd-download-test/etcdctl --endpoints=localhost:2379 put foo bar
+/tmp/etcd-download-test/etcdctl --endpoints=localhost:2379 get foo
+
+# https://www.python100.com/html/119277.html
+etcdctl get --prefix message #etcdctl命令中获取值的参数
+etcdctl get --prefix --keys-only message
+
+etcdctl cluster-health
+etcdctl --endpoints=http://etcd01.example.com:2379,http://etcd02.example.com:2379  # --endpoints=[scheme://:]host:port,[scheme://:]host:port,...
+etcdctl get message
+etcdctl endpoint status
+
 # 不work!! 参考 http://t.zoukankan.com/lgj8-p-14512516.html
 # cat /etc/etcd/etcd.conf 
 # # 节点名称
@@ -22,6 +57,24 @@ etcdctl --help
 # # 指定数据文件存放位置
 # ETCD_DATA_DIR="/var/lib/etcd/"
 # ETCD_LISTEN_CLIENT_URLS="http://127.0.0.1:3379"
+
+
+# etcd 目录结构
+➜  member tree /var/lib/etcd/member
+/var/lib/etcd/member
+├── snap
+│   ├── 0000000000000002-0000000000002711.snap
+│   ├── 0000000000000002-0000000000004e22.snap
+│   ├── 0000000000000002-0000000000007533.snap
+│   ├── 0000000000000002-0000000000009c44.snap
+│   ├── 0000000000000002-000000000000c355.snap
+│   └── db
+└── wal
+    ├── 0000000000000000-0000000000000000.wal
+    └── 0.tmp
+
+3 directories, 8 files
+
 
 
 

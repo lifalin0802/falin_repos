@@ -431,7 +431,7 @@ Your Kubernetes control-plane has initialized successfully!
 To start using your cluster, you need to run the following as a regular user:
 
   mkdir -p $HOME/.kube
-  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config #cp这个文件 覆盖 最关键~！！！
   sudo chown $(id -u):$(id -g) $HOME/.kube/config   #每次reset init 成功之后都要运行的
 
 Alternatively, if you are the root user, you can run:
@@ -449,6 +449,11 @@ kubeadm join 192.168.5.140:6443 --token da2els.6m9ufp9c37vaagy7 \
 ./init.sh: line 15: --service-cidr=10.96.0.0/16: No such file or directory
 ./init.sh: line 16: --upload-certs: command not found
 
+``` 
+### 每次kube reset 重新拉起之后运行 config 改变的部分
+`cp -i /etc/kubernetes/admin.conf $HOME/.kube/config` 到底改变了什么
+![](./img/2023-11-12-00-13-19.png)
+```bash
 
 #master 节点上不能用kubectl edit 怎么办
 export EDITOR=vim
@@ -887,7 +892,7 @@ moby
 命令	docker	ctr（containerd）	crictl（kubernetes）
 查看运行的容器	docker ps	      ctr -n k8s.io task ls/ctr container ls	crictl ps
 查看镜像	docker images   	   ctr -n k8s.io i ls	            crictl images
-查看容器日志	docker logs     	无	                      crictl logs 
+查看容器日志	docker logs      cd /var/log/pods/              crictl logs 
 查看容器数据信息	docker inspect	ctr container info	crictl inspect
 查看容器资源	docker stats	无	crictl stats
 启动/关闭已有的容器	docker start/stop	ctr task start/kill	crictl start/stop
