@@ -3,9 +3,21 @@
 ```bash
 
 #配置镜像源
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.bak
+
 curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS7-Base-163.repo
+wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo 
+
+yum clean all 
+yum makecache fast 
 yum repolist #查看镜像源
 yum list installed
+
+yum clean all
+yum makecache
+yum -y update # work!!
 
 #配置ali镜像源
 cd /etc/yum.repos.d/
@@ -21,7 +33,8 @@ disabled
 
 
 #安装常用工具
-yum install -y yum-utils device-mapper-persistent-data lvm2
+yum install -y yum-utils device-mapper-persistent-data lvm2 
+yum install -y bridge-utils.x86_64
 
 #启用ipv6， ipv4转发
 cat >> /etc/sysctl.conf << eof
@@ -33,10 +46,10 @@ eof
 
 sysctl -p #使之生效
 
-modprobe overlay  #系统加载两个模块
+modprobe overlay  #系统加载两个模块 
 modprobe br_netfilter
 
-echo"1"> /proc/sys/net/ipv4/ip_forward 
+echo "1"> /proc/sys/net/ipv4/ip_forward 
 lsmod #列出内核模块
 
 yum list containerd #找不到！！！！
@@ -95,25 +108,6 @@ kubectl get nodes --show-labels
 kubectl  label node  node02 node-role.kubernetes.io/worker=
 kubectl  label node  node02 node-role.kubernetes.io/node- #消除标签node
 
-[root@master01 lifalin]# kubectl get nodes
-NAME       STATUS     ROLES           AGE   VERSION
-master01   NotReady   control-plane   67m   v1.24.3
-node02     Ready      <none>          23m   v1.24.3
-[root@master01 lifalin]# kubectl  label node  node02 node-role.kubernetes.io/worker=
-node/node02 labeled
-[root@master01 lifalin]# kubectl  label node  node02 node-role.kubernetes.io/node=
-node/node02 labeled
-[root@master01 lifalin]# kubectl get nodes
-NAME       STATUS     ROLES           AGE   VERSION
-master01   NotReady   control-plane   72m   v1.24.3
-node02     Ready      node,worker     27m   v1.24.3
-[root@master01 lifalin]# kubectl  label node  node02 node-role.kubernetes.io/node-
-node/node02 unlabeled
-[root@master01 lifalin]# kubectl get nodes
-NAME       STATUS     ROLES           AGE   VERSION
-master01   NotReady   control-plane   72m   v1.24.3
-node02     Ready      worker          28m   v1.24.3
-
 ```
 
 ### kubernetes 二进制安装：
@@ -122,31 +116,32 @@ node02     Ready      worker          28m   v1.24.3
 mkdir -p /opt/TLS/{download,etcd,k8s}
 
 cd /opt/TLS/download
-wget https://github.com/cloudflare/cfssl/releases/download/v1.6.1/cfssl_1.6.1_linux_amd64
-wget https://github.com/cloudflare/cfssl/releases/download/v1.6.1/cfssljson_1.6.1_linux_amd64
-wget https://github.com/cloudflare/cfssl/releases/download/v1.6.1/cfssl-certinfo_1.6.1_linux_amd64
+wget https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssl_1.6.4_linux_amd64
+wget https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssljson_1.6.4_linux_amd64
+wget https://github.com/cloudflare/cfssl/releases/download/v1.6.4/cfssl-certinfo_1.6.4_linux_amd64
 chmod +x cfssl*
-cp cfssl_1.6.1_linux_amd64 /usr/local/bin/cfssl
-cp cfssljson_1.6.1_linux_amd64 /usr/local/bin/cfssljson
-cp cfssl-certinfo_1.6.1_linux_amd64 /usr/local/bin/cfssl-certinfo
+cp cfssl_1.6.4_linux_amd64 /usr/local/bin/cfssl
+cp cfssljson_1.6.4_linux_amd64 /usr/local/bin/cfssljson
+cp cfssl-certinfo_1.6.4_linux_amd64 /usr/local/bin/cfssl-certinfo
 
-#签发证书：
-cfssl gencert -initca ca-csr.json | cfssljson -bare ca - 
+# sed -i 's/centos-master/localhost.localdomain/g' /etc/kubernetes/kubelet.conf
 
-cfssl gencert -ca=ca.pem -ca-key=key.pem -config=ca-config.json -profile=client client-csr.json| cfssljson -bare client -
-cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=../ca-config.json -profile=client server-csr.json | cfssljson -bare server
-sed -i 's/centos-master/localhost.localdomain/g' /etc/kubernetes/kubelet.conf
-
-
+```
+### 写好三个文件，ca-csr.json, ca-config.json, server-csr.json 
+cfssl gencert -profile 别写错，要与ca-config.json 中的profile保持一致 ~！
+可以参考 https://zhuanlan.zhihu.com/p/596891203 https://blog.heylinux.com/en/2021/11/how-to-generate-self-signed-ssl-certificates/
+出错详见 https://blog.csdn.net/qq_44792624/article/details/117332764
+```bash
 mkdir -p /opt/certs
-cat > /opt/certs/ca-csr.json << eof
+
+cat > ca-csr.json << eof
 {
-  "CN": "kubernetes",  #证书颁发的机构名称
+  "CN": "kubernetes",
   "key": {
     "algo": "rsa",
     "size": 2048
   },
-  "names": [
+  "names": [  
     {
       "C": "CN",
       "ST": "Beijing",
@@ -161,8 +156,47 @@ cat > /opt/certs/ca-csr.json << eof
 }
 eof
 
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca - 
 
-cat > /opt/certs/ca-config.json  << eof
+➜  certs ls -lt                                       
+total 20
+-rw-r--r--. 1 root root 1070 Oct 14 03:58 ca.csr      #证书请求
+-rw-------. 1 root root 1679 Oct 14 03:58 ca-key.pem  #根证书的密钥  ca-key.pem ->ca.key
+-rw-r--r--. 1 root root 1363 Oct 14 03:58 ca.pem      #根证书       ca.pem -> ca.crt
+-rw-r--r--. 1 root root  267 Oct 13 03:36 ca-csr.json  #证书请求文件
+
+cat > server-csr.json <<EOF
+{
+    "CN":"server", 
+    "hosts":[
+        "127.0.0.1",
+        "10.0.0.1",
+        "kubernetes",
+        "kubernetes.default",
+        "kubernetes.default.svc",
+        "kubernetes.default.svc.cluster",
+        "kubernetes.default.svc.cluste.local",
+        "192.168.232.132",
+        "192.168.232.140",
+        "192.168.232.100"
+    ],
+    "key":{
+        "algo":"rsa",
+        "size":2048
+    },
+    "names":[
+        {
+            "C":"CN",
+            "L":"Beijing",
+            "ST":"Beijing",
+            "O":"k8s",
+            "OU":"System"
+        }
+    ]
+}
+EOF
+
+cat >> ca-config.json  << EOF
 {
   "signing": {
     "default": {
@@ -181,12 +215,26 @@ cat > /opt/certs/ca-config.json  << eof
     }
   }
 }
-eof
+EOF
 
+# 2. 生成私钥和证书
+# 使用方式 cfssl selfsign HOSTNAME CSRJSON
+# cfssl selfsign www.amjun.com server-csr.json | cfssljson -bare  server
 
+# # 3. 查看证书
+# cfssl certinfo -cert server.pem
 
+# 3. 基于之前生成的ca证书生成证书1
+cfssl gencert \
+-ca=ca.pem \
+-ca-key=ca-key.pem \
+-config=ca-config.json \
+-profile=kubernetes \
+server-csr.json | cfssljson -bare server -
+ 
+# 3. 查看证书
+cfssl certinfo -cert server.pem
 ```
-
 
 
 #### 安装kubectl:
@@ -203,22 +251,20 @@ gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors
 EOF
 
 yum install kubeadm kubelet kubectl  # kubectl 计算节点可以不装？ 计算节点= node节点
-
 systemctl start kubelet
 
 mkdir -p /etc/kubernetes/pki  #创建证书文件路径
 cd /etc/kubernetes/pki 
 #在centos-master节点上 scp拷贝过来ca.pem, ca-key.pem 
-yum install sshpass
-sshpass -p "lfl" scp centos:/opt/certs/ca.pem ca.crt
-sshpass -p "lfl" scp centos:/opt/certs/ca-key.pem ca.key
+# yum install sshpass
+# sshpass -p "lfl" scp centos:/opt/certs/ca.pem ca.crt
+# sshpass -p "lfl" scp centos:/opt/certs/ca-key.pem ca.key
 
+# kubeadm config print init-defaults  > kubeadm-config.yaml #生成kubeadm 配置文件，这里是master 节点用的
+# kubeadm config print join-defaults > kubeadm-config.yaml # 生成join的kubeadm的配置文件，node节点上运行
 
-
-kubeadm config print init-defaults  > kubeadm-config.yaml #生成kubeadm 配置文件，这里是master 节点用的
-kubeadm config print join-defaults > kubeadm-config.yaml # 生成join的kubeadm的配置文件，node节点上运行
-
-
+yum install -y containerd
+containerd config default > /etc/containerd/config.toml
 mv /etc/containerd/config.toml /etc/containerd/config.toml.bak
 
 cat >> /etc/containerd/config.toml <<EOF
@@ -231,8 +277,6 @@ cat > /etc/docker/daemon.json <<EOF
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
 EOF
-
-
 
 
 #containerd 安装之前 要设置好两个模块
@@ -306,19 +350,26 @@ kubeadm reset #如果init 失败，需要reset 一下再 执行上述init
 
 #启动文件
 #!/bin/bash
+yum install -y sshpass
+ssh-copy-id lifalin@192.168.232.132 
+# 上传文件  scp -r /本地文件 用户名@1ip地址:/远程文件目录/
+# 拉取文件 scp -r 用户名@1ip地址:/远程文件目录/远程服务器文件 /本地文件目录/
+scp ca.pem lifalin@archlinux:/opt/certs # scp f1 f2 将f1 -> f2 拷贝方向
+scp ca-key.pem lifalin@archlinux:/opt/certs
+
 mkdir -p /etc/kubernetes/pki
 cd /etc/kubernetes/pki
 sshpass -p "lfl" scp centos:/opt/certs/ca.pem ca.crt
 sshpass -p "lfl" scp centos:/opt/certs/ca-key.pem ca.key
 
 
-
 kubeadm init \
---apiserver-advertise-address=192.168.5.140 \
+--apiserver-advertise-address=192.168.232.132 \
 --image-repository registry.aliyuncs.com/google_containers \
 --service-cidr=10.96.0.0/16 \
 --pod-network-cidr=10.244.0.0/16 \
---upload-certs
+--upload-certs --v=5 \
+--ignore-preflight-errors=all
 
 
 Please, check the contents of the $HOME/.kube/config file.
@@ -380,7 +431,7 @@ Your Kubernetes control-plane has initialized successfully!
 To start using your cluster, you need to run the following as a regular user:
 
   mkdir -p $HOME/.kube
-  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config #cp这个文件 覆盖 最关键~！！！
   sudo chown $(id -u):$(id -g) $HOME/.kube/config   #每次reset init 成功之后都要运行的
 
 Alternatively, if you are the root user, you can run:
@@ -398,7 +449,68 @@ kubeadm join 192.168.5.140:6443 --token da2els.6m9ufp9c37vaagy7 \
 ./init.sh: line 15: --service-cidr=10.96.0.0/16: No such file or directory
 ./init.sh: line 16: --upload-certs: command not found
 
+``` 
+### 每次kube reset 重新拉起之后运行 config 改变的部分
+`cp -i /etc/kubernetes/admin.conf $HOME/.kube/config` 到底改变了什么
+![](./img/2023-11-12-00-13-19.png)
+```bash
 
+#master 节点上不能用kubectl edit 怎么办
+export EDITOR=vim
+
+```
+
+### api-server 正常状态
+```bash
+➜  lifalin ps -ef |grep api                 
+root        3568    3427  3 00:15 ?        00:03:15 kube-apiserver --advertise-address=192.168.232.132 --allow-privileged=true --authorization-mode=Node,RBAC --client-ca-file=/etc/kubernetes/pki/ca.crt --enable-admission-plugins=NodeRestriction --enable-bootstrap-token-auth=true --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt --proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key --requestheader-allowed-names=front-proxy-client --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6443 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/etc/kubernetes/pki/sa.pub --service-account-signing-key-file=/etc/kubernetes/pki/sa.key --service-cluster-ip-range=10.96.0.0/16 --tls-cert-file=/etc/kubernetes/pki/apiserver.crt --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
+➜  lifalin ps -ef |grep etcd      
+root        3388    3335  1 00:15 ?        00:01:10 etcd --advertise-client-urls=https://192.168.232.132:2379 --cert-file=/etc/kubernetes/pki/etcd/server.crt --client-cert-auth=true --data-dir=/var/lib/etcd --experimental-initial-corrupt-check=true --experimental-watch-progress-notify-interval=5s --initial-advertise-peer-urls=https://192.168.232.132:2380 --initial-cluster=archlinux=https://192.168.232.132:2380 --key-file=/etc/kubernetes/pki/etcd/server.key --listen-client-urls=https://127.0.0.1:2379,https://192.168.232.132:2379 --listen-metrics-urls=http://127.0.0.1:2381 --listen-peer-urls=https://192.168.232.132:2380 --name=archlinux --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt --peer-client-cert-auth=true --peer-key-file=/etc/kubernetes/pki/etcd/peer.key --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt --snapshot-count=10000 --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+root        3568    3427  3 00:15 ?        00:03:23 kube-apiserver --advertise-address=192.168.232.132 --allow-privileged=true --authorization-mode=Node,RBAC --client-ca-file=/etc/kubernetes/pki/ca.crt --enable-admission-plugins=NodeRestriction --enable-bootstrap-token-auth=true --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt --proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key --requestheader-allowed-names=front-proxy-client --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6443 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/etc/kubernetes/pki/sa.pub --service-account-signing-key-file=/etc/kubernetes/pki/sa.key --service-cluster-ip-range=10.96.0.0/16 --tls-cert-file=/etc/kubernetes/pki/apiserver.crt --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
+➜  lifalin ps -ef |grep controller
+root       34446    3414  0 01:25 ?        00:00:12 kube-controller-manager --allocate-node-cidrs=true --authentication-kubeconfig=/etc/kubernetes/controller-manager.conf --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf --bind-address=127.0.0.1 --client-ca-file=/etc/kubernetes/pki/ca.crt --cluster-cidr=10.244.0.0/16 --cluster-name=kubernetes --cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt --cluster-signing-key-file=/etc/kubernetes/pki/ca.key --controllers=*,bootstrapsigner,tokencleaner --kubeconfig=/etc/kubernetes/controller-manager.conf --leader-elect=true --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt --root-ca-file=/etc/kubernetes/pki/ca.crt --service-account-private-key-file=/etc/kubernetes/pki/sa.key --service-cluster-ip-range=10.96.0.0/16 --use-service-account-credentials=true
+➜  lifalin ps -ef |grep scheduler 
+root       26287    3451  0 00:56 ?        00:00:08 kube-scheduler --authentication-kubeconfig=/etc/kubernetes/scheduler.conf --authorization-kubeconfig=/etc/kubernetes/scheduler.conf --bind-address=127.0.0.1 --kubeconfig=/etc/kubernetes/scheduler.conf --leader-elect=true
+➜  lifalin ps -ef |grep kubelet  
+root        3752       1  1 00:15 ?        00:02:08 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock --pod-infra-container-image=registry.aliyuncs.com/google_containers/pause:3.9
+
+```
+
+
+### 如何join 节点
+```bash
+
+# 关闭防火墙
+systemctl stop firewalld 
+systemctl disable firewalld
+ 
+# 关闭selinux
+sed -i 's/enforcing/disabled/' /etc/selinux/config  # 永久
+setenforce 0  # 临时
+ 
+# 关闭swap
+swapoff -a  # 临时
+sed -ri 's/.*swap.*/#&/' /etc/fstab    # 永久 
+
+yum install -y kubelet kubectl kubeadm 
+yum install -y containerd.io.x86_64 #和master节点安装的containerd version 版本不一样也没关系? 目前看上去是这样的
+
+hostnamectl set-hostname node1
+cat /etc/hostname
+reboot #重启使hostname生效
+
+
+modprobe br_netfilter
+echo "1" > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf 
+br_netfilte
+EOF
+
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
 
 token create --print-join-command #重新获取master的token
 [root@master01 tigera-operator]# kubeadm token create --print-join-command
@@ -470,60 +582,67 @@ master01   NotReady   control-plane   26h   v1.24.3   192.168.5.140   <none>    
 node02     NotReady   worker          43m   v1.24.3   192.168.5.142   <none>        CentOS Linux 7 (Core)   3.10.0-1062.el7.x86_64   containerd://1.6.7
 
 
-#查看报错信息
-kubectl describe pod xxx -n namespace
-kubectl logs xxx -n namespace
-# kubectl logs -n kube-system calico-kube-controllers-775bf69498-xqdbl   #查看日志
-# kubectl describe pod calico-kube-controllers-775bf69498-kfwrk -n kube-system #查看细节 日志
-
-
 systemctl status kubelet --full
 systemctl is-enabled firewalld # 查看 firewalld状态
 
-#安装calico
-curl https://projectcalico.docs.tigera.io/manifests/calico-etcd.yaml -o calico.yaml
- https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/tigera-operator.yaml
+```
+
+### 安装calico
+```bash
+#安装calico 参考 https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/tigera-operator.yaml  #这之后有operator运行，running 成功速度很快
+
+wget -c -O https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/custom-resources.yaml
+
+vim custom-resources.yaml 
+      cidr: 10.244.0.0/16  #更改cidr 值为pod网段
+
+k create -f custom-resources.yam
+watch kubectl get pods -n calico-system # 监控看calico各个组件成功状态，短了几分钟就好，长了需要二十多分钟各个组件才running和 ready 
+```
+
+#### custom-resources.yaml 如下
+```yaml
+# This section includes base Calico installation configuration.
+# For more information, see: https://projectcalico.docs.tigera.io/master/reference/installation/api#operator.tigera.io/v1.Installation
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  # Configures Calico networking.
+  calicoNetwork:
+    # Note: The ipPools section cannot be modified post-install.
+    ipPools:
+    - blockSize: 26
+      cidr: 10.244.0.0/16
+      encapsulation: VXLANCrossSubnet
+      natOutgoing: Enabled
+      nodeSelector: all()
+---
+# This section configures the Calico API server.
+# For more information, see: https://projectcalico.docs.tigera.io/master/reference/installation/api#operator.tigera.io/v1.APIServer
+apiVersion: operator.tigera.io/v1
+kind: APIServer
+metadata:
+  name: default
+spec: {}
+```
 
 
-
-
+```bash
 cat /etc/kubernetes/pki/etcd/ca.crt | base64 -w 0
 
-#替换calico.yaml 中的etcd的证书信息，etcd 地址  refered to :https://www.jianshu.com/p/5d760511b640
+#还有一种安装方式，非官方  refered to :https://www.jianshu.com/p/5d760511b640
 #r如果etcd是http访问的，那就不用配置证书了，直接指定etcd地址就可以了
-#!/bin/bash 
-ETCD_ENDPOINTS="https://192.168.5.140:2379"
-sed -i "s#.*etcd_endpoints:.*#  etcd_endpoints: \"${ETCD_ENDPOINTS}\"#g" calico.yaml
-sed -i "s#__ETCD_ENDPOINTS__#${ETCD_ENDPOINTS}#g" calico.yaml
 
-# ETCD 证书信息
-ETCD_CA=`cat /etc/kubernetes/pki/etcd/ca.crt | base64 | tr -d '\n'`
-ETCD_CERT=`cat /etc/kubernetes/pki/etcd/server.crt | base64 | tr -d '\n'`
-ETCD_KEY=`cat /etc/kubernetes/pki/etcd/server.key | base64 | tr -d '\n'`
-
-# 替换修改
-sed -i "s#.*etcd-ca:.*#  etcd-ca: ${ETCD_CA}#g" calico.yaml
-sed -i "s#.*etcd-cert:.*#  etcd-cert: ${ETCD_CERT}#g" calico.yaml
-sed -i "s#.*etcd-key:.*#  etcd-key: ${ETCD_KEY}#g" calico.yaml
-
-sed -i 's#.*etcd_ca:.*#  etcd_ca: "/calico-secrets/etcd-ca"#g' calico.yaml
-sed -i 's#.*etcd_cert:.*#  etcd_cert: "/calico-secrets/etcd-cert"#g' calico.yaml
-sed -i 's#.*etcd_key:.*#  etcd_key: "/calico-secrets/etcd-key"#g' calico.yaml
-
-sed -i "s#__ETCD_CA_CERT_FILE__#/etc/kubernetes/pki/etcd/ca.crt#g" calico.yaml
-sed -i "s#__ETCD_CERT_FILE__#/etc/kubernetes/pki/etcd/server.crt#g" calico.yaml
-sed -i "s#__ETCD_KEY_FILE__#/etc/kubernetes/pki/etcd/server.key#g" calico.yaml
-
-sed -i "s#__KUBECONFIG_FILEPATH__#/etc/cni/net.d/calico-kubeconfig#g" calico.yaml
-
-
-
-#设置  CALICO_IPV4POOL_CIDR  要和kube-controller-manager 一致 --cluster-cidr=10.244.0.0/16
+#设置  CALICO_IPV4POOL_CIDR  要和kube-controller-manager 一致 --cluster-cidr=10.244.0.0/16，设置成pod网段
  - name: CALICO_IPV4POOL_CIDR
-   value: "10.244.0.0/16"
+   value: "10.244.0.0/16" 
 #修改or添加 网卡参数 IP_AUTODETECTION_METHOD
   - name: IP_AUTODETECTION_METHOD
     value: "interface=ens33"
+
 
 
 #最后apply,
@@ -621,18 +740,38 @@ vi /etc/crictl.yaml #编辑完即刻生效 啥都不用重启
 ```
 
 ### calico 安装：
+参考 https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises
+manifests
 ```bash
+# 当节点小于50
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/calico.yaml -O 
+
+# 当节点大于50
 
 
 ```
 
 
 ### calicoctl 安装:
+参考 https://docs.tigera.io/calico/latest/operations/calicoctl/install  
+所有节点都需要安装，包括master 和node 节点
 ```bash 
-wget -c https://github.com/projectcalico/calicoctl/releases/download/v3.5.4/calicoctl -O /usr/bin/calicoct
-cp calicoctl /usr/bin
-chmod +x /usr/bin/calicoctl
+curl -L https://github.com/projectcalico/calico/releases/download/v3.26.3/calicoctl-linux-amd64 -o calicoctl
+chmod +x ./calicoctl
+mv calicoctl /usr/local/bin/calicoctl  
+caclicoctl version 
+```
 
+### Install calicoctl as a kubectl plugin on a single host
+```bash
+curl -L https://github.com/projectcalico/calico/releases/download/v3.26.3/calicoctl-linux-amd64 -o kubectl-calico
+chmod +x kubectl-calico
+mv kubectl-calico /usr/local/bin/kubectl-calico
+kubectl-calico -h
+```
+
+
+```bash
 DATASTORE_TYPE=kubernetes KUBECONFIG=~/.kube/config calicoctl node status #命令测试S
 
 #设置环境变量
@@ -642,6 +781,7 @@ calicoctl get workloadendpoints
 
 calicoctl node status #查看bgp情况
 calicoctl get nodes
+calicoctl ipam show --show-blocks
 calicoctl get ippool -o wide #
 
 
@@ -707,7 +847,6 @@ kubectl delete pod PODNAME --force --grace-period=0
 
 ```bash
 yum list |grep containd.io
-
 yum install -y containerd.io
 
 #基本命令
@@ -722,6 +861,8 @@ ctr namespace ls #查看命名空间
 du -sh|grep G
 mount |grep /var/lib/container
 
+
+ctr -n k8s.io i ls #containerd image 分namespace 
 ctr -n k8s.io c ls
 /var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots
 
@@ -751,7 +892,7 @@ moby
 命令	docker	ctr（containerd）	crictl（kubernetes）
 查看运行的容器	docker ps	      ctr -n k8s.io task ls/ctr container ls	crictl ps
 查看镜像	docker images   	   ctr -n k8s.io i ls	            crictl images
-查看容器日志	docker logs     	无	                      crictl logs 
+查看容器日志	docker logs      cd /var/log/pods/              crictl logs 
 查看容器数据信息	docker inspect	ctr container info	crictl inspect
 查看容器资源	docker stats	无	crictl stats
 启动/关闭已有的容器	docker start/stop	ctr task start/kill	crictl start/stop

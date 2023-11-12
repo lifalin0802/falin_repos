@@ -64,3 +64,13 @@ kubectl describe pod -l app=pgadmin | grep -G "PGADMIN_DEFAULT_.*$"
 Forwarding from 127.0.0.1:8080 -> 8080
 Forwarding from [::1]:8080 -> 8080
 ```
+
+### terraform脚本检查最后署名，commit 号，branchname, workspace, kubernetes 上下文，因为此处terraform会查看k8s资源而作修改
+```bash
+git show --oneline -s
+git remote -v
+pwd
+terraform workspace list
+kubectl config get-contexts
+date
+```

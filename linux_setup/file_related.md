@@ -106,6 +106,8 @@ tail /var/log/dmesg #包含了内核环缓冲区的内容，可以查看与系�
 
 ls /var/log/containers/XXX.log #容器日志输出,这种默认的日志驱动方式，实际上是将容器的日志输出写入到节点主机上的文件中
 tail /var/log/pods/<pod-namespace>_<pod-name>_<container-name>/<container-id>/
+
+
 ```
 
 10.16.68.52 (nic0)	35.198.111.29

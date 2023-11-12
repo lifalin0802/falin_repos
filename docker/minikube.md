@@ -89,7 +89,12 @@ mount -a #使之生效
 reboot         #永久关闭需要重启 
 
 #错误 [ERROR FileContent--proc-sys-net-bridge-bridge-nf-call-iptables]: /proc/sys/net/bridge/bridge-nf-call-iptables contents are not set to 1
-echo "1" >/proc/sys/net/bridge/bridge-nf-call-iptables  
+
+echo "1" > /proc/sys/net/bridge/bridge-nf-call-iptables  
+
+# 对于出现 zsh: no such file or directory: /proc/sys/net/bridge/bridge-nf-call-iptables
+# 要执行以下： 
+modprobe br_netfilter
 
 #如果执行上面的命令后提示没有这个文件，则继续执行下面的命令：modprobe br_netfilter
 #执行后再执行上面的echo命令
