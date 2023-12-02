@@ -24,10 +24,10 @@ GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
 DOWNLOAD_URL=${GOOGLE_URL}
 
 rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
-rm -rf /tmp/etcd-download-test && mkdir -p /tmp/etcd-download-test
+rm -rf /tmp/etcd-download-test 
 
 curl -L ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
-tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd-download-test --strip-components=1
+tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /home/lifalin/programs/etcd --strip-components=1
 rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
 
 /tmp/etcd-download-test/etcd --version
@@ -46,10 +46,22 @@ etcdctl get --prefix message #etcdctl命令中获取值的参数
 etcdctl get --prefix --keys-only message
 
 etcdctl cluster-health
-etcdctl --endpoints=http://etcd01.example.com:2379,http://etcd02.example.com:2379  # --endpoints=[scheme://:]host:port,[scheme://:]host:port,...
+etcdctl --endpoints=http://127.0.0.1:2379,http://etcd01.example.com:2379,http://etcd02.example.com:2379  # --endpoints=[scheme://:]host:port,[scheme://:]host:port,...
 etcdctl get message
 etcdctl endpoint status
+etcdctl --endpoints=127.0.0.1:2379  --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key endpoint health
 
+# backup & restore 参考 https://www.zhaowenyu.com/etcd-doc/ops/data-backup-restore.html
+$ etcdctl --endpoints=127.0.0.1:2379  snapshot save /home/lifalin/backup/etcd/snapshot.db
+$ etcdctl snapshot restore snapshot.db \
+  --name m1 \
+  --initial-cluster m1=http://127.0.0.1:2380 \
+  --initial-cluster-token etcd-cluster-1 \
+  --initial-advertise-peer-urls http://127.0.0.1:2380
+# 获取某个 key 信息
+ETCDCTL_API=3 etcdctl --endpoints=127.0.0.1:2379  --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key get /registry/apiregistration.k8s.io/apiservices/v1.apps
+#获取 ETCD 所有的 key
+ETCDCTL_API=3 etcdctl --endpoints=127.0.0.1:2379  --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key get / --prefix --keys-only
 # 不work!! 参考 http://t.zoukankan.com/lgj8-p-14512516.html
 # cat /etc/etcd/etcd.conf 
 # # 节点名称
@@ -75,7 +87,13 @@ etcdctl endpoint status
 
 3 directories, 8 files
 
-
+## 虽然可以解决问题，但是重启之后 只有etcd scheduler apiserver controllermanager,
+# coredns,kubeprocy 都没了hai
+# panic: recovering backend from snapshot error: database snapshot file path error
+# 或者 etcd failed to get all reachable pages
+## 解决方法 暴力解决: 
+cd /var/lib/etcd
+rm -rf *
 
 
 vim etcd_conf.yml
