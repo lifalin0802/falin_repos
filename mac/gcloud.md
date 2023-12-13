@@ -11,7 +11,10 @@ gcloud auth login #登陆
 g project list 
 gcloud auth list #查看当前账号信息
 gcloud config set accessibility/screen_reader false  #以table的形式展现
-gcloud components install gke-gcloud-auth-plugin #kubectl 等运行的前提条件，gcloud 需要安装的插件之一 或者使用 apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
+
+#关闭clash 运行，看到卡住了再开启
+gcloud components install gke-gcloud-auth-plugin #kubectl 等运行的前提条件，gcloud 需要安装的插件之一 或者使用 apt-get install google-cloud-sdk-gke-gcloud-auth-plugin, 
+
 
 
 
@@ -65,4 +68,8 @@ gcloud config unset proxy/port
 # gcloud config set auth/disable_ssl_validation  True   
 gcloud config unset auth/disable_ssl_validations
 ```
-#### 
+
+#### set alias in windows
+```bash
+alias gcloud='winpty gcloud.cmd'
+```
