@@ -44,9 +44,10 @@ please see https://cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the
 ```
 #### powershell端
 ```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass  #allow to run ps1, https://stackoverflow.com/questions/9742775/why-is-my-locally-created-script-not-allowed-to-run-under-the-remotesigned-execu
 start (gcloud info --format="value(basic.python_location)") "-m pip install numpy"
 $env:CLOUDSDK_PYTHON_SITEPACKAGES="1"
+
 ```
 
 ```bash
@@ -62,6 +63,22 @@ gcloud auth login
 gcloud config unset proxy/type
 gcloud config unset proxy/address
 gcloud config unset proxy/port
+gcloud config unset compute/zone
+```
+
+```bash
+➜  ~ gcloud auth login
+Your browser has been opened to visit:
+
+    https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8085%2F&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=mwiLt1kJdJRfPMeYvjtfxMlBq5mdDV&access_type=offline&code_challenge=Zfijjbc4UynjZ9-0XfF8YSf7H2c9X7D9jxQL7KXo25A&code_challenge_method=S256
+
+ERROR: gcloud crashed (SSLError): HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
+
+If you would like to report this issue, please run the following command:
+  gcloud feedback
+
+To check gcloud for common problems, please run the following command:
+  gcloud info --run-diagnostics
 ```
 
 ```bash
@@ -72,4 +89,16 @@ gcloud config unset auth/disable_ssl_validations
 #### set alias in windows
 ```bash
 alias gcloud='winpty gcloud.cmd'
+```
+```bash
+#连接pgsql
+cloud-sql-proxy fr-stg-teamworkretail-uqeu-1b:europe-west3:frk-uqeu-sales-postgres-1b-master-1-pg13 --port 5432
+
+#windows 查看本地端口号
+netstat -ano | findstr <端口号> #最后列出进程ID（PID）
+$ netstat -ano |grep 5432
+  TCP    127.0.0.1:5432         0.0.0.0:0              LISTENING       22196
+
+taskkill /pid 22196 #windows中结束进程
+
 ```
