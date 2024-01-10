@@ -63,3 +63,7 @@ go env -w GOARCH=amd64 #为goland debug 设置的
 # enable go module integration
 ```
 ![](./img/2023-12-11-00-50-08.png)
+
+```bash
+
+```

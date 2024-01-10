@@ -9,6 +9,10 @@ Generating public/private rsa key pair.
 Enter file in which to save the key (/Users/zhaoliangchen/.ssh/id_rsa): id_rsa_xxxxxx
 # 剩下的一直回车
 
+Could not open a connection to your authentication agent.
+1.输入如下命令，启动agent：
+eval $(ssh-agent -s)
+
 ssh-add ~/.ssh/id_rsa #添加账号
 ssh-add ~/.ssh/id_rsa_tw_bitbucket #个人账号，必须加上
 ssh-add -l #添加后查看
@@ -25,7 +29,9 @@ git checkout .  #撤销所有未提交的修改
 
 git add .
 git commit -m "1" 
-git checkout dev #切换到dev分支
+git checkout destination_branch #切换到 已有分支
+
+git checkout -b new_branch #创建新分支
 ```
 
 ### ~/.ssh/config 配置文件内容

@@ -1,58 +1,36 @@
-### 下载mandatory.yaml:
-
-下载地址是：https://github.com/kubernetes/ingress-nginx/tree/nginx-0.30.0/deploy/static
-
-1. 关于版本：  
-   要修改apiversion版本号
-   将文件中的rbac.authorization.k8s.io/v1beta1 替换成 rbac.authorization.k8s.io/v1  
-   原因是1.20版本已经v1beta1版本已经过期，所以最好是改成v1不然会告警或报错。  
-2. 关于quey.io镜像源  
-   quey.io不用替换, 国内网络也可以下载此repo源  
-3. 关于yml语法：  
-   apiversion后边不许有空格
-   下图报错是因为apiVersion： 后边有一个空格，语法错误   
-   ![img](image/kubernetes_ingress_install/1650124493606.png)
-
-```bash
-[root@centos ingress-controller]# rm -rf mandatory.yaml
-[root@centos ingress-controller]# ls
-mandatory.yaml
-[root@centos ingress-controller]# kubectl apply -f ./
-namespace/ingress-nginx created
-configmap/nginx-configuration created
-configmap/tcp-services created
-configmap/udp-services created
-serviceaccount/nginx-ingress-serviceaccount created
-deployment.apps/nginx-ingress-controller created
-limitrange/ingress-nginx created
-unable to recognize "mandatory.yaml": no matches for kind "ClusterRole" in version "\u00a0rbac.authorization.k8s.io/v1"
-unable to recognize "mandatory.yaml": no matches for kind "Role" in version "\u00a0rbac.authorization.k8s.io/v1"
-unable to recognize "mandatory.yaml": no matches for kind "RoleBinding" in version "\u00a0rbac.authorization.k8s.io/v1"
-unable to recognize "mandatory.yaml": no matches for kind "ClusterRoleBinding" in version "\u00a0rbac.authorization.k8s.io/v1"
-[root@centos ingress-controller]# kubectl apply -f ./
-namespace/ingress-nginx unchanged
-configmap/nginx-configuration unchanged
-configmap/tcp-services unchanged
-configmap/udp-services unchanged
-serviceaccount/nginx-ingress-serviceaccount unchanged
-clusterrole.rbac.authorization.k8s.io/nginx-ingress-clusterrole created
-role.rbac.authorization.k8s.io/nginx-ingress-role created
-rolebinding.rbac.authorization.k8s.io/nginx-ingress-role-nisa-binding created
-clusterrolebinding.rbac.authorization.k8s.io/nginx-ingress-clusterrole-nisa-binding created
-deployment.apps/nginx-ingress-controller unchanged
-limitrange/ingress-nginx configured
-[root@centos ingress-controller]#
-```
-
-1. 下载service-nodeport.yaml  
-   地址：https://github.com/kubernetes/ingress-nginx/blob/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml  
-   下载后加上nodePort分别指向该node 30080,30443两个地址  
-   注明： 此处30080 改为30082, 因为30080要给kuboard使用  
-   &ensp;Q:这个yml 做什么的？  
-   &ensp;A:就是初始化这个一个nginx pod实例。做url <--> service映射  
+### ingress安装：
+refered to https://kubernetes.github.io/ingress-nginx/deploy/#quick-start
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
 
 ### 测试，以tomcat 为例
 ```bash
+
+➜  ~ k get svc -A          
+NAMESPACE          NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                         AGE
+calico-apiserver   calico-api                           ClusterIP      10.96.99.95     <none>        443/TCP                         55d
+calico-system      calico-kube-controllers-metrics      ClusterIP      None            <none>        9094/TCP                        55d
+calico-system      calico-typha                         ClusterIP      10.96.123.219   <none>        5473/TCP                        55d
+default            kubernetes                           ClusterIP      10.96.0.1       <none>        443/TCP                         55d
+default            nginx-demo                           NodePort       10.96.6.65      <none>        8080:30645/TCP                  21m
+dev                tomcat-svc                           NodePort       10.96.94.157    <none>        8080:32009/TCP,8009:30527/TCP   11m
+ingress-nginx      ingress-nginx-controller             LoadBalancer   10.96.60.213    <pending>     80:30279/TCP,443:30962/TCP      21h
+ingress-nginx      ingress-nginx-controller-admission   ClusterIP      10.96.131.113   <none>        443/TCP                         21h
+kube-system        kube-dns                             ClusterIP      10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP          55d
+
+~ # curl -I 10.96.94.157:8080
+HTTP/1.1 200 
+Content-Type: text/html;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Sat, 06 Jan 2024 15:55:15 GMT
+
+~ # curl -I 192.168.232.132:32009
+HTTP/1.1 200 
+Content-Type: text/html;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Sat, 06 Jan 2024 15:55:39 GMT
+
+
+
 [root@centos kubeworkspace]# kubectl get svc -n dev
 NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)             AGE
 pc-deployment          NodePort       10.104.59.61    <none>          80:32470/TCP        2d16h

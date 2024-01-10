@@ -36,9 +36,15 @@ curl $KUBE_API/apis/apps/v1/deployments \
 --cacert /etc/kubernetes/pki/ca.crt \
 --header "Authorization: Bearer $JWT_TOKEN_KUBESYSTEM_DEFAULT"
 
+
+curl $KUBE_API/api/v1/namespaces/default/pods/sh \
+--cacert /etc/kubernetes/pki/ca.crt \
+--header "Authorization: Bearer $JWT_TOKEN_KUBESYSTEM_DEFAULT"
+
 ```
 ### api group 是个啥， 
-- A Deployment would have some apiVersion: apps/v1. Which belongs to apiGroups apps. Wherehas pods, secrets or services would have theirs set to v1, thus in appGroups "".
+- A Deployment would have some apiVersion: apps/v1. Which belongs to apiGroups apps. Wherehas pods, 
+- secrets or services would have theirs set to v1, thus in appGroups "".
 refered to : https://stackoverflow.com/questions/73175745/not-able-to-get-deployments-as-serviceaccount
 ```yaml
 ---
@@ -73,4 +79,7 @@ rules:
 - apiGroups: ["apps"]   ### !!!
   resources: ["deployments"]
   verbs: ["get", "watch", "list", "create", "delete"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list", "get", "watch"]
 ```

@@ -178,3 +178,25 @@ Created symlink /etc/systemd/system/dev-zram0.swap → /dev/null.
     Aborting...
 # 解决办法，
 ```
+
+```bash
+pacman -S code #安装vscode
+#若出现error: failed retrieving file 'electron25-25.9.4-1-x86_64.pkg.tar.zst' from mirror.funami.tech : The requested URL returned error: 404 需要更新下载源
+vim /etc/pacman.d/mirrorlist 
+#添加在最上行
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+#更新下载源
+pacman -Syy
+
+#下载linux 版本的vscode
+https://code.visualstudio.com/docs/?dv=linux64
+
+vim /etc/.bashrc
+
+alias go="/usr/local/go/bin/go"
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+alias code="/usr/local/VSCode-linux-x64/bin/code --user-data-dir=\"~/.vscode-root\" --no-sandbox"
+
+
+```
+
