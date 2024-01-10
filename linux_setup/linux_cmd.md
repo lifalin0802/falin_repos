@@ -284,6 +284,9 @@ rpm -qa|grep nginx|xargs rpm -e --nodeps
 ulimit -n #Linux能打开的最大文件描述符数量
 cat /proc/sys/fs/file-max
 
+#查看cgroup 版本
+➜  ~ stat -fc %T /sys/fs/cgroup
+cgroup2fs #表示版本是v2
 
 df -hT
 ll /sys/fs/cgroup

@@ -94,6 +94,12 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOF 
 
+
+#/etc/resolv.conf 经常被 dhcpcd 重写？ 参考 https://bbs.archlinux.org/viewtopic.php?id=159857
+systemctl stop dhcpcd #停止服务
+chattr +i /etc/resolv.conf #加锁 防止重写，当然自己也不能编辑了
+
+
 #install chrome refered to: https://aur.archlinux.org/packages/google-chrome
 $ curl -sSf https://dl.google.com/linux/chrome/deb/dists/stable/main/binary-amd64/Packages | \
      grep -A1 "Package: google-chrome-stable" | \
@@ -164,4 +170,11 @@ To show all installed unit files use 'systemctl list-unit-files'.
 ➜  ~ systemctl mask dev-zram0.swap     
 Created symlink /etc/systemd/system/dev-zram0.swap → /dev/null.
 ➜  ~ swapoff -a 
+```
+
+```bash
+[lifalin@archlinux yay]$  makepkg -si   
+==> ERROR: You do not have write permission for the directory $BUILDDIR (/home/lifalin/git_repo/yay).
+    Aborting...
+# 解决办法，
 ```

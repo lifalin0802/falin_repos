@@ -1,5 +1,12 @@
 
 
+```bash
+kubeadm token create --print-join-command #生成token 
+k delete node centos #删除节点 之后 再 node resetm, node join
+
+
+```
+
 ### 卸载kubernetes
 ```bash
 kubeadm reset -f
@@ -131,28 +138,6 @@ metadata:
 
  ```
 
-```bash
-[root@master01 ~]# kgp -A
-NAMESPACE          NAME                                       READY   STATUS              RESTARTS        AGE     IP              NODE       NOMINATED NODE   READINESS GATES
-calico-apiserver   calico-apiserver-7bbfc646c5-gd429          0/1     ContainerCreating   0               6m22s   <none>          node02     <none>           <none>
-calico-apiserver   calico-apiserver-7bbfc646c5-pfh5v          0/1     ContainerCreating   0               6m22s   <none>          node02     <none>           <none>
-calico-system      calico-kube-controllers-789dc4c76b-rfpmh   0/1     Running             0               6m24s   10.244.140.66   node02     <none>           <none>
-calico-system      calico-node-7222w                          0/1     CrashLoopBackOff    6 (37s ago)     6m24s   192.168.5.140   master01   <none>           <none>
-calico-system      calico-node-bzz7p                          0/1     Running             1 (4m50s ago)   6m24s   192.168.5.142   node02     <none>           <none>
-calico-system      calico-typha-575b4cb7bf-jlfx7              1/1     Running             0               6m24s   192.168.5.140   master01   <none>           <none>
-calico-system      csi-node-driver-2qg79                      2/2     Running             0               6m24s   10.244.241.64   master01   <none>           <none>
-calico-system      csi-node-driver-gdmwk                      0/2     ContainerCreating   0               6m24s   <none>          node02     <none>           <none>
-kube-system        coredns-7bdc4cb885-gmtpk                   1/1     Running             0               34m     10.244.140.67   node02     <none>           <none>
-kube-system        coredns-7bdc4cb885-jxdnx                   1/1     Running             0               34m     10.244.140.64   node02     <none>           <none>
-kube-system        etcd-master01                              1/1     Running             4 (61m ago)     3h9m    192.168.5.140   master01   <none>           <none>
-kube-system        kube-apiserver-master01                    1/1     Running             10 (61m ago)    3h9m    192.168.5.140   master01   <none>           <none>
-kube-system        kube-controller-manager-master01           1/1     Running             24 (45s ago)    3h9m    192.168.5.140   master01   <none>           <none>
-kube-system        kube-proxy-g8xg5                           1/1     Running             1 (26m ago)     139m    192.168.5.142   node02     <none>           <none>
-kube-system        kube-proxy-vtxvn                           1/1     Running             1 (61m ago)     3h9m    192.168.5.140   master01   <none>           <none>
-kube-system        kube-scheduler-master01                    1/1     Running             17 (38s ago)    3h9m    192.168.5.140   master01   <none>           <none>
-tigera-operator    tigera-operator-549d4f9bdb-j7rrj           0/1     CrashLoopBackOff    1 (80s ago)     11m     192.168.5.142   node02     <none>           <none>
-
-```
 
 ```bash
 k run -it --image=nicolaka/netshoot sh #启动
