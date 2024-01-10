@@ -41,9 +41,10 @@ please see https://cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the
 ```
 #### powershell端
 ```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass  #allow to run ps1, https://stackoverflow.com/questions/9742775/why-is-my-locally-created-script-not-allowed-to-run-under-the-remotesigned-execu
 start (gcloud info --format="value(basic.python_location)") "-m pip install numpy"
 $env:CLOUDSDK_PYTHON_SITEPACKAGES="1"
+
 ```
 
 ```bash
@@ -62,6 +63,7 @@ gcloud config unset proxy/port
 gcloud config unset compute/zone
 ```
 
+```bash
 ➜  ~ gcloud auth login
 Your browser has been opened to visit:
 
@@ -74,10 +76,22 @@ If you would like to report this issue, please run the following command:
 
 To check gcloud for common problems, please run the following command:
   gcloud info --run-diagnostics
-
+```
 
 ```bash
 # gcloud config set auth/disable_ssl_validation  True   
 gcloud config unset auth/disable_ssl_validations
 ```
 #### 
+```bash
+#连接pgsql
+cloud-sql-proxy fr-stg-teamworkretail-uqeu-1b:europe-west3:frk-uqeu-sales-postgres-1b-master-1-pg13 --port 5432
+
+#windows 查看本地端口号
+netstat -ano | findstr <端口号> #最后列出进程ID（PID）
+$ netstat -ano |grep 5432
+  TCP    127.0.0.1:5432         0.0.0.0:0              LISTENING       22196
+
+taskkill /pid 22196 #windows中结束进程
+
+```

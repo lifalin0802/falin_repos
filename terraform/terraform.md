@@ -31,13 +31,26 @@ tf force-unlock [options] LOCK_ID #解锁某个lockID -force
 
 
 ```bash
-tss export --env uq_jp_prd ---config config_4019.yaml
+
+
+# tss export --env uq_jp_prd  --config config_4019.yaml
+
+# # zip -q -r -m -o dump_before_import.zip uq_jp_prd
+# tss import --env uq_jp_prd --pos-file tss_pos_data_MD_20231114_uq_utc_4stores.csv --config config_4019.yaml
+# tss import --env uq_jp_prd --sd-file tss_pos_data_SD_20231114_uq_utc_3stores.csv --config config_4019.yaml
+
+# tss export --env uq_jp_prd --config config_4019.yaml
+# # zip -q -r -m -o dump_after_import.zip uq_jp_prd
+
+
+
+tss export --env uq_vn_prd_as
 
 # zip -q -r -m -o dump_before_import.zip uq_jp_prd
-tss import --env uq_jp_prd --pos-file tss_pos_data_MD_20231109_uq_utc_1300_1463.csv --config config_4019.yaml
-tss import --env uq_jp_prd --sd-file tss_pos_data_SD_20231109_uq_utc_1300_1463.csv --config config_4019.yaml
+tss import --env uq_vn_prd_as --pos-file FRSEA-1542_TSSImport_MD.csv
+tss import --env uq_vn_prd_as --sd-file FRSEA-1542_TSSImport_SD.csv 
 
-tss export --env uq_jp_prd --config config_4019.yaml
+tss export --env uq_vn_prd_as
 # zip -q -r -m -o dump_after_import.zip uq_jp_prd
 
 

@@ -48,6 +48,11 @@ git pull origin master #下载最新代码
 git show --oneline -s #查看当前处于哪个commit
 git log #查看当前分支所有log
 
+
+#到bastion server 切换分支
+git fetch
+git checkout <branchname>
+
 ```
 
 ### ~/.ssh/config 配置文件内容

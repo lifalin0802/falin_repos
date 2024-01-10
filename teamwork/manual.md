@@ -71,8 +71,11 @@ route print # 查看本地路由表， 这个是teamwork windows笔记本的，�
 
 
 ```sql
+--remove db from AG
 use master
 alter availability group [uqde-stg-1b-ag]
 remove database CloudHQ_UQDE
 go
+
+ALTER DATABASE CloudHQ_UQDE SET MULTI_USER;
 ```
