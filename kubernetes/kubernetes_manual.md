@@ -44,6 +44,8 @@ k api-versions  #查看
 k api-resources
 kubectl api-resources -o wide --sort-by name
 kubectl get events -A
+kubectl get event -n abc-namespace --field-selector involvedObject.name=my-pod-zl6m6
+
 k get componentstatus #查看状态
 k cluster-info
 kubectl get --raw '/healthz?verbose' #查看调度程序、控制器管理器、etcd节点是否健康。

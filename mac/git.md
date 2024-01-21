@@ -57,7 +57,22 @@ git log #查看当前分支所有log
 
 #到bastion server 切换分支
 git fetch
-git checkout <branchname>
+git checkout <branchname>   
+
+
+TW-QA-UQSE-2D-4.0.x_initial
+
+git branch -m TW-QA-UQSE-2D-4.8.x_initial TW-QA-UQSE-2D-4.0.x_initial
+git push origin --delete TW-QA-UQSE-2D-4.8.x_initial
+git push -u origin TW-QA-UQSE-2D-4.0.x_initial
+
+
+
+
+git branch -m OLD-BRANCH-NAME NEW-BRANCH-NAME
+git fetch origin
+git branch -u origin/NEW-BRANCH-NAME NEW-BRANCH-NAME
+git remote set-head origin -a
 
 ```
 

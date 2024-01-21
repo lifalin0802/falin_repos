@@ -199,4 +199,18 @@ alias code="/usr/local/VSCode-linux-x64/bin/code --user-data-dir=\"~/.vscode-roo
 
 
 ```
+### 环境变量设置
+```bash
+➜  operator-crd cat /etc/.bashrc
+alias k="/usr/bin/kubectl"
+export EDITOR=vim
+alias kgp="kubectl get pod"
+alias etcdctl="/tmp/etcd-download-test/etcdctl"
+alias etcdutl="/tmp/etcd-download-test/etcdutl"
+alias etcd="/tmp/etcd-download-test/etcd"
 
+alias go="/usr/local/go/bin/go"
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:/usr/local/go/bin
+alias code="/usr/local/VSCode-linux-x64/bin/code --user-data-dir=\"~/.vscode-root\" --no-sandbox"
+
+```
