@@ -111,6 +111,17 @@ helm init —upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/till
 ```
 
 
+
+
+### helm 修改repo源
+
+```bash
+helm repo remove stable
+helm repo add stable https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+helm repo update
+helm search
+```
+
 ### 其他好的文献：
 `https://blog.csdn.net/huahua1999/article/details/124602624` helm 初探  
 `https://mp.weixin.qq.com/s/YwnmOA2Ttl0YIhX_nXnUCQ` 

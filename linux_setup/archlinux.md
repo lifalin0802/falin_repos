@@ -199,6 +199,11 @@ alias code="/usr/local/VSCode-linux-x64/bin/code --user-data-dir=\"~/.vscode-roo
 
 
 ```
+### 如何设置vscode in linux 的settings.json 
+- ctrl + shift + p ，打开open user settings ，通常在项目目录下的 ./\~/.vscode-root/User/settings.json 编辑
+
+
+
 ### 环境变量设置
 ```bash
 ➜  operator-crd cat /etc/.bashrc

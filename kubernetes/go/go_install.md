@@ -30,6 +30,88 @@ chmod +x kubebuilder && mv kubebuilder /usr/local/bin/
 
 #验证是否安装成功
 kubebuilder version
+
+#/home/lifalin/code/kubebuilder-demo 文件夹下 
+➜  kubebuilder-demo kubebuilder version                      
+Version: main.version{KubeBuilderVersion:"3.14.0", KubernetesVendor:"1.27.1", GitCommit:"11053630918ac421cb6eb6f0a3225e2a2ad49535", BuildDate:"2024-01-30T09:29:27Z", GoOs:"linux", GoArch:"amd64"}
+
+➜  kubebuilder-demo go mod init github.com/kubebuilder-demo
+go: creating new go.mod: module github.com/kubebuilder-demo
+➜  kubebuilder-demo kubebuilder init --domain baiding.tech
+INFO Writing kustomize manifests for you to edit... 
+INFO Writing scaffold for you to edit...          
+INFO Get controller runtime:
+$ go get sigs.k8s.io/controller-runtime@v0.17.0 
+go: downloading sigs.k8s.io/controller-runtime v0.17.0
+go: downloading k8s.io/apimachinery v0.29.0
+go: downloading k8s.io/client-go v0.29.0
+go: downloading k8s.io/api v0.29.0
+go: downloading k8s.io/component-base v0.29.0
+go: downloading github.com/evanphx/json-patch/v5 v5.8.0
+go: downloading golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
+go: downloading github.com/prometheus/client_golang v1.18.0
+go: downloading gomodules.xyz/jsonpatch/v2 v2.4.0
+go: downloading k8s.io/apiextensions-apiserver v0.29.0
+go: downloading sigs.k8s.io/yaml v1.4.0
+go: downloading k8s.io/kube-openapi v0.0.0-20231010175941-2dd684a91f00
+go: downloading golang.org/x/oauth2 v0.12.0
+go: downloading golang.org/x/sys v0.16.0
+go: downloading github.com/fsnotify/fsnotify v1.7.0
+go: downloading github.com/prometheus/client_model v0.5.0
+go: downloading github.com/prometheus/common v0.45.0
+go: downloading github.com/beorn7/perks v1.0.1
+go: downloading github.com/cespare/xxhash/v2 v2.2.0
+go: downloading github.com/prometheus/procfs v0.12.0
+go: downloading github.com/matttproud/golang_protobuf_extensions/v2 v2.0.0
+INFO Update dependencies:
+$ go mod tidy           
+go: downloading github.com/onsi/ginkgo/v2 v2.14.0
+go: downloading github.com/onsi/gomega v1.30.0
+go: downloading github.com/go-logr/zapr v1.3.0
+go: downloading go.uber.org/zap v1.26.0
+go: downloading go.uber.org/goleak v1.3.0
+go: downloading go.uber.org/multierr v1.11.0
+go: downloading gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
+go: downloading github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572
+go: downloading github.com/google/pprof v0.0.0-20210720184732-4bb14d4b1be1
+go: downloading github.com/kr/pretty v0.3.1
+go: downloading github.com/rogpeppe/go-internal v1.10.0
+go: downloading github.com/kr/text v0.2.0
+Next: define a resource with:
+➜  kubebuilder-demo kubebuilder create api --group ingress --version v1beta1 --kind App
+INFO Create Resource [y/n]                        
+y
+INFO Create Controller [y/n]                      
+y
+INFO Writing kustomize manifests for you to edit... 
+INFO Writing scaffold for you to edit...          
+INFO api/v1beta1/app_types.go                     
+INFO api/v1beta1/groupversion_info.go             
+INFO internal/controller/suite_test.go            
+INFO internal/controller/app_controller.go        
+INFO internal/controller/app_controller_test.go   
+INFO Update dependencies:
+$ go mod tidy           
+INFO Running make:
+$ make generate                
+mkdir -p /home/lifalin/code/kubebuilder-demo/bin
+Downloading sigs.k8s.io/controller-tools/cmd/controller-gen@v0.14.0
+go: downloading sigs.k8s.io/controller-tools v0.14.0
+go: downloading github.com/spf13/cobra v1.8.0
+go: downloading github.com/gobuffalo/flect v1.0.2
+go: downloading github.com/fatih/color v1.16.0
+go: downloading github.com/mattn/go-colorable v0.1.13
+go: downloading github.com/mattn/go-isatty v0.0.20
+/home/lifalin/code/kubebuilder-demo/bin/controller-gen-v0.14.0 object:headerFile="hack/boilerplate.go.txt" paths="./..."
+Next: implement your new API and generate the manifests (e.g. CRDs,CRs) with:
+$ make manifests
+➜  kubebuilder-demo 
+
+
+
+kubebuilder create api --group ingress --version v1beta1 --kind App
+
+
 ```
 
 
