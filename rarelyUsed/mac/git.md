@@ -59,6 +59,9 @@ git log #查看当前分支所有log
 git fetch
 git checkout <branchname>   
 
+#插销未提交的 所有文件
+git checkout -- .
+git reset --hard HEAD 
 
 TW-QA-UQSE-2D-4.0.x_initial
 

@@ -83,3 +83,10 @@ rules:
   resources: ["pods"]
   verbs: ["list", "get", "watch"]
 ```
+
+
+### 其他kubectl 命令：
+```bash
+kubectl replace --raw /api/v1/namespaces/default/pods/demo-nginx-xxx-xxx/ephemeralcontainers -f ec.json
+# 衍生： kubectl 各种命令参考： https://kubernetes.io/docs/reference/kubectl/generated/kubectl_replace/vas
+```

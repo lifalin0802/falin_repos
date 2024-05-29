@@ -12,8 +12,8 @@ HKEY_CURRENT_USER\SOFTWARE\CLASSES\CLSID
 #### enable disk online
 ```bash
 diskpart # hit enter
-disk list
-lisk disk
+
+list disk
 select disk 0 or 1
 online or offline disk
 ```

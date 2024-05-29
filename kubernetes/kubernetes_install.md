@@ -538,15 +538,29 @@ kubeadm join 192.168.5.140:6443 --token vebwg0.haex8tp6r3n60fu3 --discovery-toke
 kubectl label node node01 node-role.kubernetes.io/worker=worker #kubectl get nodes 时候有个role为none? 的解决办法
 kubectl label ns kube-public tingyun-injection- #删除label
 
-kubectl taint node node01  node-role.kubernetes.io/master-
+kubectl taint node node01 node-role.kubernetes.io/master-
 kubectl taint node node01 key1-
 kubectl taint nodes master1 node-role.kubernetes.io/master=:NoSchedule
 
 kubectl describe nodes prod-k8s-apm-node-data3  |grep Taints
 kubectl taint node prod-k8s-apm-node-data3  
 kubectl taint node prod-k8s-apm-node-data1 app=bigdata:NoExecute
-kubectl taint node prod-k8s-apm-node-data2 app=bigdata:NoExecute
-kubectl taint node prod-k8s-apm-node-data3 app=bigdata:NoExecute
+
+
+#增加污点
+kubectl taint node node01 键名=键值:NoSchedule
+
+#只有key 没有value
+➜  ~ k describe node archlinux |grep -i  taint
+Taints:             node-role.kubernetes.io/control-plane:NoSchedule
+
+
+#删除
+kubectl taint node node01 键名=键值:NoSchedule-
+kubectl taint node node01 键名-
+
+
+
 
 
 kubectl get po coredns-74586cf9b6-4lqmw -n kube-system -o yaml #work
@@ -647,20 +661,6 @@ cat /etc/kubernetes/pki/etcd/ca.crt | base64 -w 0
 
 #最后apply,
 kubectl apply -f calico.yaml
-
-[root@master01 lifalin]# kubectl get pods --all-namespaces -o wide
-NAMESPACE     NAME                                       READY   STATUS              RESTARTS        AGE    IP              NODE       NOMINATED NODE   READINESS GATES
-kube-system   calico-kube-controllers-775bf69498-25vk6   0/1     Running             1 (5s ago)      18s    192.168.5.142   node02     <none>           <none>
-kube-system   calico-node-2b9h4                          0/1     Running             0               18s    192.168.5.140   master01   <none>           <none>
-kube-system   calico-node-k7pmx                          0/1     Running             0               18s    192.168.5.142   node02     <none>           <none>
-kube-system   coredns-74586cf9b6-4jqcv                   0/1     ContainerCreating   0               38m    <none>          node02     <none>           <none>
-kube-system   coredns-74586cf9b6-h9kzg                   0/1     ContainerCreating   0               28h    <none>          master01   <none>           <none>
-kube-system   etcd-master01                              1/1     Running             1               28h    192.168.5.140   master01   <none>           <none>
-kube-system   kube-apiserver-master01                    1/1     Running             0               28h    192.168.5.140   master01   <none>           <none>
-kube-system   kube-controller-manager-master01           1/1     Running             1 (6h58m ago)   28h    192.168.5.140   master01   <none>           <none>
-kube-system   kube-proxy-56lw2                           1/1     Running             0               144m   192.168.5.142   node02     <none>           <none>
-kube-system   kube-proxy-6bd4t                           1/1     Running             0               28h    192.168.5.140   master01   <none>           <none>
-kube-system   kube-scheduler-master01                    1/1     Running             1 (6h58m ago)   28h    192.168.5.140   master01   <none>           <none>
 
 #此时 coredns 还没有好？ 
 
