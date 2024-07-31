@@ -190,6 +190,11 @@ pacman -Syy
 
 #下载linux 版本的vscode
 https://code.visualstudio.com/docs/?dv=linux64
+curl -L -o code-stable.tar.gz https://update.code.visualstudio.com/latest/linux-x64/stable
+tar -xzf code-stable.tar.gz
+sudo mv VSCode-linux-x64 /opt/vscode
+sudo ln -s /opt/vscode/code /usr/local/bin/code
+code 
 
 vim /etc/.bashrc
 
