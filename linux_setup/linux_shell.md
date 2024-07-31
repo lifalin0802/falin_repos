@@ -47,6 +47,72 @@ done < $filename
 
 ```
 
+```bash
+ssl_expiry () {
+           echo | openssl s_client -connect ${1}:443 2> /dev/null | openssl x509 -noout -enddate
+}
+
+curl  https://stg-1a-teamwork-uqhk-chq.fastretailing.com -vI	 
+curl  https://stg-2a-teamwork-uqhk-chq.fastretailing.com -vI	
+
+
+ssl_expiry stg-1a-teamwork-guhk-chq.fastretailing.com 
+ssl_expiry stg-2a-teamwork-guhk-chq.fastretailing.com
+
+
+cloud-sql-proxy --credentials-file ~/.config/gcloud/legacy_credentials/falin.li@gcp.fastretailing.com/adc.json  fr-stg-teamworkretail-uqas-2b:asia-southeast1:sgp-uqas-sales-postgres-2b-master-1-pg13 --port 5432 --address 0.0.0.0 &
+
+aws s3 ls s3://fr-staging-vir-teamworkretail/UQ/US/share/master/V2_1-Price --profile fr-stg
+aws s3api head-object --bucket fr-staging-vir-teamworkretail --key UQ/US/share/master/V2_1-Price_BIFCIF2971X01BU04CIFVIR.20231214.PlaceHolder.20231214_032031_osb_0000000221.zip --profile fr-stg
+aws s3api head-object --bucket fr-staging-vir-teamworkretail --key UQ/US/share/master/V2_1-Price_BIFCIF2971X01BU04CIFVIR.20231214.PlaceHolder.20231214_032040_osb_0000000982.zip --profile fr-stg
+aws s3 cp s3://fr-staging-vir-teamworkretail/UQ/US/share/master/V2_1-Price_BIFCIF2971X01BU04CIFVIR.20231214.PlaceHolder.20231214_032031_osb_0000000221.zip . --profile fr-stg
+aws s3 cp s3://fr-staging-vir-teamworkretail/UQ/US/share/master/V2_1-Price_BIFCIF2971X01BU04CIFVIR.20231214.PlaceHolder.20231214_032040_osb_0000000982.zip . --profile fr-stg
+
+aws s3 rm  s3://fr-staging-tky-teamworkretail/UQ/KR/share/master/V2_1-Price_BIFCIF2971X01BU05CIFTKY.20231214.PlaceHolder.20231214_031621_osb_0000000313.zip --profile fr-stg-uqkr
+
+aws s3 cp s3://fr-staging-vir-teamworkretail/UQ/US/share/master/V2_1-Price/V2_1-Price_BIFCIF2971X01BU04CIFVIR.20231214.PlaceHolder.20231214_032031_osb_0000000221.zip . --profile fr-stg
+#download file from bucket 
+gsutil -m cp -r "gs://twc-infrastructure-common-builds/builds/FR AdminServer/*50.0.19.0*" "C:\Install"
+
+#get current project
+gcloud config get-value project
+gcloud projects list --format="table(projectNumber,projectId,createTime.date(tz=LOCAL),lifecycleState)" --limit 10
+gcloud config set project fr-stg-teamworkretail-uqas-1b 
+
+#ALWAYS NEVER
+gcloud config set project fr-stg-teamworkretail-uqas-1b 
+gcloud sql instances patch sgp-uqas-sales-postgres-1b-master-1-pg13           --activation-policy=NEVER & 
+gcloud sql instances patch sgp-uqas-settings-postgres-1b-master-1-pg13        --activation-policy=NEVER & 
+gcloud sql instances patch sgp-uqas-integrations-postgres-1b-master-1-pg13    --activation-policy=NEVER & 
+gcloud sql instances patch sgp-uqas-identity-postgres-1b-master-1-pg13        --activation-policy=NEVER & 
+
+gcloud config set project fr-stg-teamworkretail-uqas-2b
+gcloud sql instances patch sgp-uqas-sales-postgres-2b-master-1-pg13           --activation-policy=NEVER & 
+gcloud sql instances patch sgp-uqas-settings-postgres-2b-master-1-pg13        --activation-policy=NEVER & 
+gcloud sql instances patch sgp-uqas-integrations-postgres-2b-master-1-pg13    --activation-policy=NEVER & 
+gcloud sql instances patch sgp-uqas-identity-postgres-2b-master-1-pg13        --activation-policy=NEVER & 
+
+#get sql instances
+gcloud sql instances list [--show-edition] [--show-sql-network-architecture] [--filter=EXPRESSION] [--limit=LIMIT] [--page-size=PAGE_SIZE] [--sort-by=[FIELD,…]] [--uri] [GCLOUD_WIDE_FLAG …]
+
+#start sql instance
+gcloud sql instances patch frk-uqeu-settings-postgres-1b-master-1-pg13 --activation-policy=ALWAYS
+
+#stop sql instance
+gcloud sql instances patch INSTANCE_NAME --activation-policy=NEVER
+
+kubectl delete jobs -n uqde --all
+kubectl get cronjob -n uqde | grep True | awk '{print $1}' | xargs kubectl patch cronjob -n uqde -p '{"spec" : {"suspend" : false }}'
+
+kubectl get cronjob -n uqde | grep False | awk '{print $1}' | xargs kubectl patch cronjob -n uqde -p '{"spec" : {"suspend" : true }}'
+
+SHOW TIME ZONE; 
+SET TIME ZONE 'UTC';
+
+
+
+```
+
 
 ```bash
 
