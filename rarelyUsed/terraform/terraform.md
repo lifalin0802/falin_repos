@@ -24,6 +24,19 @@ tf import google_compute_instance.sql1 fr-test-twc/europe-west3-b/tw-fr-test-sql
 tf import google_container_node_pool.pool2 europe-west3/twc-cluster/twc-highmem-pool-1
 
 tf force-unlock [options] LOCK_ID #解锁某个lockID -force
+
+
+import {
+  to = aws_instance.example[0]
+  id = "i-abcd1234"
+}
+
+#terraform import 
+terraform import 'my_module.my_resource.my_resource_name' 'id'
+
+terraform import 'module.sbc_resources.google_service_account.k8s_sa["uqvn"]' 'projects/fr-stg-teamworkretail-uqas-2b/serviceAccounts/uqvn-k8s-sales-bi-connector-sa@fr-stg-teamworkretail-uqas-2b.iam.gserviceaccount.com'
+
+
 #module 如何使用
 
 

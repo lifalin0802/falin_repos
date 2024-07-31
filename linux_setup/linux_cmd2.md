@@ -34,9 +34,32 @@ cfssl gencert -initca ca-csr.json |cfssljson -bare ca # 创建ca证书
 cfssl certinfo -cert ca.pem |grep not   #查看ca证书 有效期
 cfssl-certinfo -cert ca.pem #也可以查看ca证书
 
-kubeadm alpha cert check-expiration #查看证书有效期
-kubeadm alpha certs renew -h 
-kubeadm alpha certs renew all  # 这里用all,可以用-h中查到的设备 给具体的设备renew
+kubeadm certs check-expiration #查看证书有效期
+kubeadm certs renew -h 
+kubeadm certs renew all  # 这里用all,可以用-h中查到的设备 给具体的设备renew
+
+➜  ~ kubeadm certs check-expiration
+[check-expiration] Reading configuration from the cluster...
+[check-expiration] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
+
+CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
+admin.conf                 Feb 11, 2025 18:11 UTC   229d            ca                      no      
+apiserver                  Feb 11, 2025 18:11 UTC   229d            ca                      no      
+apiserver-etcd-client      Feb 11, 2025 18:11 UTC   229d            etcd-ca                 no      
+apiserver-kubelet-client   Feb 11, 2025 18:11 UTC   229d            ca                      no      
+controller-manager.conf    Feb 11, 2025 18:11 UTC   229d            ca                      no      
+etcd-healthcheck-client    Feb 11, 2025 18:11 UTC   229d            etcd-ca                 no      
+etcd-peer                  Feb 11, 2025 18:11 UTC   229d            etcd-ca                 no      
+etcd-server                Feb 11, 2025 18:11 UTC   229d            etcd-ca                 no      
+front-proxy-client         Feb 11, 2025 18:11 UTC   229d            front-proxy-ca          no      
+scheduler.conf             Feb 11, 2025 18:11 UTC   229d            ca                      no      
+
+CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+ca                      Feb 09, 2034 18:11 UTC   9y              no      
+etcd-ca                 Feb 09, 2034 18:11 UTC   9y              no      
+front-proxy-ca          Feb 09, 2034 18:11 UTC   9y              no      
+➜  ~ 
+
 
 
 ln -s cfssl_1.6.1_linux_amd64            /usr/local/bin/cfssl

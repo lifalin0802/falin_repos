@@ -58,10 +58,33 @@ tcp        0      0 127.0.0.1:13402         0.0.0.0:*               LISTEN      
 tcp6       0      0 ::1:13402               :::*                    LISTEN      1787/ssh 
 ➜  ~ k port-forward svc/pgadmin -n uqth 8080:80 --address 0.0.0.0 &  #address允许任意主机访问
 [1] 1953
-netstat -nltup|grep 8080  #以下这个0.0.0.0 就是指 任何主机都可以访问这里的8080端口                                    
+netstat -nltup|grep 8080  #以下这个0.0.0.0 就是指 任何主机都可以访问这里x的8080端口                                    
 tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      1953/kubectl 
 
 
 ```
 
 ![](./img/image.png)
+
+#### how to install docker
+```bash
+apt-get remove docker
+apt-get update
+# Install Required Packages:
+apt-get install apt-transport-https ca-certificates curl software-properties-common
+
+# Add Docker’s Official GPG Key:
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Set Up the Stable Repository:
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Update the Package List Again:
+apt-get update
+
+# Install the Latest Version of Docker Engine and Containerd:
+apt-get install docker-ce docker-ce-cli containerd.io
+
+# check 
+docker --version
+```
