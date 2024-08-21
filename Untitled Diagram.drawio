@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.7">
   <diagram name="Page-1" id="9H_g9kAqsXyCxntlrRIn">
-    <mxGraphModel dx="1728" dy="2015" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="988" dy="1623" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -160,11 +160,11 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-135" value="customerized template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="75" y="2850" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-136" value="node pool" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
-          <mxGeometry x="220" y="2800" width="70" height="20" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-136" value="template name" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="220" y="2800" width="110" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-137" value="" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="300" y="2800" width="185" height="20" as="geometry" />
+          <mxGeometry x="340" y="2800" width="145" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-142" value="template details" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="220" y="2740" width="120" height="20" as="geometry" />
@@ -175,8 +175,8 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-144" value="双击每个template可以进入template details页" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="700" y="2440" width="120" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-150" value="这里是dropdown list，里边有一些options" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;" vertex="1" parent="1">
-          <mxGeometry x="455" y="2800" width="200" height="20" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-150" value="这里以下四个输入框都是dropdown list，里边有一些options" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="480" y="2870" width="200" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-151" value="network" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="220" y="2830" width="70" height="20" as="geometry" />
@@ -205,14 +205,8 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-168" value="" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="300" y="2950" width="185" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-528" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="vTDVaDkW4czHKNU96Y0x-170" target="vTDVaDkW4czHKNU96Y0x-527">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-170" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;" vertex="1" parent="1">
           <mxGeometry x="307.5" y="2835" width="10" height="10" as="geometry" />
-        </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-171" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;" vertex="1" parent="1">
-          <mxGeometry x="385" y="2835" width="10" height="10" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-172" value="Infiniband" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="317.5" y="2830" width="65" height="20" as="geometry" />
@@ -221,7 +215,7 @@
           <mxGeometry x="398.75" y="2830" width="42.5" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-176" value="这里是check box" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;" vertex="1" parent="1">
-          <mxGeometry x="441.25" y="2835" width="120" height="15" as="geometry" />
+          <mxGeometry x="430" y="2832.5" width="120" height="15" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-178" value="create" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="425" y="3000" width="60" height="20" as="geometry" />
@@ -235,7 +229,7 @@
             <mxPoint x="365" y="2010" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-183" value="node pool" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-183" value="node pool" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="392.5" y="2030" width="145" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-184" value="" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
@@ -247,9 +241,11 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-186" value="jobs" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="85" y="3190" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-187" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="85" y="3230" width="100" height="40" as="geometry" />
-        </mxCell>
+        <UserObject label="http://test.damodel.net/login" link="http://test.damodel.net/login" id="vTDVaDkW4czHKNU96Y0x-187">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="85" y="3230" width="100" height="40" as="geometry" />
+          </mxCell>
+        </UserObject>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-188" value="customerized template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="85" y="3270" width="100" height="40" as="geometry" />
         </mxCell>
@@ -763,7 +759,7 @@
           <mxGeometry x="621" y="-110" width="70" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-527" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;" vertex="1" parent="1">
-          <mxGeometry x="397.5" y="2835" width="10" height="10" as="geometry" />
+          <mxGeometry x="387.5" y="2835" width="10" height="10" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-529" value="" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="195" y="-570" width="570" height="330" as="geometry" />
@@ -836,6 +832,12 @@
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-554" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;" vertex="1" parent="1">
           <mxGeometry x="408.75" y="-465" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-558" value="这里是textbox" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;" vertex="1" parent="1">
+          <mxGeometry x="470" y="2805" width="120" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-560" value="template details 就是一个模板的概念，相当于初始化一台机器需要用的模板" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="491.25" y="2750" width="198.75" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
