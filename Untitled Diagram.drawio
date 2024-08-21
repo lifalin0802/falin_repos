@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.7">
   <diagram name="Page-1" id="9H_g9kAqsXyCxntlrRIn">
-    <mxGraphModel dx="988" dy="1623" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1728" dy="2015" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -161,10 +161,10 @@
           <mxGeometry x="75" y="2850" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-136" value="template name" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
-          <mxGeometry x="220" y="2800" width="110" height="20" as="geometry" />
+          <mxGeometry x="220" y="2800" width="90" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-137" value="" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="340" y="2800" width="145" height="20" as="geometry" />
+          <mxGeometry x="320" y="2800" width="165" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-142" value="template details" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="220" y="2740" width="120" height="20" as="geometry" />
@@ -241,7 +241,7 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-186" value="jobs" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="85" y="3190" width="100" height="40" as="geometry" />
         </mxCell>
-        <UserObject label="http://test.damodel.net/login" link="http://test.damodel.net/login" id="vTDVaDkW4czHKNU96Y0x-187">
+        <UserObject label="template" link="http://test.damodel.net/login" id="vTDVaDkW4czHKNU96Y0x-187">
           <mxCell style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
             <mxGeometry x="85" y="3230" width="100" height="40" as="geometry" />
           </mxCell>
@@ -261,7 +261,7 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-192" value="这里是dropdown list，用于选择已经创建的template" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;" vertex="1" parent="1">
           <mxGeometry x="455" y="3160" width="200" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-193" value="shell" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-193" value="action" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="230" y="3250" width="70" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-195" value="" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
@@ -288,7 +288,7 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-219" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iAddIcon;fillColor=#7AdF78;fillColor2=#1A9917;strokeColor=#ffffff;sketch=0;" vertex="1" parent="1">
           <mxGeometry x="480" y="3282.5" width="15" height="15" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-220" value="点击此处可以添加任务" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-220" value="点击此处可以添加动作" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="510" y="3275" width="125" height="30" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-221" value="" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
@@ -838,6 +838,15 @@
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-560" value="template details 就是一个模板的概念，相当于初始化一台机器需要用的模板" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="491.25" y="2750" width="198.75" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-561" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="75" y="2490" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-562" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="75" y="2890" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-563" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="85" y="3310" width="100" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
