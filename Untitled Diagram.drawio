@@ -16,9 +16,6 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-9" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="100" y="290" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-10" value="customerized template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="100" y="330" width="100" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-11" value="node pool 1&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="260" y="340" width="100" height="40" as="geometry" />
         </mxCell>
@@ -75,9 +72,6 @@
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-120" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="90.5" y="3087" width="100" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-121" value="customerized template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="90.5" y="3127" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-122" value="search" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="240.5" y="3047" width="400" height="20" as="geometry" />
@@ -213,9 +207,6 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-223" value="jobs" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="95" y="1050" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-224" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="95" y="1090" width="100" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-226" value="search" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="240" y="1050" width="390" height="20" as="geometry" />
         </mxCell>
@@ -233,7 +224,7 @@
             <mxRectangle width="104" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-839" value="action" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-234">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-839" value="task" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-234">
           <mxGeometry x="104" width="104" height="30" as="geometry">
             <mxRectangle width="104" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -345,9 +336,6 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-337" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="92" y="2690" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-338" value="customerized template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="92" y="2730" width="100" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-339" value="search" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="252" y="2650" width="465" height="20" as="geometry" />
         </mxCell>
@@ -377,9 +365,6 @@
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-388" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="95" y="-90" width="100" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-389" value="customerized template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="95" y="-50" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-393" value="search" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="255" y="-110" width="350" height="20" as="geometry" />
@@ -677,9 +662,6 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-532" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="95" y="-490" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-533" value="customerized template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="95" y="-450" width="100" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-534" value="vpc" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="240" y="-500" width="70" height="20" as="geometry" />
         </mxCell>
@@ -743,11 +725,11 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-560" value="template details 就是一个模板的概念，相当于初始化一台机器需要用的模板" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="506.75" y="3427" width="198.75" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-561" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="90.5" y="3167" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-561" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="90.5" y="3127" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-563" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="100.5" y="4027" width="100" height="40" as="geometry" />
+          <mxGeometry x="100.5" y="3988" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-564" value="dropdown list" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;" vertex="1" parent="1">
           <mxGeometry x="492.5" y="3514.5" width="93" height="15" as="geometry" />
@@ -800,7 +782,7 @@
           <mxGeometry x="646.5" y="4288" width="60" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-600" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="94.5" y="4428" width="100" height="40" as="geometry" />
+          <mxGeometry x="94.5" y="4389" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-601" value="" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="193.5" y="5587" width="570" height="330" as="geometry" />
@@ -816,7 +798,7 @@
             <mxGeometry x="93.5" y="5667" width="100" height="40" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-606" value="action details" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-606" value="task details" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="238.5" y="5597" width="97" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-607" value="dropdown list，用于选择已经有的operator" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;" vertex="1" parent="1">
@@ -834,8 +816,8 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-612" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iDeleteApp;fillColor=#cccccc;fillColor2=#000000;strokeColor=#ffffff;sketch=0;" vertex="1" parent="1">
           <mxGeometry x="513.5" y="5694.5" width="15" height="15" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-615" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="93.5" y="5747" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-615" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="93.5" y="5709" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-629" value="Assets" style="childLayout=tableLayout;recursiveResize=0;strokeColor=#98bf21;fillColor=#40c9a0;shadow=1;" vertex="1" parent="1">
           <mxGeometry x="245.5" y="4328" width="440" height="153" as="geometry" />
@@ -843,7 +825,7 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-630" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;dropTarget=0;collapsible=0;recursiveResize=0;expand=0;fontStyle=0;strokeColor=inherit;fillColor=#ffffff;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-629">
           <mxGeometry width="440" height="33" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-631" value="Action Name" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-630">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-631" value="task Name" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-630">
           <mxGeometry width="86" height="33" as="geometry">
             <mxRectangle width="86" height="33" as="alternateBounds" />
           </mxGeometry>
@@ -853,7 +835,7 @@
             <mxRectangle width="72" height="33" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-691" value="action type" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-630">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-691" value="task type" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-630">
           <mxGeometry x="158" width="72" height="33" as="geometry">
             <mxRectangle width="72" height="33" as="alternateBounds" />
           </mxGeometry>
@@ -1018,10 +1000,10 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-655" value="operator details" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="220.5" y="4667" width="95" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-656" value="dropdown list，用于选择各种动作, 可以是安装network, cuda, fabric, cudnn -- 下方会出现类似template 页面中其中一个选项&lt;br&gt;shell -- textbox&lt;br&gt;此处只能添加一个action, 后保存&amp;nbsp;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-656" value="dropdown list，用于选择各种动作, 可以是安装network, cuda, fabric, cudnn -- 下方会出现类似template 页面中其中一个选项&lt;br&gt;shell -- textbox&lt;br&gt;此处只能添加一个task, 后保存&amp;nbsp;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;" vertex="1" parent="1">
           <mxGeometry x="501.75" y="4789" width="260" height="55" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-657" value="action" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-657" value="task" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="225.5" y="4773" width="90" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-658" value="" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
@@ -1031,7 +1013,7 @@
           <mxGeometry x="445.5" y="4927" width="60" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-664" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="95.5" y="4857" width="100" height="40" as="geometry" />
+          <mxGeometry x="95.5" y="4818" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-665" value="operator name" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="225.5" y="4707" width="90" height="20" as="geometry" />
@@ -1099,17 +1081,17 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-702" value="dropdown list, 从已创建的operator中选择其中一个" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="531.5" y="3923" width="275" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-703" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="100.5" y="3987" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-703" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100.5" y="3948" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-709" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="93.5" y="4388" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-709" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="93.5" y="4349" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-710" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="95.5" y="4817" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-710" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="95.5" y="4778" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-711" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="93.5" y="5787" width="100" height="40" as="geometry" />
+          <mxGeometry x="93.5" y="5749" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-712" value="可删除" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="523.5" y="5688" width="57" height="30" as="geometry" />
@@ -1117,14 +1099,14 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-713" value="双击每一个operator 可以看到operator details" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="690.5" y="4377" width="145" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-714" value="一个action 是&lt;br&gt;1. 一组 operator 的集合&lt;br&gt;2. 单独一个template&lt;br&gt;3. template + 一组operator&amp;nbsp;&lt;br&gt;&lt;div style=&quot;&quot;&gt;如果是以template开始的action, 要标记为containsInstallOS= true&lt;br&gt;这种action不能被添加到其他任何action之后&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-714" value="一个task 是&lt;br&gt;1. 一组 operator 的集合&lt;br&gt;2. 单独一个template&lt;br&gt;3. template + 一组operator&amp;nbsp;&lt;br&gt;&lt;div style=&quot;&quot;&gt;如果是以template开始的task, 要标记为containsInstallOS= true&lt;br&gt;这种task不能被添加到其他任何task之后&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="655" y="4920" width="440" height="90" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-715" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="89.5" y="3609" width="100" height="40" as="geometry" />
+          <mxGeometry x="89.5" y="3570" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-716" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="89.5" y="3569" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-716" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="89.5" y="3530" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-717" value="template details 就是一个模板的概念，相当于初始化一台机器需要用的模板" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="461.75" y="2990" width="198.75" height="50" as="geometry" />
@@ -1144,7 +1126,7 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-724" value="dropdown list" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="203" y="5817" width="130" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-725" value="action" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-725" value="task" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="236" y="5753" width="70" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-726" value="" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
@@ -1153,7 +1135,7 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-729" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iDeleteApp;fillColor=#cccccc;fillColor2=#000000;strokeColor=#ffffff;sketch=0;" vertex="1" parent="1">
           <mxGeometry x="508.5" y="5753" width="15" height="15" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-730" value="&lt;span style=&quot;text-align: left;&quot;&gt;要在dropdown list 中 过滤掉contains&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;InstallOS= true 的&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;action&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-730" value="&lt;span style=&quot;text-align: left;&quot;&gt;要在dropdown list 中 过滤掉will&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;InstallOS= true 的&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;task&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="504" y="5762" width="269.5" height="30" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-731" value="" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
@@ -1170,17 +1152,17 @@
             <mxGeometry x="105.5" y="5167" width="100" height="40" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-736" value="action list" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-736" value="task list" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="250.5" y="5097" width="70" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-740" value="create" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="630.5" y="5137" width="60" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-745" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="105.5" y="5247" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-745" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="105.5" y="5209" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-746" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="105.5" y="5287" width="100" height="40" as="geometry" />
+          <mxGeometry x="105.5" y="5249" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-760" value="search" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="245.5" y="5137" width="380" height="20" as="geometry" />
@@ -1191,7 +1173,7 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-784" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;top=0;left=0;bottom=0;right=0;dropTarget=0;collapsible=0;recursiveResize=0;expand=0;fontStyle=0;strokeColor=inherit;fillColor=#ffffff;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-783">
           <mxGeometry width="512" height="33" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-785" value="Action Name" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-784">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-785" value="task Name" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-784">
           <mxGeometry width="86" height="33" as="geometry">
             <mxRectangle width="86" height="33" as="alternateBounds" />
           </mxGeometry>
@@ -1201,7 +1183,7 @@
             <mxRectangle width="72" height="33" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-787" value="action type" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-784">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-787" value="task type" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-784">
           <mxGeometry x="158" width="72" height="33" as="geometry">
             <mxRectangle width="72" height="33" as="alternateBounds" />
           </mxGeometry>
@@ -1397,7 +1379,7 @@
             <mxRectangle width="72" height="48" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-826" value="action" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=inherit;whiteSpace=wrap;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-823">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-826" value="task" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=inherit;whiteSpace=wrap;html=1;" vertex="1" parent="vTDVaDkW4czHKNU96Y0x-823">
           <mxGeometry x="158" width="72" height="48" as="geometry">
             <mxRectangle width="72" height="48" as="alternateBounds" />
           </mxGeometry>
@@ -1419,19 +1401,19 @@
           <mxGeometry x="316.75" y="5667" width="185" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-836" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="89.5" y="3207" width="100" height="40" as="geometry" />
+          <mxGeometry x="89.5" y="3167" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-837" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="91.5" y="2400" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-837" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="91.5" y="2360" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-838" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="90.5" y="2440" width="100" height="40" as="geometry" />
+          <mxGeometry x="90.5" y="2400" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-845" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="92" y="2770" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-845" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="92" y="2730" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-846" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="91" y="2810" width="100" height="40" as="geometry" />
+          <mxGeometry x="91" y="2770" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-847" value="execute" style="shape=ext;double=1;rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="502.5" y="1130" width="50" height="30" as="geometry" />
@@ -1454,9 +1436,6 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-853" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="101.5" y="1540" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-854" value="customerized template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="101.5" y="1580" width="100" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-862" value="Job details" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="214" y="1470" width="100" height="20" as="geometry" />
         </mxCell>
@@ -1475,25 +1454,25 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-867" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iDeleteIcon;fillColor=#e8878E;fillColor2=#BD1421;strokeColor=#ffffff;sketch=0;" vertex="1" parent="1">
           <mxGeometry x="491.5" y="1520" width="15" height="15" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-868" value="action" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-868" value="task" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="230" y="1670" width="84.5" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-869" value="" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="324.75" y="1670" width="159.75" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-870" value="dropdown list, 从已创建的action 中选择" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-870" value="dropdown list, 从已创建的task 中选择" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="495.25" y="1670" width="218.75" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-871" value="此处要检查node pool 中的node 是否有操作系统，如果有，需要过滤掉containsInstallOS=true 这种action" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-871" value="此处要检查node pool 中的node 是否有操作系统，如果有，需要过滤掉containsInstallOS=true 这种task" style="html=1;whiteSpace=wrap;strokeWidth=0;" vertex="1" parent="1">
           <mxGeometry x="474.5" y="1710" width="232.5" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-872" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="101.5" y="1620" width="100" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-872" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="101.5" y="1581" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-873" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="100.5" y="1660" width="100" height="40" as="geometry" />
+          <mxGeometry x="100.5" y="1621" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-874" value="action" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-874" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="96" y="1130" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-875" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
@@ -1501,6 +1480,15 @@
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-876" value="此处node pool 要有个字段标记是否已安装系统， OSInstalled=true/false" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="568" y="420" width="232" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-879" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="96" y="1090" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-880" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="99" y="332" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-881" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="98" y="372" width="100" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
