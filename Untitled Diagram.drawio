@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.7">
   <diagram name="Page-1" id="9H_g9kAqsXyCxntlrRIn">
-    <mxGraphModel dx="1147" dy="2790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1659" dy="3078" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -844,7 +844,7 @@
             <mxRectangle width="72" height="33" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-828" value="willInstallOS" style="connectable=0;recursiveResize=0;strokeColor=#d79b00;fillColor=#ffe6cc;align=center;fontStyle=1;html=1;" parent="vTDVaDkW4czHKNU96Y0x-784" vertex="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-828" value="willInstallOS" style="connectable=0;recursiveResize=0;strokeColor=#A7C942;fillColor=#d5e8d4;align=center;fontStyle=1;html=1;" parent="vTDVaDkW4czHKNU96Y0x-784" vertex="1">
           <mxGeometry x="230" width="130" height="33" as="geometry">
             <mxRectangle width="130" height="33" as="alternateBounds" />
           </mxGeometry>
