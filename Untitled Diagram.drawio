@@ -361,10 +361,10 @@
           <mxGeometry x="68" y="-1198.53" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-531" value="jobs" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
-          <mxGeometry x="68" y="-1158.53" width="100" height="40" as="geometry" />
+          <mxGeometry x="68" y="-1118.53" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-532" value="template" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
-          <mxGeometry x="68" y="-1118.53" width="100" height="40" as="geometry" />
+          <mxGeometry x="68" y="-1078.53" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-534" value="pool name" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="213" y="-1128.53" width="70" height="20" as="geometry" />
@@ -402,14 +402,14 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-575" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.select;fillColor=#0080f0;strokeColor=#ffffff;sketch=0;" parent="1" vertex="1">
           <mxGeometry x="240.5" y="3547" width="12" height="12" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-579" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.168;entryY=0.818;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-579" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.168;entryY=0.818;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1" source="vTDVaDkW4czHKNU96Y0x-580">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="298.62" y="3758.31" as="sourcePoint" />
             <mxPoint x="283.3800000000001" y="3658.2499999999995" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-580" value="可选可不选，不选择时候右侧的dropdownlist or checkbox 可以置灰" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="225.5" y="3777" width="100" height="30" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-580" value="可选的,不选择时候右侧的dropdownlist or checkbox 可以置灰" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="89" y="3730" width="100" height="30" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-581" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=#1ba1e2;sketch=1;opacity=30;" parent="1" vertex="1">
           <mxGeometry x="305.5" y="3532" width="286" height="136.5" as="geometry" />
@@ -1350,10 +1350,10 @@
           <mxGeometry x="678.5" y="-698.53" width="130" height="30" as="geometry" />
         </mxCell>
         <mxCell id="7UirqOSI1epc1jbIi7jL-237" value="task" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="67" y="-1078.53" width="100" height="40" as="geometry" />
+          <mxGeometry x="67" y="-1038.53" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="7UirqOSI1epc1jbIi7jL-238" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="66" y="-1038.53" width="100" height="40" as="geometry" />
+          <mxGeometry x="66" y="-998.53" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="7UirqOSI1epc1jbIi7jL-239" value="" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="192.5" y="590" width="570" height="330" as="geometry" />
@@ -1798,6 +1798,12 @@
         </mxCell>
         <mxCell id="7UirqOSI1epc1jbIi7jL-425" value="nodes" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="93.5" y="5626" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7UirqOSI1epc1jbIi7jL-426" value="nodes" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="67" y="-1158.53" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7UirqOSI1epc1jbIi7jL-427" value="此处安装ubuntu OS 之后，自动安装agent最新版本" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="572.5" y="3512.25" width="180" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
