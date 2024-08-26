@@ -17,10 +17,10 @@ go get github.com/cweill/gotests/gotests
 go get github.com/fatih/gomodifytags 
 go get github.com/josharian/impl
 go get github.com/haya14busa/goplay/cmd/goplay 
-go get github.com/go-delve/delve/cmd/dlv  
-go get github.com/go-delve/delve/cmd/dlv@master
-go get honnef.co/go/tools/cmd/staticcheck  
-go get golang.org/x/tools/gopls
+
+go install -v github.com/go-delve/delve/cmd/dlv@latest
+go install -v golang.org/x/tools/gopls@latest
+go install honnef.co/go/tools/cmd/staticcheck@latest 
 
 
 go run XX.go #运行S
