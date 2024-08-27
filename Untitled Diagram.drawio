@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" version="24.7.7">
   <diagram name="Page-1" id="9H_g9kAqsXyCxntlrRIn">
-    <mxGraphModel dx="1674" dy="2938" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1928" dy="3115" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -298,8 +298,8 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-423" value="node pool details" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="196" y="-788.53" width="130" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-424" value="双击可进入 node pool details" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="573" y="-293.53" width="130" height="30" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-424" value="双击可进入 node pool details&lt;div&gt;spare node pool 备机池&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="573" y="-293.53" width="157" height="43.53" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-427" value="search" style="html=1;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="594" y="-738.53" width="70" height="20" as="geometry" />
@@ -440,7 +440,7 @@
             <mxRectangle width="72" height="33" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-691" value="task type" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" parent="vTDVaDkW4czHKNU96Y0x-630" vertex="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-691" value="action type" style="connectable=0;recursiveResize=0;strokeColor=inherit;fillColor=#A7C942;align=center;fontStyle=1;fontColor=#FFFFFF;html=1;" parent="vTDVaDkW4czHKNU96Y0x-630" vertex="1">
           <mxGeometry x="244" width="72" height="33" as="geometry">
             <mxRectangle width="72" height="33" as="alternateBounds" />
           </mxGeometry>
@@ -673,7 +673,7 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-656" value="dropdown list，用于选择各种动作, 可以是安装network, cuda, fabric, cudnn -- 下方会出现类似template 页面中其中一个选项&lt;br&gt;shell -- textbox&lt;br&gt;此处只能添加一个task, 后保存&amp;nbsp;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;" parent="1" vertex="1">
           <mxGeometry x="501.75" y="4789" width="260" height="55" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-657" value="task" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-657" value="actiontype" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="225.5" y="4773" width="90" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-658" value="" style="html=1;whiteSpace=wrap;" parent="1" vertex="1">
@@ -764,7 +764,7 @@
           <mxGeometry x="770.5" y="4279" width="145" height="30" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-714" value="一个task 是&lt;br&gt;1. 一组 operator 的集合&lt;br&gt;2. 单独一个template&lt;br&gt;3. template + 一组operator&amp;nbsp;&lt;br&gt;&lt;div style=&quot;&quot;&gt;如果是以template开始的task, 要标记为willInstallOS= true&lt;br&gt;这种task不能被添加到其他任何task之后&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="560" y="4927" width="440" height="90" as="geometry" />
+          <mxGeometry x="533" y="5822" width="440" height="90" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-715" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
           <mxGeometry x="89.5" y="3614" width="100" height="40" as="geometry" />
@@ -783,9 +783,6 @@
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-722" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iAddIcon;fillColor=#7AdF78;fillColor2=#1A9917;strokeColor=#ffffff;sketch=0;" parent="1" vertex="1">
           <mxGeometry x="479.5" y="5785.5" width="15" height="15" as="geometry" />
-        </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-724" value="dropdown list" style="html=1;whiteSpace=wrap;strokeWidth=0;" parent="1" vertex="1">
-          <mxGeometry x="203" y="5817" width="130" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-725" value="task" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="236" y="5753" width="70" height="20" as="geometry" />
