@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.7">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" version="24.7.7">
   <diagram name="Page-1" id="9H_g9kAqsXyCxntlrRIn">
-    <mxGraphModel dx="1080" dy="2676" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1322" dy="2827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1153,14 +1153,14 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-862" value="Job details" style="html=1;whiteSpace=wrap;strokeWidth=0;" parent="1" vertex="1">
           <mxGeometry x="214" y="1470" width="100" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-863" value="node pool" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
-          <mxGeometry x="496.57" y="1520" width="84.5" height="20" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-863" value="nodes" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+          <mxGeometry x="407.57" y="1520" width="84.5" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-864" value="" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
-          <mxGeometry x="324.25" y="1520" width="159.75" height="20" as="geometry" />
+          <mxGeometry x="324.25" y="1520" width="75.75" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-865" value="dropdown list, 从已有node pool 中选择" style="html=1;whiteSpace=wrap;strokeWidth=0;" parent="1" vertex="1">
-          <mxGeometry x="776" y="1520" width="209" height="20" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-865" value="dropdown list, 可以按node pool筛选，也可以按照label，或者备机池中单独的机器" style="html=1;whiteSpace=wrap;strokeWidth=0;" parent="1" vertex="1">
+          <mxGeometry x="776" y="1520" width="214" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-866" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iAddIcon;fillColor=#7AdF78;fillColor2=#1A9917;strokeColor=#ffffff;sketch=0;" parent="1" vertex="1">
           <mxGeometry x="739" y="1581" width="15" height="15" as="geometry" />
@@ -1172,7 +1172,7 @@
           <mxGeometry x="229.06" y="1520" width="84.5" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-869" value="" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
-          <mxGeometry x="592.75" y="1520" width="159.75" height="20" as="geometry" />
+          <mxGeometry x="503.75" y="1520" width="226.25" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-870" value="dropdown list, 从已创建的task 中选择" style="html=1;whiteSpace=wrap;strokeWidth=0;" parent="1" vertex="1">
           <mxGeometry x="495.25" y="1670" width="218.75" height="20" as="geometry" />
@@ -1814,7 +1814,7 @@
         <mxCell id="7UirqOSI1epc1jbIi7jL-382" value="" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="323.25" y="271" width="145.75" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="7UirqOSI1epc1jbIi7jL-384" value="dropdown list, 可以选择现有的node pool" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="7UirqOSI1epc1jbIi7jL-384" value="dropdown list, 可以选择现有的node pool&lt;div&gt;默认选择spare node pool (备用主机池)&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="466.5" y="273" width="252.5" height="30" as="geometry" />
         </mxCell>
         <mxCell id="7UirqOSI1epc1jbIi7jL-385" value="已安装ubuntu的node不能再次安装系统&lt;div&gt;即 node OSInstalled=true 的主机不能跑 willInstallOS=true的task&lt;br&gt;&lt;div style=&quot;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;三角表示运行，执行该job&lt;br&gt;&lt;br&gt;删除job 会连同删除job histries, 要有弹出提示框 以便二次确认&lt;/div&gt;&lt;br&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -2425,7 +2425,7 @@
         <mxCell id="7UirqOSI1epc1jbIi7jL-595" value="dropdown list, 可以选择现有的node pool" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1184.5" y="273" width="252.5" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="7UirqOSI1epc1jbIi7jL-596" value="Ubuntu:&lt;br&gt;driver&amp;nbsp;&lt;br&gt;cuda:&lt;div&gt;fabric:&lt;/div&gt;&lt;div&gt;cudnn:&lt;/div&gt;&lt;div&gt;network:&lt;/div&gt;&lt;div&gt;agent:&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="7UirqOSI1epc1jbIi7jL-596" value="cpu：&amp;nbsp; mem:&amp;nbsp; &amp;nbsp; gpu:&amp;nbsp; &amp;nbsp;disk:&amp;nbsp;&amp;nbsp;&lt;br&gt;Ubuntu:&lt;br&gt;driver&amp;nbsp;&lt;br&gt;cuda:&lt;div&gt;fabric:&lt;/div&gt;&lt;div&gt;cudnn:&lt;/div&gt;&lt;div&gt;network:&lt;/div&gt;&lt;div&gt;agent:&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="943.5" y="320" width="234.5" height="110" as="geometry" />
         </mxCell>
         <mxCell id="7UirqOSI1epc1jbIi7jL-597" value="delete" style="html=1;whiteSpace=wrap;" parent="1" vertex="1">
@@ -2636,19 +2636,19 @@
         <mxCell id="7UirqOSI1epc1jbIi7jL-706" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn2.iconfinder.com/data/icons/gnomeicontheme/32x32/actions/gtk-go-back-ltr.png" parent="1" vertex="1">
           <mxGeometry x="897" y="178" width="32" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="KMe8TxQKS5YMcq-NLHq3-4" value="node pool" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
-          <mxGeometry x="496.94" y="1548" width="84.5" height="20" as="geometry" />
+        <mxCell id="KMe8TxQKS5YMcq-NLHq3-4" value="nodes" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+          <mxGeometry x="407.94" y="1548" width="84.5" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="KMe8TxQKS5YMcq-NLHq3-5" value="" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
-          <mxGeometry x="324.62" y="1548" width="159.75" height="20" as="geometry" />
+        <mxCell id="KMe8TxQKS5YMcq-NLHq3-5" value="" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+          <mxGeometry x="324.62" y="1548" width="75.38" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="KMe8TxQKS5YMcq-NLHq3-6" value="task" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="KMe8TxQKS5YMcq-NLHq3-6" value="task" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="229.43" y="1548" width="84.5" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="KMe8TxQKS5YMcq-NLHq3-7" value="" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
-          <mxGeometry x="593.12" y="1548" width="159.75" height="20" as="geometry" />
+        <mxCell id="KMe8TxQKS5YMcq-NLHq3-7" value="" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+          <mxGeometry x="504.12" y="1548" width="225.88" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="KMe8TxQKS5YMcq-NLHq3-8" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iDeleteIcon;fillColor=#e8878E;fillColor2=#BD1421;strokeColor=#ffffff;sketch=0;" vertex="1" parent="1">
+        <mxCell id="KMe8TxQKS5YMcq-NLHq3-8" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iDeleteIcon;fillColor=#e8878E;fillColor2=#BD1421;strokeColor=#ffffff;sketch=0;" parent="1" vertex="1">
           <mxGeometry x="756.5" y="1550.5" width="15" height="15" as="geometry" />
         </mxCell>
       </root>
