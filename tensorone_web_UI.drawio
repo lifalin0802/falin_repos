@@ -2395,13 +2395,13 @@
         <mxCell id="munbYMiNZBLQ6UdRiRkw-36" value="textbox， 用于添加新var_value, 例如是playbook中vars中的value" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;align=left;" vertex="1" parent="1">
           <mxGeometry x="509.25" y="4856" width="348.25" height="33" as="geometry" />
         </mxCell>
-        <mxCell id="munbYMiNZBLQ6UdRiRkw-37" value="version" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="munbYMiNZBLQ6UdRiRkw-37" value="package version" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="225" y="4900" width="90" height="20" as="geometry" />
         </mxCell>
         <mxCell id="munbYMiNZBLQ6UdRiRkw-38" value="" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="320" y="4900" width="185" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="munbYMiNZBLQ6UdRiRkw-39" value="textbox(可空)，宿主" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;align=left;" vertex="1" parent="1">
+        <mxCell id="munbYMiNZBLQ6UdRiRkw-39" value="textbox(可空)，软件包的版本，例如535， 550" style="html=1;whiteSpace=wrap;strokeWidth=0;opacity=0;align=left;" vertex="1" parent="1">
           <mxGeometry x="505.5" y="4889" width="348.25" height="33" as="geometry" />
         </mxCell>
       </root>
