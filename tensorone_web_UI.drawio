@@ -954,7 +954,7 @@
           <mxGeometry x="324.25" y="1548" width="225.75" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-865" value="dropdown list, 可以按node pool筛选，也可以按照label，或者备机池中单独的机器" style="html=1;whiteSpace=wrap;strokeWidth=0;" parent="1" vertex="1">
-          <mxGeometry x="513.88" y="1590" width="214" height="40" as="geometry" />
+          <mxGeometry x="549.5" y="1582" width="214" height="40" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-868" value="template" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="229.06" y="1549" width="84.5" height="20" as="geometry" />
@@ -962,11 +962,8 @@
         <mxCell id="vTDVaDkW4czHKNU96Y0x-869" value="" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="324.68" y="1577" width="226.25" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-870" value="dropdown list, 从已创建的task 中选择" style="html=1;whiteSpace=wrap;strokeWidth=0;" parent="1" vertex="1">
-          <mxGeometry x="495.25" y="1670" width="218.75" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="vTDVaDkW4czHKNU96Y0x-871" value="此处要检查node pool 中的node 是否有操作系统 &lt;br&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;1. 如果有 即 OSInstalled=true，不得选择willInstallOS=true 类型的task&lt;br&gt;2. 未安装系统的node pool,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;OSInstalled=false, 不得选择&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;willInstallOS=false 的task&lt;/span&gt;&lt;/div&gt;" style="html=1;whiteSpace=wrap;strokeWidth=0;align=left;" parent="1" vertex="1">
-          <mxGeometry x="474.5" y="1710" width="395.5" height="40" as="geometry" />
+        <mxCell id="vTDVaDkW4czHKNU96Y0x-870" value="dropdown list, 从已创建的template中选择" style="html=1;whiteSpace=wrap;strokeWidth=0;" parent="1" vertex="1">
+          <mxGeometry x="544.75" y="1548" width="245.25" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vTDVaDkW4czHKNU96Y0x-881" value="operator" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
           <mxGeometry x="71" y="-213.52999999999997" width="100" height="40" as="geometry" />
@@ -2788,6 +2785,12 @@
         </mxCell>
         <mxCell id="J8rhPDoSc14AQXrC9aeW-19" value="..." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="1153" y="5707.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-21" value="comments" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="228" y="1615" width="84.5" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-22" value="" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="325.61" y="1615" width="234.39" height="105" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
