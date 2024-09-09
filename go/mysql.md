@@ -13,8 +13,6 @@ mysql -u root -p
 create database devops_platform
 use devops_platform
 
-
-
 ```
 
 
@@ -37,6 +35,15 @@ go run .main.go   handler.go # 启动server
 
 client 中引用为kitex , dest service 为master
 go run client.go
+
+
+```
+
+
+### protobuf 安装
+https://github.com/protocolbuffers/protobuf/releases 下载 protoc-27.4-win64.zip
+```bash
+
 
 
 ```

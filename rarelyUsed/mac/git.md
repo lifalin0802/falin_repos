@@ -70,14 +70,27 @@ git push origin --delete TW-QA-UQSE-2D-4.8.x_initial
 git push -u origin TW-QA-UQSE-2D-4.0.x_initial
 
 
-
-
 git branch -m OLD-BRANCH-NAME NEW-BRANCH-NAME
 git fetch origin
 git branch -u origin/NEW-BRANCH-NAME NEW-BRANCH-NAME
 git remote set-head origin -a
 
 ```
+
+### how to re-edit git commit comments 
+https://www.youtube.com/watch?v=gz26pPCK2x4
+```bash
+git log --oneline
+git rebase -i HEAD~3
+# you could change 'pick' to 'reword' for the commit you want to re-edit(press i to enter edit mode)
+# then press etc:wq!, then you could enter another interact command line, in this context you could edit the comment you want 
+then etc:wq!
+
+git log --oneline # to check
+git push origin xxx --force # to push the changesets to remote 
+
+```
+
 
 ### ~/.ssh/config 配置文件内容
 ```bash
