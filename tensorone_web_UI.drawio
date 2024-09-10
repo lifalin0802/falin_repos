@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" version="24.7.12">
   <diagram name="Page-1" id="9H_g9kAqsXyCxntlrRIn">
-    <mxGraphModel dx="1965" dy="4333" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1123" dy="3890" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -2100,7 +2100,7 @@
           <mxGeometry x="1510.5" y="4510" width="30" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vvoWrVjzDLUGsO_10hLB-96" value="6" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="1580" y="4510" width="30" height="20" as="geometry" />
+          <mxGeometry x="1583" y="4510" width="30" height="20" as="geometry" />
         </mxCell>
         <mxCell id="vvoWrVjzDLUGsO_10hLB-100" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;dashed=1;" parent="1" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -2207,7 +2207,7 @@
         <mxCell id="munbYMiNZBLQ6UdRiRkw-9" value="一个template 会内部切分成不同的task, 基本上会以&lt;br&gt;playbook, &lt;br&gt;shell-for-ansible, &lt;br&gt;shell-for-agent 为单位. 切分粒度不会对前端展示&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="583" y="6056" width="440" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="munbYMiNZBLQ6UdRiRkw-10" value="role/shell" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+        <mxCell id="munbYMiNZBLQ6UdRiRkw-10" value="user_set" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="236" y="5720" width="84" height="20" as="geometry" />
         </mxCell>
         <mxCell id="munbYMiNZBLQ6UdRiRkw-11" value="pkg_version" style="html=1;whiteSpace=wrap;" parent="1" vertex="1">
@@ -2741,55 +2741,55 @@
         <mxCell id="P16M4riwoLo8gH1ixJw3-133" value="node pool 2" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
           <mxGeometry x="318" y="-1720" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-1" value="shell" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-1" value="shell" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="220.5" y="5970" width="81.5" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-2" value="others" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-2" value="others" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="311.75" y="5970" width="111.06" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-3" value="ip a&amp;nbsp;&lt;br&gt;nvidia-msi&lt;br&gt;nvcc --version&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-3" value="ip a&amp;nbsp;&lt;br&gt;nvidia-msi&lt;br&gt;nvcc --version&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="440" y="5970" width="237.75" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-4" value="&lt;span style=&quot;text-align: left;&quot;&gt;shell-for-ansible&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-4" value="&lt;span style=&quot;text-align: left;&quot;&gt;shell-for-ansible&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="674" y="5915" width="154" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-5" value="&lt;span style=&quot;text-align: left;&quot;&gt;shell-for-agent&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-5" value="&lt;span style=&quot;text-align: left;&quot;&gt;shell-for-agent&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="672.5" y="5985" width="152.25" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-7" value="job" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-7" value="job" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="986.84" y="5707.5" width="38.16" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-10" value="playbook_task" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-10" value="playbook_task" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1052.5" y="5647.5" width="75" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-11" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-11" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="1025" y="5662.5" width="20" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-12" value="shell_task(ansible)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-12" value="shell_task(ansible)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1052.5" y="5702.5" width="75" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-13" value="shell_task(agent)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-13" value="shell_task(agent)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1052.5" y="5762.5" width="75" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-14" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;size=0.5;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-14" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;size=0.5;" parent="1" vertex="1">
           <mxGeometry x="1144" y="5602.5" width="20" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-15" value="operator 1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-15" value="operator 1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1166.75" y="5591.5" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-17" value="operator 2" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-17" value="operator 2" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1164" y="5632.5" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-18" value="operator 3" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-18" value="operator 3" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1163.75" y="5672.5" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-19" value="..." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-19" value="..." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1153" y="5707.5" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-21" value="comments" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-21" value="comments" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="228" y="1615" width="84.5" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="J8rhPDoSc14AQXrC9aeW-22" value="" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+        <mxCell id="J8rhPDoSc14AQXrC9aeW-22" value="" style="whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="325.61" y="1615" width="234.39" height="105" as="geometry" />
         </mxCell>
       </root>
