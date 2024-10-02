@@ -67,3 +67,12 @@ go env -w GOARCH=amd64 #为goland debug 设置的
 ```bash
 
 ```
+
+
+```bash
+
+go install github.com/go-swagger/go-swagger/cmd/swagger@latest
+go env GOPATH #就在GOPATH/bin目录下有swagger
+swagger version
+
+```
