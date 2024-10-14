@@ -47,6 +47,9 @@ UPDATE mysql.user SET Password=PASSWORD('Grafana_123') WHERE User='grafana';
 GRANT ALL ON grafana.* TO grafana@'%';  
 
 
+-- drop user in mysql
+DROP USER 'grafana'@'%';
+
 --SET PASSWORD FOR ‘username’@‘host’ = PASSWORD(‘newpassword’);
 SET PASSWORD FOR 'pig'@'%' = PASSWORD("123456");
 

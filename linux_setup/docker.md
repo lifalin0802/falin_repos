@@ -300,9 +300,9 @@ https://zhuanlan.zhihu.com/p/468632142
 
 ###  安装 node_exporter 
 ```bash
-wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
-tar zxf node_exporter-1.5.0.linux-amd64.tar.gz
-mv node_exporter-1.5.0.linux-amd64/node_exporter /usr/local/bin
+wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+tar zxf node_exporter-1.7.0.linux-amd64.tar.gz
+mv node_exporter-1.7.0.linux-amd64/node_exporter /usr/local/bin
 
 id prometheus >/dev/null 2>&1 ||\
 useradd --no-create-home -s /bin/false prometheus
