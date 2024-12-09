@@ -54,6 +54,9 @@ git pull origin master #下载最新代码
 git show --oneline -s #查看当前处于哪个commit
 git log #查看当前分支所有log
 
+git tag  #查看git 所有tag, q退出
+git branch -a 
+git branch -r  #查看git 所有branch
 
 #到bastion server 切换分支
 git fetch
