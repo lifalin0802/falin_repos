@@ -46,12 +46,18 @@ sudo systemctl restart docker
 
 ```bash
 # 发现docker pull 下载错误 docker pull nicolaka/netshoot or  docker run nicolaka/netshoot
-$ journalctl -u docker.service | grep "error"
-
-Sep 30 13:29:33 node235 dockerd[509830]: time="2024-09-30T13:29:33.456980853+08:00" level=error msg="Handler for POST /v1.47/images/create returned error: Get \"https://registry-1.docker.io/v2/\": net/http: TLS handshake timeout" spanID=7bff44a0f2840fdf traceID=d4fb2c25eeaf2186c62db84fb5bea12e
 
 
-# 方法 1: (work !!)
+# 查询网络
+docker run --rm -it \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /:/hostfs \
+    --network container:05608e4f4d0d \
+    nicolaka/netshoot
+
+
+
+# 方法 1: (work !!) 再不行用这个 https://blog.csdn.net/lx1056212225/article/details/144651418
 cat >> /etc/docker/daemon.json << EOF
 {
   "registry-mirrors": [

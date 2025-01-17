@@ -1,6 +1,8 @@
 
 
 
+
+
 ### selinux 相关配置
 ```bash
 setenforce 0    #关闭selinux 临时关闭

@@ -1,3 +1,7 @@
+### ubuntu check list of pkg by api install
+```bash
+dpkg -l # check the list of pkg list 
+```
 
 ### 安装软件
 ```bash
@@ -516,6 +520,11 @@ docker pull  yldc-docker.pkg.coding.yili.com/apm/install/injector:2.3.0.0
 docker image save centos:deeptunBase_20210624 > centos_deeptunbase.tar
 docker load < centos_deeptunbase.tar
 
+docker save -o netshoot.tar nicolaka/netshoot:latest
+scp 10.10.100.235:/root/netshoot.tar  100.64.25.223:/root 
+docker load -i netshoot.tar
+
+
 #多个镜像库时候， 先打tag,用前缀区别开来
 docker tag centos:deeptunBase_20210624 192.168.2.142/library/centos:deeptunBase_20210624
 docker push 192.168.2.142/library/centos:deeptunBase_20210624
@@ -879,6 +888,156 @@ type=rpm-md
 $ yum install filebeat -y
 
 ```
+
+
+### 安装filebeat 到ubuntu:
+```bash
+# https://www.howtoforge.com/how-to-install-filebeat-on-ubuntu/
+apt-get update -y
+apt-get upgrade -y
+
+#First, install required package with the following command:
+apt-get install apt-transport-https -y
+
+# Next, download and add the Elastic Stack key with the following command:
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+
+# Next, add the Elastic Stack 7 Apt repository with the following command:
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list
+
+# Next, update the repository and install Filebeat with the following command:
+apt-get update -y
+apt-get install filebeat -y
+
+```
+
+#### `nano /etc/filebeat/filebeat.yml` to edit this config:
+```yaml
+#-------------------------- Elasticsearch output ------------------------------
+output.elasticsearch:
+  Array of hosts to connect to.
+  hosts: ["localhost:9200"]
+
+#----------------------------- Logstash output --------------------------------
+output.logstash:
+  # The Logstash hosts
+  hosts: ["localhost:5044"]
+```
+#### check all module status, then enable one: 
+```bash
+filebeat modules list
+filebeat modules enable system
+filebeat modules list # then check again
+```
+
+
+#### `nano /etc/filebeat/modules.d/system.yml` to configure the system module to read-only authentication logs:
+```yaml
+- module: system
+  # Syslog
+  syslog:
+    enabled: false
+...
+  # Authorization logs
+  auth:
+    enabled: true
+
+    # Set custom paths for the log files. If left empty,
+    # Filebeat will choose the paths depending on your OS.
+    var.paths: ["/var/log/auth.log"]
+```
+#### load the template into Elasticsearch manually: 
+```bash
+filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]'
+
+# generate the index template and install the template on Elastic Stack server 
+filebeat export template > filebeat.template.json
+curl -XPUT -H 'Content-Type: application/json' http://localhost:9200/_template/filebeat-7.0.1 -d@filebeat.template.json
+
+# start Filebeat service and enable it to start after system reboot
+systemctl start filebeat
+systemctl enable filebeat
+```
+
+### 安装logstash, path: /opt/elk/docker-compose.yaml
+```yaml
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - elk
+ 
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.10.0
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    command: -f /usr/share/logstash/pipeline/logstash.conf
+    networks:
+      - elk
+ 
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.10.0
+    ports:
+      - "5601:5601"
+    networks:
+      - elk
+ 
+volumes:
+  esdata1:
+    driver: local
+ 
+networks:
+  elk:
+    driver: bridge
+```
+
+#### config the logstash config file at `/opt/elk/logstash/pipeline/logstash.conf`:
+```bash
+input {
+  syslog {
+    port => "514"
+  }
+  beats {
+    port => 5044
+  }
+}
+
+filter {
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://100.64.25.223:9200"]  # Replace with your Elasticsearch host
+  }
+
+  stdout { codec => rubydebug }  # Optional: print the logs to stdout for debugging
+}
+```
+
+#### 之所以有5044，514 是因为上边logstash.conf 配置文件里指定的：
+```bash
+~ # netstat -nltup
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.11:37249        0.0.0.0:*               LISTEN      -
+tcp        0      0 :::9600                 :::*                    LISTEN      -
+tcp        0      0 :::514                  :::*                    LISTEN      -
+tcp        0      0 :::5044                 :::*                    LISTEN      -
+udp        0      0 127.0.0.11:33230        0.0.0.0:*                           -
+udp        0      0 0.0.0.0:514             0.0.0.0:*                           -
+```
+
+
 
 
 ### 安装kibana:
@@ -1693,6 +1852,6 @@ blog: https://blog.csdn.net/m0_67698950/article/details/124911153
 mkdir -p /apps/devops/jenkins
 chmod 777 /apps/devops/jenkins
 docker run -itd -p 9003:8080 -p 9004:50000  --restart always \
- -v /apps/devops/jenkins:/var/jenkins_home --name jenkins  jenkins/jenkins:lts
+ -v /apps/devops/jenkins:/var/jenkins_home --name jenkins  jenkins/jenkins:latest
 ```
 

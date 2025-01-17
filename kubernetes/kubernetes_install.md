@@ -73,7 +73,7 @@ systemctl restart docker
 docker info |grep Cgroup
 
 
-
+systemctl --type=service --state=running #列出清单
 systemctl list-unit-files|grep -i container #找不到服务的名字怎么办 模糊搜索
 grep -i xx   # 不区分大小写  -i, --ignore-case ignore case distinctions
 
