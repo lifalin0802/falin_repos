@@ -64,3 +64,36 @@ wget  https://github.com/flashcatcloud/categraf/releases/download/v0.3.16/categr
 vim /opt/n9e/categraf/conf/config.toml
 
 ```
+
+
+### setup netdata
+Official webside : https://www.netdata.cloud/
+how to start from docker:  https://app.netdata.cloud/spaces/lifalin0802-space/rooms/all-nodes/integrate-anything?post_survey_submit=true#metrics_correlation=false&after=-900&before=0&utc=Asia%2FShanghai&offset=%2B8&timezoneName=Beijing%2C%20Chongqing%2C%20Hong%20Kong%2C%20Urumqi&modal=&modalTab=&modalParams=&selectedIntegrationCategory=deploy.docker-kubernetes&force_play=false&selectedIntegration=&selectedIntegrationTab=
+```bash
+mkdir -p /data/netdata/{netdatacache,netdatalib}
+
+docker run -d --name=netdata \
+--pid=host \
+--network=host \
+# -v netdataconfig/netdataconfig:/etc/netdata \
+-v /data/netdata/netdatalib:/var/lib/netdata \
+-v /data/netdata/netdatacache:/var/cache/netdata \
+-v /:/host/root:ro,rslave \
+-v /etc/passwd:/host/etc/passwd:ro \
+-v /etc/group:/host/etc/group:ro \
+-v /etc/localtime:/etc/localtime:ro \
+-v /proc:/host/proc:ro \
+-v /sys:/host/sys:ro \
+-v /etc/os-release:/host/etc/os-release:ro \
+-v /var/log:/host/var/log:ro \
+-v /var/run/docker.sock:/var/run/docker.sock:ro \
+--restart unless-stopped \
+--cap-add SYS_PTRACE \
+--cap-add SYS_ADMIN \
+--security-opt apparmor=unconfined \
+-e NETDATA_CLAIM_TOKEN=UfinNTG9VlgQMZXDHyE2Lbr4Ib61ZeZZstfVMSJA3nx8zvpwGSazAz6gQqeMfboX-VwUV_4uyuMNnbViqPSfo7th7AQ22W1NUJm9T2YX2Erx74rnOh-hQt3zbP2NsmoUOmCGpMw \
+-e NETDATA_CLAIM_URL=https://app.netdata.cloud \
+-e NETDATA_CLAIM_ROOMS=a9458faa-0275-473e-8897-d3b7882e82a9 \
+netdata/netdata:stable
+
+```
