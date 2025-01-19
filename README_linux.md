@@ -105,7 +105,6 @@ $ ifconfig ens192   # 只显示某个网卡的信息
 -c #显示被标注为配置文件的文件列表
 rpm -ql yum-config-manager 
 rpm -e  zsh  #-e 卸载
-journalctl -u jenkins.service #查看安装日志
 systemctl status -l kibana  # -l 输出完整 systemctl 日志 
 
 

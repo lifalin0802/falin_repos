@@ -2,14 +2,6 @@
 
 ### 现象查看：
 ```bash
-$ journalctl -u docker.service
-May 14 20:21:01 centos systemd[1]: docker.service holdoff time over, scheduling restart.
-May 14 20:21:01 centos systemd[1]: Stopped Docker Application Container Engine.
-May 14 20:21:01 centos systemd[1]: Starting Docker Application Container Engine...
-May 14 20:21:01 centos dockerd[1927]: time="2022-05-14T20:21:01.176566009-04:00" level=info msg="Starting up"
-May 14 20:21:01 centos dockerd[1927]: failed to start daemon: Unable to get the TempDir under /var/lib/docker: mkdir /var/lib/docker/tmp: no space left on devic
-May 14 20:21:01 centos systemd[1]: docker.service: main process exited, code=exited, status=1/FAILURE
-May 14 20:21:01 centos systemd[1]: Failed to start Docker Application Container Engine.
 
 ```
 
@@ -39,7 +31,58 @@ docker system prone #清理出来3G
 
 ```
 
-将所有的container 按照占用大小排序：其实没什么用
+### set docker proxy (not work !!)
+```bash
+ cat /etc/systemd/system/docker.service.d/http-proxy.conf
+[Service]
+Environment="HTTP_PROXY=http://10.10.100.240:20172/"
+Environment="HTTPS_PROXY=http://10.10.100.240:20172/"
+Environment="NO_PROXY=localhost,127.0.0.1"
+
+# run the following command to reset docker 
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+```bash
+# 发现docker pull 下载错误 docker pull nicolaka/netshoot or  docker run nicolaka/netshoot
+
+
+# 查询网络
+docker run --rm -it \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /:/hostfs \
+    --network container:05608e4f4d0d \
+    nicolaka/netshoot
+
+
+
+# 方法 1: (work !!) 再不行用这个 https://blog.csdn.net/lx1056212225/article/details/144651418
+cat >> /etc/docker/daemon.json << EOF
+{
+  "registry-mirrors": [
+    "https://register.liberx.info",
+    "https://dockerpull.com",
+    "https://docker.anyhub.us.kg",
+    "https://dockerhub.jobcher.com",
+    "https://dockerhub.icu",
+    "https://docker.awsl9527.cn"
+    ],
+  "max-concurrent-downloads": 1,
+  "dns": ["8.8.8.8", "8.8.4.4"],
+  "debug": true,
+  "experimental": false
+}
+EOF
+
+# 方法 2:  (not work !!)
+vi /etc/sysconfig/docker
+OPTIONS='--selinux-enabled --log-driver=journald --registry-mirror=https://docker.mirrors.ustc.edu.cn'
+```
+
+
+
+### 将所有的container 按照占用大小排序：其实没什么用
 ```bash
 [root@centos ~]# d1 -h /var/lib/docker/containers |sort -h
 
