@@ -145,13 +145,6 @@ httpd-76f7455774-v45fb           1/1     Running   1 (44h ago)   4d
 pc-deployment-557dc8d667-p29kd   1/1     Running   1 (44h ago)   3d1h
 pc-deployment-557dc8d667-p2lqz   1/1     Running   1 (44h ago)   3d1h
 [root@centos kubeworkspace]# kubectl exec -it pc-deployment-557dc8d667-p29kd -n dev /bin/sh
-kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
-# cat /etc/resolv.conf
-nameserver 10.96.0.10
-search dev.svc.cluster.local svc.cluster.local cluster.local
-options ndots:5
-# exit
-[root@centos kubeworkspace]# dig @10.96.0.10 service-headless.dev.svc.cluster.local
 
 ; <<>> DiG 9.11.4-P2-RedHat-9.11.4-26.P2.el7_9.7 <<>> @10.96.0.10 service-headless.dev.svc.cluster.local
 ; (1 server found)
