@@ -1,27 +1,5 @@
 
 
-### 设置容忍
-```bash
-spec:
-  selector:
-    matchLabels:
-      k8s-app: calico-node
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-  template:
-    metadata:
-      labels:
-        k8s-app: calico-node
-    spec:
-      nodeSelector:
-        kubernetes.io/os: linux
-      hostNetwork: true
-      tolerations:
-        - effect: NoSchedule
-          operator: Exists
-```
 
 ### containerd 中的容器都在这里 
 只是containerd 的容器id

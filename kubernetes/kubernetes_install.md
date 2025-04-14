@@ -289,7 +289,7 @@ EOF
 containerd config default|tee /etc/containerd/config.toml #将现在默认的配置写入config.toml文件中
 
 
-vim  /etc/containerd/confi  g.toml
+vim  /etc/containerd/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
   ...
   [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
@@ -601,12 +601,19 @@ systemctl is-enabled firewalld # 查看 firewalld状态
 
 ```
 
-### 安装calico
+### 安装calico operator
 ```bash
 #安装calico 参考 https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/tigera-operator.yaml  #这之后有operator运行，running 成功速度很快
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml  #这之后有operator运行，running 成功速度很快
+
+# install crd
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml
+
+
 
 wget -c -O https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/custom-resources.yaml
+
+
 
 vim custom-resources.yaml 
       cidr: 10.244.0.0/16  #更改cidr 值为pod网段

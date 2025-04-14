@@ -28,10 +28,6 @@ kubectl get node master01 -o yaml |grep -i cidr
   podCIDR: 10.244.0.0/24
   podC
 
-
-
-kubectl delete pod d1 #删除pod  临时删除， 
-kubectl delete -f xxx.yaml #彻底删除
 ```
 ### kubernetes 显示当初的yaml 文件？
 https://www.csdn.net/tags/MtjaAgzsMzc3MTYtYmxvZwO0O0OO0O0O.html

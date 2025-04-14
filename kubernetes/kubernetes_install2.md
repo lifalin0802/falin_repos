@@ -50,6 +50,11 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config 
 
 
+# print the kubeadmin join command if missing
+➜  ~ kubeadm token create --print-join-command
+kubeadm join 192.168.226.130:6443 --token icmg46.ds2pxvsbgfymlip9 --discovery-token-ca-cert-hash sha256:7cc33e964c0c070719c9d050ba2458a08047b8cb1481fed8b2ecbd14b96f47b1 
+
+
 
 kubectl  nodes --all node-role.kubernetes.io/control-plane-
 kubectl taint nodes --all node-role.kubernetes.io/master-
