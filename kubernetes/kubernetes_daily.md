@@ -52,3 +52,17 @@ drwxr-xr-x. 2 root root 54 Jun  6 08:47 29eee9f8cb04d6424177d90c981fd1b654b3425b
 kubectl create deploy netshoot --image=nicolaka/netshoot -- /bin/sh -c 'sleep 36000'
 
 ```
+
+
+
+
+### force delete terminated namespace 
+```bash
+➜  vector k get ns                                         
+NAME               STATUS   AGE
+vector             Terminated   54m
+
+kubectl get namespace "stucked-namespace" -o json \
+  | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/" \
+  | kubectl replace --raw /api/v1/namespaces/stucked-namespace/finalize -f -
+```

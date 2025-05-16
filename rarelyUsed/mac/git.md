@@ -64,13 +64,17 @@ git checkout <branchname>
 
 #插销未提交的 所有文件
 git checkout -- .
-git reset --hard HEAD 
+git reset --hard HEAD  
 
-TW-QA-UQSE-2D-4.0.x_initial
+git fetch --tags
+git checkout tags/4.1.2
 
-git branch -m TW-QA-UQSE-2D-4.8.x_initial TW-QA-UQSE-2D-4.0.x_initial
-git push origin --delete TW-QA-UQSE-2D-4.8.x_initial
-git push -u origin TW-QA-UQSE-2D-4.0.x_initial
+
+git checkout -b my-4.1.2-branch tags/4.1.2
+git ls-remote --tags origin
+git checkout refs/tags/4.1.2
+
+
 
 
 git branch -m OLD-BRANCH-NAME NEW-BRANCH-NAME
@@ -91,6 +95,9 @@ then etc:wq!
 
 git log --oneline # to check
 git push origin xxx --force # to push the changesets to remote 
+
+# Another Git process seems to be running in this repository
+rm -rf .git/index.lock
 
 ```
 
