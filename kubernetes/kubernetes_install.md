@@ -550,6 +550,10 @@ kubectl taint node prod-k8s-apm-node-data1 app=bigdata:NoExecute
 #增加污点
 kubectl taint node node01 键名=键值:NoSchedule
 
+# check taints of every nodes
+kubectl get nodes -o custom-columns=NAME:.metadata.name,TAINTS:.spec.taints --no-headers 
+
+
 #只有key 没有value
 ➜  ~ k describe node archlinux |grep -i  taint
 Taints:             node-role.kubernetes.io/control-plane:NoSchedule
